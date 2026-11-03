@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+
+# Raw run logs and per-sample dumps (large; summaries are kept)
+results/**/logs/*.txt
+results/**/noise_seed_*.json
+results/**/diag_samples_seed_*.json
+results/**/summaries/
+results/**/*.zip
+
+# TensorBoard output of local runs
+flip/summaries/
+
+# Local smoke-test outputs and toy data
+.smoke/
+
+# Build output (code zip for Kaggle/server)
+dist/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Upstream FLiP clone (0-ml/flip @ ec3a848); diff with:
+#   git --git-dir=flip/.git-upstream --work-tree=flip diff
+flip/.git-upstream/

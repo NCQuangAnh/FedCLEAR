@@ -1,0 +1,32 @@
+{
+ "dtd_ZSCLIP": {
+  "dataset": "dtd",
+  "algo": "CLIP",
+  "times": 1,
+  "rounds": 50,
+  "extra": [],
+  "returncode": 0,
+  "seconds": 47.1,
+  "log": "/kaggle/working/phase1/logs/dtd_ZSCLIP.txt"
+ },
+ "dtd_PromptFL": {
+  "dataset": "dtd",
+  "algo": "CoOp",
+  "times": 3,
+  "rounds": 50,
+  "extra": [],
+  "returncode": 0,
+  "seconds": 2058.8,
+  "log": "/kaggle/working/phase1/logs/dtd_PromptFL.txt"
+ },
+ "dtd_FedOTP": {
+  "dataset": "dtd",
+  "algo": "OTP",
+  "times": 3,
+  "rounds": 50,
+  "extra": [],
+  "returncode": 0,
+  "seconds": 2712.6,
+  "log": "/kaggle/working/phase1/logs/dtd_FedOTP.txt"
+ }
+}

@@ -1,0 +1,137 @@
+{
+ "dtd_ZSCLIP": {
+  "dataset": "dtd",
+  "algo": "CLIP",
+  "method": "ZSCLIP",
+  "variant": "paper",
+  "times": 1,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 58.2,
+  "log": "/kaggle/working/phase1/logs/dtd_ZSCLIP.txt"
+ },
+ "dtd_PromptFL": {
+  "dataset": "dtd",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "paper",
+  "times": 3,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 1492.4,
+  "log": "/kaggle/working/phase1/logs/dtd_PromptFL.txt"
+ },
+ "dtd_FedOTP": {
+  "dataset": "dtd",
+  "algo": "OTP",
+  "method": "FedOTP",
+  "variant": "paper",
+  "times": 3,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 2271.6,
+  "log": "/kaggle/working/phase1/logs/dtd_FedOTP.txt"
+ },
+ "caltech101_ZSCLIP": {
+  "dataset": "caltech101",
+  "algo": "CLIP",
+  "method": "ZSCLIP",
+  "variant": "paper",
+  "times": 1,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 29.9,
+  "log": "/kaggle/working/phase1/logs/caltech101_ZSCLIP.txt"
+ },
+ "caltech101_PromptFL": {
+  "dataset": "caltech101",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "paper",
+  "times": 3,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 3366.7,
+  "log": "/kaggle/working/phase1/logs/caltech101_PromptFL.txt"
+ },
+ "caltech101_FedOTP": {
+  "dataset": "caltech101",
+  "algo": "OTP",
+  "method": "FedOTP",
+  "variant": "paper",
+  "times": 3,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 5764.4,
+  "log": "/kaggle/working/phase1/logs/caltech101_FedOTP.txt"
+ },
+ "oxford_pets_ZSCLIP": {
+  "dataset": "oxford_pets",
+  "algo": "CLIP",
+  "method": "ZSCLIP",
+  "variant": "paper",
+  "times": 1,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 33.6,
+  "log": "/kaggle/working/phase1/logs/oxford_pets_ZSCLIP.txt"
+ },
+ "oxford_pets_PromptFL": {
+  "dataset": "oxford_pets",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "paper",
+  "times": 3,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 1659.9,
+  "log": "/kaggle/working/phase1/logs/oxford_pets_PromptFL.txt"
+ },
+ "oxford_pets_FedOTP": {
+  "dataset": "oxford_pets",
+  "algo": "OTP",
+  "method": "FedOTP",
+  "variant": "paper",
+  "times": 3,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 2444.1,
+  "log": "/kaggle/working/phase1/logs/oxford_pets_FedOTP.txt"
+ }
+}

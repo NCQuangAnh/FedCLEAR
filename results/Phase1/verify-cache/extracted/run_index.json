@@ -1,0 +1,104 @@
+{
+ "dtd_cache_false": {
+  "dataset": "dtd",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "paper",
+  "times": 1,
+  "rounds": 5,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--cache_test_feats",
+   "false"
+  ],
+  "returncode": 0,
+  "seconds": 126.5,
+  "log": "/kaggle/working/phase1/logs/dtd_cache_false.txt"
+ },
+ "dtd_cache_true": {
+  "dataset": "dtd",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "paper",
+  "times": 1,
+  "rounds": 5,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--cache_test_feats",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 75.8,
+  "log": "/kaggle/working/phase1/logs/dtd_cache_true.txt"
+ },
+ "caltech101_cache_false": {
+  "dataset": "caltech101",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "paper",
+  "times": 1,
+  "rounds": 5,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--cache_test_feats",
+   "false"
+  ],
+  "returncode": 0,
+  "seconds": 170.5,
+  "log": "/kaggle/working/phase1/logs/caltech101_cache_false.txt"
+ },
+ "caltech101_cache_true": {
+  "dataset": "caltech101",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "paper",
+  "times": 1,
+  "rounds": 5,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--cache_test_feats",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 145.5,
+  "log": "/kaggle/working/phase1/logs/caltech101_cache_true.txt"
+ },
+ "oxford_pets_cache_false": {
+  "dataset": "oxford_pets",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "paper",
+  "times": 1,
+  "rounds": 5,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--cache_test_feats",
+   "false"
+  ],
+  "returncode": 0,
+  "seconds": 124.4,
+  "log": "/kaggle/working/phase1/logs/oxford_pets_cache_false.txt"
+ },
+ "oxford_pets_cache_true": {
+  "dataset": "oxford_pets",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "paper",
+  "times": 1,
+  "rounds": 5,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--cache_test_feats",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 82.2,
+  "log": "/kaggle/working/phase1/logs/oxford_pets_cache_true.txt"
+ }
+}

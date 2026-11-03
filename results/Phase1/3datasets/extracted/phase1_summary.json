@@ -1,0 +1,170 @@
+[
+ {
+  "dataset": "caltech101",
+  "method": "FedOTP",
+  "variant": "paper",
+  "ours_best": 91.1,
+  "ours_sd": 0.57,
+  "ours_best_per_run": [
+   91.16,
+   91.64,
+   90.51
+  ],
+  "paper": 91.8,
+  "paper_sd": 0.1,
+  "diff": -0.7,
+  "tolerance": 1.0,
+  "pass": true,
+  "ours_last": 90.82,
+  "ours_last10": 90.72,
+  "minutes": 96.1
+ },
+ {
+  "dataset": "caltech101",
+  "method": "PromptFL",
+  "variant": "paper",
+  "ours_best": 90.94,
+  "ours_sd": 0.29,
+  "ours_best_per_run": [
+   90.67,
+   91.24,
+   90.91
+  ],
+  "paper": 91.5,
+  "paper_sd": 0.5,
+  "diff": -0.56,
+  "tolerance": 1.0,
+  "pass": true,
+  "ours_last": 90.22,
+  "ours_last10": 90.28,
+  "minutes": 56.1
+ },
+ {
+  "dataset": "caltech101",
+  "method": "ZSCLIP",
+  "variant": "paper",
+  "ours_best": 85.76,
+  "ours_sd": 0.0,
+  "ours_best_per_run": null,
+  "paper": 86.0,
+  "paper_sd": 0.0,
+  "diff": -0.24,
+  "tolerance": 0.5,
+  "pass": true,
+  "ours_last": null,
+  "ours_last10": null,
+  "minutes": 0.5
+ },
+ {
+  "dataset": "dtd",
+  "method": "FedOTP",
+  "variant": "paper",
+  "ours_best": 57.6,
+  "ours_sd": 1.44,
+  "ours_best_per_run": [
+   57.33,
+   59.16,
+   56.32
+  ],
+  "paper": 58.0,
+  "paper_sd": 0.8,
+  "diff": -0.4,
+  "tolerance": 1.6,
+  "pass": true,
+  "ours_last": 57.35,
+  "ours_last10": 56.71,
+  "minutes": 37.9
+ },
+ {
+  "dataset": "dtd",
+  "method": "PromptFL",
+  "variant": "paper",
+  "ours_best": 56.72,
+  "ours_sd": 0.91,
+  "ours_best_per_run": [
+   57.27,
+   57.21,
+   55.67
+  ],
+  "paper": 57.6,
+  "paper_sd": 1.3,
+  "diff": -0.88,
+  "tolerance": 2.6,
+  "pass": true,
+  "ours_last": 56.21,
+  "ours_last10": 55.61,
+  "minutes": 24.9
+ },
+ {
+  "dataset": "dtd",
+  "method": "ZSCLIP",
+  "variant": "paper",
+  "ours_best": 41.78,
+  "ours_sd": 0.0,
+  "ours_best_per_run": null,
+  "paper": 41.7,
+  "paper_sd": 0.0,
+  "diff": 0.08,
+  "tolerance": 0.5,
+  "pass": true,
+  "ours_last": null,
+  "ours_last10": null,
+  "minutes": 1.0
+ },
+ {
+  "dataset": "oxford_pets",
+  "method": "FedOTP",
+  "variant": "paper",
+  "ours_best": 88.69,
+  "ours_sd": 0.41,
+  "ours_best_per_run": [
+   88.25,
+   88.74,
+   89.07
+  ],
+  "paper": 89.1,
+  "paper_sd": 0.1,
+  "diff": -0.41,
+  "tolerance": 1.0,
+  "pass": true,
+  "ours_last": 87.55,
+  "ours_last10": 87.62,
+  "minutes": 40.7
+ },
+ {
+  "dataset": "oxford_pets",
+  "method": "PromptFL",
+  "variant": "paper",
+  "ours_best": 89.08,
+  "ours_sd": 0.65,
+  "ours_best_per_run": [
+   88.36,
+   89.26,
+   89.62
+  ],
+  "paper": 89.4,
+  "paper_sd": 0.5,
+  "diff": -0.32,
+  "tolerance": 1.0,
+  "pass": true,
+  "ours_last": 88.12,
+  "ours_last10": 88.09,
+  "minutes": 27.7
+ },
+ {
+  "dataset": "oxford_pets",
+  "method": "ZSCLIP",
+  "variant": "paper",
+  "ours_best": 85.69,
+  "ours_sd": 0.0,
+  "ours_best_per_run": null,
+  "paper": 85.7,
+  "paper_sd": 0.0,
+  "diff": -0.01,
+  "tolerance": 0.5,
+  "pass": true,
+  "ours_last": null,
+  "ours_last10": null,
+  "minutes": 0.6
+ }
+]

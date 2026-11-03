@@ -1,0 +1,55 @@
+[
+ {
+  "dataset": "food101",
+  "job": "P0_disguise",
+  "pairwise": {
+   "conc_malicious_vs_honest": 1.0,
+   "conc_noisy_vs_honest": 0.848,
+   "sem_malicious_vs_honest": 0.936,
+   "mean_s_sem": {
+    "honest": -0.06485,
+    "noisy": 0.04236,
+    "malicious": 0.06909
+   },
+   "mean_s_conc": {
+    "honest": -0.01608,
+    "noisy": 0.01306,
+    "malicious": 0.10544
+   },
+   "auc_s_conc_n_malicious_vs_noisy": 0.933,
+   "auc_s_conc_kl_malicious_vs_noisy": 0.853
+  },
+  "auc_sem_problem_vs_honest": 0.957,
+  "auc_conc_malicious_vs_noisy": 0.933,
+  "auc_upd_malicious_vs_noisy": 0.947,
+  "gain_over_deviation": -0.013,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 1.0,
+    "c3": 1.0
+   },
+   {
+    "seed": 1,
+    "c2": 1.0,
+    "c3": 0.5
+   },
+   {
+    "seed": 2,
+    "c2": 0.8333333333333334,
+    "c3": 1.0
+   },
+   {
+    "seed": 3,
+    "c2": 0.6666666666666666,
+    "c3": 1.0
+   },
+   {
+    "seed": 4,
+    "c2": 1.0,
+    "c3": 1.0
+   }
+  ],
+  "n_clients_scored": 50
+ }
+]

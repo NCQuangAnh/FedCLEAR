@@ -1,0 +1,161 @@
+[
+ {
+  "dataset": "eurosat",
+  "job": "N_control",
+  "pairwise": {
+   "conc_malicious_vs_honest": 0.356,
+   "conc_noisy_vs_honest": 0.44,
+   "sem_malicious_vs_honest": 0.644,
+   "mean_s_sem": {
+    "honest": 0.01154,
+    "noisy": 0.00542,
+    "malicious": 0.02348
+   },
+   "mean_s_conc": {
+    "honest": 0.01998,
+    "noisy": -0.01288,
+    "malicious": -0.02302
+   },
+   "auc_s_conc_n_malicious_vs_noisy": NaN,
+   "auc_s_conc_kl_malicious_vs_noisy": NaN
+  },
+  "auc_sem_problem_vs_honest": 0.538,
+  "auc_conc_malicious_vs_noisy": 0.44,
+  "auc_upd_malicious_vs_noisy": 0.493,
+  "gain_over_deviation": -0.053,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 0.16666666666666666,
+    "c3": 0.16666666666666666
+   },
+   {
+    "seed": 1,
+    "c2": 0.0,
+    "c3": 1.0
+   },
+   {
+    "seed": 2,
+    "c2": 0.8333333333333334,
+    "c3": 0.5
+   },
+   {
+    "seed": 3,
+    "c2": 0.8333333333333334,
+    "c3": 0.3333333333333333
+   },
+   {
+    "seed": 4,
+    "c2": 0.16666666666666666,
+    "c3": 0.6666666666666666
+   }
+  ],
+  "n_clients_scored": 50
+ },
+ {
+  "dataset": "eurosat",
+  "job": "P0_disguise",
+  "pairwise": {
+   "conc_malicious_vs_honest": 0.432,
+   "conc_noisy_vs_honest": 0.336,
+   "sem_malicious_vs_honest": 0.468,
+   "mean_s_sem": {
+    "honest": 0.01307,
+    "noisy": 0.00235,
+    "malicious": 0.00708
+   },
+   "mean_s_conc": {
+    "honest": 0.0391,
+    "noisy": 0.00087,
+    "malicious": 0.02373
+   },
+   "auc_s_conc_n_malicious_vs_noisy": NaN,
+   "auc_s_conc_kl_malicious_vs_noisy": NaN
+  },
+  "auc_sem_problem_vs_honest": 0.453,
+  "auc_conc_malicious_vs_noisy": 0.593,
+  "auc_upd_malicious_vs_noisy": 0.407,
+  "gain_over_deviation": 0.187,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 0.3333333333333333,
+    "c3": 0.16666666666666666
+   },
+   {
+    "seed": 1,
+    "c2": 0.5,
+    "c3": 1.0
+   },
+   {
+    "seed": 2,
+    "c2": 0.3333333333333333,
+    "c3": 0.16666666666666666
+   },
+   {
+    "seed": 3,
+    "c2": 0.6666666666666666,
+    "c3": 0.8333333333333334
+   },
+   {
+    "seed": 4,
+    "c2": 0.8333333333333334,
+    "c3": 0.0
+   }
+  ],
+  "n_clients_scored": 50
+ },
+ {
+  "dataset": "food101",
+  "job": "N_control",
+  "pairwise": {
+   "conc_malicious_vs_honest": 0.468,
+   "conc_noisy_vs_honest": 0.888,
+   "sem_malicious_vs_honest": 0.504,
+   "mean_s_sem": {
+    "honest": -0.02588,
+    "noisy": 0.08373,
+    "malicious": -0.02169
+   },
+   "mean_s_conc": {
+    "honest": 0.00179,
+    "noisy": 0.01713,
+    "malicious": 0.00029
+   },
+   "auc_s_conc_n_malicious_vs_noisy": NaN,
+   "auc_s_conc_kl_malicious_vs_noisy": NaN
+  },
+  "auc_sem_problem_vs_honest": 0.774,
+  "auc_conc_malicious_vs_noisy": 0.073,
+  "auc_upd_malicious_vs_noisy": 0.0,
+  "gain_over_deviation": 0.073,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 0.0,
+    "c3": 0.0
+   },
+   {
+    "seed": 1,
+    "c2": 0.0,
+    "c3": 0.0
+   },
+   {
+    "seed": 2,
+    "c2": 0.0,
+    "c3": 0.0
+   },
+   {
+    "seed": 3,
+    "c2": 0.3333333333333333,
+    "c3": 0.0
+   },
+   {
+    "seed": 4,
+    "c2": 0.0,
+    "c3": 0.0
+   }
+  ],
+  "n_clients_scored": 50
+ }
+]

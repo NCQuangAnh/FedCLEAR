@@ -1,0 +1,44 @@
+[
+ {
+  "dataset": "oxford_pets",
+  "method": "FedOTP",
+  "ours_best": 87.41,
+  "ours_sd": 0.88,
+  "paper": 89.1,
+  "paper_sd": 0.1,
+  "diff": -1.69,
+  "tolerance": 1.0,
+  "pass": false,
+  "ours_last": 86.04,
+  "ours_last10": 86.3,
+  "minutes": 57.1
+ },
+ {
+  "dataset": "oxford_pets",
+  "method": "PromptFL",
+  "ours_best": 87.89,
+  "ours_sd": 0.63,
+  "paper": 89.4,
+  "paper_sd": 0.5,
+  "diff": -1.51,
+  "tolerance": 1.0,
+  "pass": false,
+  "ours_last": 86.21,
+  "ours_last10": 86.3,
+  "minutes": 46.9
+ },
+ {
+  "dataset": "oxford_pets",
+  "method": "ZSCLIP",
+  "ours_best": 85.69,
+  "ours_sd": 0.0,
+  "paper": 85.7,
+  "paper_sd": 0.0,
+  "diff": -0.01,
+  "tolerance": 0.5,
+  "pass": true,
+  "ours_last": null,
+  "ours_last10": null,
+  "minutes": 0.9
+ }
+]

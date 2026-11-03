@@ -1,0 +1,73 @@
+{
+ "caltech101_B_sym40": {
+  "dataset": "caltech101",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "sym40",
+  "times": 3,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0.4",
+   "--noisy_client_frac",
+   "0.5",
+   "--noise_mode",
+   "uniform"
+  ],
+  "returncode": 0,
+  "seconds": 3279.4,
+  "log": "/kaggle/working/phase2/logs/caltech101_B_sym40.txt"
+ },
+ "caltech101_B_pair40": {
+  "dataset": "caltech101",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "pair40",
+  "times": 3,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--noise_type",
+   "pair",
+   "--noise_rate",
+   "0.4",
+   "--noisy_client_frac",
+   "0.5",
+   "--noise_mode",
+   "uniform"
+  ],
+  "returncode": 0,
+  "seconds": 3312.2,
+  "log": "/kaggle/working/phase2/logs/caltech101_B_pair40.txt"
+ },
+ "caltech101_C_drop50": {
+  "dataset": "caltech101",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "drop50",
+  "times": 3,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0.4",
+   "--noisy_client_frac",
+   "0.5",
+   "--noise_mode",
+   "uniform",
+   "--noise_oracle",
+   "drop_noisy"
+  ],
+  "returncode": 0,
+  "seconds": 2137.8,
+  "log": "/kaggle/working/phase2/logs/caltech101_C_drop50.txt"
+ }
+}

@@ -1,0 +1,7 @@
+# gatec stage 2 (results/side-research/calrepair/gatec_plan.md): held-out seeds 5-7 on Caltech101,
+# gatec (gatech) and CLEAR-FPL (clearh) on the same seeds. Caltech never runs next to another run:
+# start with --gpus 0 and no --per-gpu.
+caltech101 N_pair75_gatech
+caltech101 N_pair75_clearh
+caltech101 N_sym75_gatech
+caltech101 N_sym75_clearh

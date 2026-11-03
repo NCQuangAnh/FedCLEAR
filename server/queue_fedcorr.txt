@@ -1,0 +1,42 @@
+# Baselines asked by the supervisor. Round 2: FedCorr + CoOp (CVPR 2022), official CIFAR-10 settings.
+# Same 11 settings, seeds and protocol as PromptFL / FedProx / CLEAR-FPL. Order: Pets, DTD, Caltech.
+# Plan: results/side-research/fedcorr/fedcorr_plan.md
+
+# oxford_pets: five gate D scenarios, then every client noisy
+oxford_pets S_sym_corr
+oxford_pets S_pair_corr
+oxford_pets S_inst_corr
+oxford_pets S_het_corr
+oxford_pets S_clean_corr
+oxford_pets N_sym25_corr
+oxford_pets N_sym50_corr
+oxford_pets N_sym75_corr
+oxford_pets N_pair25_corr
+oxford_pets N_pair50_corr
+oxford_pets N_pair75_corr
+
+# dtd: five gate D scenarios, then every client noisy
+dtd S_sym_corr
+dtd S_pair_corr
+dtd S_inst_corr
+dtd S_het_corr
+dtd S_clean_corr
+dtd N_sym25_corr
+dtd N_sym50_corr
+dtd N_sym75_corr
+dtd N_pair25_corr
+dtd N_pair50_corr
+dtd N_pair75_corr
+
+# caltech101: five gate D scenarios, then every client noisy
+caltech101 S_sym_corr
+caltech101 S_pair_corr
+caltech101 S_inst_corr
+caltech101 S_het_corr
+caltech101 S_clean_corr
+caltech101 N_sym25_corr
+caltech101 N_sym50_corr
+caltech101 N_sym75_corr
+caltech101 N_pair25_corr
+caltech101 N_pair50_corr
+caltech101 N_pair75_corr

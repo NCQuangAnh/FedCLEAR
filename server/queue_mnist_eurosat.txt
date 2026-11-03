@@ -1,0 +1,26 @@
+# MNIST then EuroSAT, CLEAR-FPL with the original 10-client setting (same arms as Pets / DTD / Caltech).
+# Plan: results/side-research/mnist_eurosat/plan.md. First run: PYTHONPATH=flip python server/prep_mnist_eurosat.py
+
+mnist S_sym_full
+mnist S_pair_full
+mnist S_inst_full
+mnist S_het_full
+mnist S_clean_full
+mnist N_sym25_clear
+mnist N_sym50_clear
+mnist N_sym75_clear
+mnist N_pair25_clear
+mnist N_pair50_clear
+mnist N_pair75_clear
+
+eurosat S_sym_full
+eurosat S_pair_full
+eurosat S_inst_full
+eurosat S_het_full
+eurosat S_clean_full
+eurosat N_sym25_clear
+eurosat N_sym50_clear
+eurosat N_sym75_clear
+eurosat N_pair25_clear
+eurosat N_pair50_clear
+eurosat N_pair75_clear

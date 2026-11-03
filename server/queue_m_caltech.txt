@@ -1,0 +1,5 @@
+# CLEAR-v2 (gatef) rerun with --log_metrics (macro P/R/F1 + cost), seeds 0-4, to compare with FedRG
+# (results/side-research/fedrg/rg_metrics_results.md). Same seeds and flags as calrepair gatef, so
+# accuracy repeats; only the metrics files are new. Picked where FedRG is ahead on accuracy.
+# Caltech never runs next to another run: --gpus 0, no --per-gpu. About 2.3 h.
+caltech101 N_pair75_gatef

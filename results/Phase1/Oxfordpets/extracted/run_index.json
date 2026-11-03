@@ -1,0 +1,32 @@
+{
+ "oxford_pets_ZSCLIP": {
+  "dataset": "oxford_pets",
+  "algo": "CLIP",
+  "times": 1,
+  "rounds": 50,
+  "extra": [],
+  "returncode": 0,
+  "seconds": 55.8,
+  "log": "/kaggle/working/phase1/logs/oxford_pets_ZSCLIP.txt"
+ },
+ "oxford_pets_PromptFL": {
+  "dataset": "oxford_pets",
+  "algo": "CoOp",
+  "times": 3,
+  "rounds": 50,
+  "extra": [],
+  "returncode": 0,
+  "seconds": 2811.9,
+  "log": "/kaggle/working/phase1/logs/oxford_pets_PromptFL.txt"
+ },
+ "oxford_pets_FedOTP": {
+  "dataset": "oxford_pets",
+  "algo": "OTP",
+  "times": 3,
+  "rounds": 50,
+  "extra": [],
+  "returncode": 0,
+  "seconds": 3423.3,
+  "log": "/kaggle/working/phase1/logs/oxford_pets_FedOTP.txt"
+ }
+}

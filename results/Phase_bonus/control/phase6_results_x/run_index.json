@@ -1,0 +1,37 @@
+{
+ "dtd_N_audit_ownlabels": {
+  "dataset": "dtd",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "N_audit_ownlabels",
+  "times": 5,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0.4",
+   "--noisy_client_frac",
+   "0.3",
+   "--malicious_client_frac",
+   "0.2",
+   "--log_signals",
+   "true",
+   "--correction_every",
+   "5",
+   "--attack_type",
+   "none",
+   "--probe_audit_prob",
+   "1.0",
+   "--correction_labels",
+   "own",
+   "--correction_audit",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 3941.0,
+  "log": "/kaggle/working/phase6/logs/dtd_N_audit_ownlabels.txt"
+ }
+}

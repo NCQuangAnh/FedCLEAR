@@ -1,0 +1,65 @@
+# Caltech101 runs still to do. One run per line: <dataset> <arm>. Order = priority.
+# Arms and flags: tools/make_notebook.py (ARM_ARGS). Plans: results/side-research/gate_N/.
+
+# 1. NLPrompt (client-histogram version) on the five gate D scenarios
+caltech101 S_sym_nlph
+caltech101 S_pair_nlph
+caltech101 S_inst_nlph
+caltech101 S_het_nlph
+caltech101 S_clean_nlph
+
+# 2. CLEAR-FPL, every client noisy (gate N)
+caltech101 N_sym25_clear
+caltech101 N_sym50_clear
+caltech101 N_sym75_clear
+caltech101 N_pair25_clear
+caltech101 N_pair50_clear
+caltech101 N_pair75_clear
+
+# 3. NLPrompt (histogram), every client noisy
+caltech101 N_sym25_nlph
+caltech101 N_sym50_nlph
+caltech101 N_sym75_nlph
+caltech101 N_pair25_nlph
+caltech101 N_pair50_nlph
+caltech101 N_pair75_nlph
+
+# 4. PromptFL + MAE, every client noisy
+caltech101 N_sym25_mae
+caltech101 N_sym50_mae
+caltech101 N_sym75_mae
+caltech101 N_pair25_mae
+caltech101 N_pair50_mae
+caltech101 N_pair75_mae
+
+# 5. PromptFL, every client noisy
+caltech101 N_sym25_none
+caltech101 N_sym50_none
+caltech101 N_sym75_none
+caltech101 N_pair25_none
+caltech101 N_pair50_none
+caltech101 N_pair75_none
+
+# 6. NLPrompt as published (uniform marginal), gate D scenarios and every client noisy
+caltech101 S_sym_nlp
+caltech101 S_pair_nlp
+caltech101 S_inst_nlp
+caltech101 S_het_nlp
+caltech101 S_clean_nlp
+caltech101 N_sym25_nlp
+caltech101 N_sym50_nlp
+caltech101 N_sym75_nlp
+caltech101 N_pair25_nlp
+caltech101 N_pair50_nlp
+caltech101 N_pair75_nlp
+
+# 7. old DBR-FPL, every client noisy
+caltech101 N_sym25_dbr
+caltech101 N_sym50_dbr
+caltech101 N_sym75_dbr
+caltech101 N_pair25_dbr
+caltech101 N_pair50_dbr
+caltech101 N_pair75_dbr
+
+# 8. ablation missing from gate D stage 2 (3 of 5 seeds on Kaggle)
+caltech101 S_het_all

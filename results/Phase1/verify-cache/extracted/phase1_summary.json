@@ -1,0 +1,110 @@
+[
+ {
+  "dataset": "caltech101",
+  "method": "PromptFL",
+  "variant": "paper",
+  "ours_best": 88.15,
+  "ours_sd": 0.0,
+  "ours_best_per_run": [
+   88.15
+  ],
+  "paper": 91.5,
+  "paper_sd": 0.5,
+  "diff": -3.35,
+  "tolerance": 1.0,
+  "pass": false,
+  "ours_last": 88.15,
+  "ours_last10": 86.92,
+  "minutes": 2.8
+ },
+ {
+  "dataset": "caltech101",
+  "method": "PromptFL",
+  "variant": "paper",
+  "ours_best": 88.15,
+  "ours_sd": 0.0,
+  "ours_best_per_run": [
+   88.15
+  ],
+  "paper": 91.5,
+  "paper_sd": 0.5,
+  "diff": -3.35,
+  "tolerance": 1.0,
+  "pass": false,
+  "ours_last": 88.15,
+  "ours_last10": 86.92,
+  "minutes": 2.4
+ },
+ {
+  "dataset": "dtd",
+  "method": "PromptFL",
+  "variant": "paper",
+  "ours_best": 35.93,
+  "ours_sd": 0.0,
+  "ours_best_per_run": [
+   35.93
+  ],
+  "paper": 57.6,
+  "paper_sd": 1.3,
+  "diff": -21.67,
+  "tolerance": 2.6,
+  "pass": false,
+  "ours_last": 35.93,
+  "ours_last10": 31.49,
+  "minutes": 2.1
+ },
+ {
+  "dataset": "dtd",
+  "method": "PromptFL",
+  "variant": "paper",
+  "ours_best": 35.93,
+  "ours_sd": 0.0,
+  "ours_best_per_run": [
+   35.93
+  ],
+  "paper": 57.6,
+  "paper_sd": 1.3,
+  "diff": -21.67,
+  "tolerance": 2.6,
+  "pass": false,
+  "ours_last": 35.93,
+  "ours_last10": 31.49,
+  "minutes": 1.3
+ },
+ {
+  "dataset": "oxford_pets",
+  "method": "PromptFL",
+  "variant": "paper",
+  "ours_best": 86.02,
+  "ours_sd": 0.0,
+  "ours_best_per_run": [
+   86.02
+  ],
+  "paper": 89.4,
+  "paper_sd": 0.5,
+  "diff": -3.38,
+  "tolerance": 1.0,
+  "pass": false,
+  "ours_last": 85.99,
+  "ours_last10": 81.23,
+  "minutes": 2.1
+ },
+ {
+  "dataset": "oxford_pets",
+  "method": "PromptFL",
+  "variant": "paper",
+  "ours_best": 86.02,
+  "ours_sd": 0.0,
+  "ours_best_per_run": [
+   86.02
+  ],
+  "paper": 89.4,
+  "paper_sd": 0.5,
+  "diff": -3.38,
+  "tolerance": 1.0,
+  "pass": false,
+  "ours_last": 85.99,
+  "ours_last10": 81.23,
+  "minutes": 1.4
+ }
+]

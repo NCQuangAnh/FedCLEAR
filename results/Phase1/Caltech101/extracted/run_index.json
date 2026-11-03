@@ -1,0 +1,32 @@
+{
+ "caltech101_ZSCLIP": {
+  "dataset": "caltech101",
+  "algo": "CLIP",
+  "times": 1,
+  "rounds": 50,
+  "extra": [],
+  "returncode": 0,
+  "seconds": 50.3,
+  "log": "/kaggle/working/phase1/logs/caltech101_ZSCLIP.txt"
+ },
+ "caltech101_PromptFL": {
+  "dataset": "caltech101",
+  "algo": "CoOp",
+  "times": 3,
+  "rounds": 50,
+  "extra": [],
+  "returncode": 0,
+  "seconds": 3833.1,
+  "log": "/kaggle/working/phase1/logs/caltech101_PromptFL.txt"
+ },
+ "caltech101_FedOTP": {
+  "dataset": "caltech101",
+  "algo": "OTP",
+  "times": 3,
+  "rounds": 50,
+  "extra": [],
+  "returncode": 0,
+  "seconds": 6141.6,
+  "log": "/kaggle/working/phase1/logs/caltech101_FedOTP.txt"
+ }
+}

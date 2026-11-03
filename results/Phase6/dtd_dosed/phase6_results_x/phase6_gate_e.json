@@ -1,0 +1,83 @@
+{
+ "rows": [
+  {
+   "dataset": "dtd",
+   "job": "A0_refuse",
+   "last10": 47.56,
+   "damage": 4.5,
+   "per_seed": [
+    43.82,
+    50.65,
+    45.33,
+    49.75,
+    48.23
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "A4_comply_dose",
+   "last10": 49.29,
+   "damage": 2.77,
+   "per_seed": [
+    46.33,
+    50.44,
+    49.14,
+    49.69,
+    50.84
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "A5_refuse_dose",
+   "last10": 49.11,
+   "damage": 2.95,
+   "per_seed": [
+    44.62,
+    52.93,
+    47.78,
+    49.53,
+    50.7
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "A6_fast_ban",
+   "last10": 48.63,
+   "damage": 3.43,
+   "per_seed": [
+    46.12,
+    50.78,
+    48.23,
+    49.02,
+    49.01
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "N_control",
+   "last10": 52.06,
+   "damage": 0.0,
+   "per_seed": [
+    51.28,
+    53.2,
+    52.21,
+    52.09,
+    51.52
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "O_drop_mal",
+   "last10": 48.57,
+   "damage": 3.49,
+   "per_seed": [
+    46.11,
+    51.48,
+    47.52,
+    49.37,
+    48.36
+   ]
+  }
+ ],
+ "verdict": {}
+}

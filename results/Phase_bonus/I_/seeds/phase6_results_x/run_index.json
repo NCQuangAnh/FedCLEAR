@@ -1,0 +1,73 @@
+{
+ "dtd_H_soft_s5": {
+  "dataset": "dtd",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "H_soft_more",
+  "times": 5,
+  "rounds": 50,
+  "extra": [
+   "--attack_type",
+   "noise_disguise",
+   "--attack_rate",
+   "0.4",
+   "--correction_audit",
+   "true",
+   "--sample_filter",
+   "rho",
+   "--filter_soft",
+   "true",
+   "--filter_clean_band",
+   "0.10",
+   "--seed",
+   "5"
+  ],
+  "returncode": 0,
+  "seconds": 2397.9,
+  "log": "/kaggle/working/phase6/logs/dtd_H_soft_s5.txt"
+ },
+ "dtd_H_band_s5": {
+  "dataset": "dtd",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "H_band_more",
+  "times": 5,
+  "rounds": 50,
+  "extra": [
+   "--attack_type",
+   "noise_disguise",
+   "--attack_rate",
+   "0.4",
+   "--correction_audit",
+   "true",
+   "--sample_filter",
+   "rho",
+   "--filter_clean_band",
+   "0.10",
+   "--seed",
+   "5"
+  ],
+  "returncode": 0,
+  "seconds": 2457.9,
+  "log": "/kaggle/working/phase6/logs/dtd_H_band_s5.txt"
+ },
+ "dtd_A0_refuse_s5": {
+  "dataset": "dtd",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "A0_refuse_more",
+  "times": 5,
+  "rounds": 50,
+  "extra": [
+   "--attack_type",
+   "noise_disguise",
+   "--attack_rate",
+   "0.4",
+   "--seed",
+   "5"
+  ],
+  "returncode": 0,
+  "seconds": 2490.6,
+  "log": "/kaggle/working/phase6/logs/dtd_A0_refuse_s5.txt"
+ }
+}

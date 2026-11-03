@@ -1,0 +1,110 @@
+[
+ {
+  "dataset": "dtd",
+  "noise": "pair40",
+  "B": 49.06,
+  "B_per_seed": [
+   49.29,
+   49.0,
+   48.88
+  ],
+  "C": 49.61,
+  "C_per_seed": [
+   47.87,
+   50.95,
+   50.0
+  ],
+  "A": 56.72,
+  "H_sample": 7.66,
+  "H_sample_sd": 0.76,
+  "H_client": 0.55,
+  "H_client_sd": 1.76,
+  "B_above_zs": true,
+  "crit_i": true,
+  "crit_ii": false,
+  "conclusive_i": true,
+  "conclusive_ii": false,
+  "minutes": 38.9
+ },
+ {
+  "dataset": "dtd",
+  "noise": "sym40",
+  "B": 49.9,
+  "B_per_seed": [
+   50.53,
+   51.42,
+   47.75
+  ],
+  "C": 49.61,
+  "C_per_seed": [
+   47.87,
+   50.95,
+   50.0
+  ],
+  "A": 56.72,
+  "H_sample": 6.82,
+  "H_sample_sd": 1.07,
+  "H_client": -0.29,
+  "H_client_sd": 2.46,
+  "B_above_zs": true,
+  "crit_i": true,
+  "crit_ii": false,
+  "conclusive_i": true,
+  "conclusive_ii": false,
+  "minutes": 38.3
+ },
+ {
+  "dataset": "oxford_pets",
+  "noise": "pair40",
+  "B": 83.83,
+  "B_per_seed": [
+   83.46,
+   84.9,
+   83.13
+  ],
+  "C": 87.24,
+  "C_per_seed": [
+   87.19,
+   88.23,
+   86.29
+  ],
+  "A": 89.08,
+  "H_sample": 5.25,
+  "H_sample_sd": 1.11,
+  "H_client": 3.41,
+  "H_client_sd": 0.29,
+  "B_above_zs": false,
+  "crit_i": true,
+  "crit_ii": true,
+  "conclusive_i": true,
+  "conclusive_ii": true,
+  "minutes": 42.3
+ },
+ {
+  "dataset": "oxford_pets",
+  "noise": "sym40",
+  "B": 84.29,
+  "B_per_seed": [
+   84.52,
+   83.16,
+   85.2
+  ],
+  "C": 87.24,
+  "C_per_seed": [
+   87.19,
+   88.23,
+   86.29
+  ],
+  "A": 89.08,
+  "H_sample": 4.79,
+  "H_sample_sd": 1.17,
+  "H_client": 2.94,
+  "H_client_sd": 2.0,
+  "B_above_zs": false,
+  "crit_i": true,
+  "crit_ii": true,
+  "conclusive_i": true,
+  "conclusive_ii": false,
+  "minutes": 41.0
+ }
+]

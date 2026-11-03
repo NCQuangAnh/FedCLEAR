@@ -1,0 +1,44 @@
+[
+ {
+  "dataset": "caltech101",
+  "method": "FedOTP",
+  "ours_best": 90.29,
+  "ours_sd": 0.2,
+  "paper": 91.8,
+  "paper_sd": 0.1,
+  "diff": -1.51,
+  "tolerance": 1.0,
+  "pass": false,
+  "ours_last": 89.64,
+  "ours_last10": 89.57,
+  "minutes": 102.4
+ },
+ {
+  "dataset": "caltech101",
+  "method": "PromptFL",
+  "ours_best": 90.18,
+  "ours_sd": 0.56,
+  "paper": 91.5,
+  "paper_sd": 0.5,
+  "diff": -1.32,
+  "tolerance": 1.0,
+  "pass": false,
+  "ours_last": 89.51,
+  "ours_last10": 89.47,
+  "minutes": 63.9
+ },
+ {
+  "dataset": "caltech101",
+  "method": "ZSCLIP",
+  "ours_best": 85.76,
+  "ours_sd": 0.0,
+  "paper": 86.0,
+  "paper_sd": 0.0,
+  "diff": -0.24,
+  "tolerance": 0.5,
+  "pass": true,
+  "ours_last": null,
+  "ours_last10": null,
+  "minutes": 0.8
+ }
+]

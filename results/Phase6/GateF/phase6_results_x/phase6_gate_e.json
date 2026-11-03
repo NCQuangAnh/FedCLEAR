@@ -1,0 +1,70 @@
+{
+ "rows": [
+  {
+   "dataset": "dtd",
+   "job": "A0_refuse",
+   "last10": 47.56,
+   "damage": 4.5,
+   "per_seed": [
+    43.82,
+    50.65,
+    45.33,
+    49.75,
+    48.23
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "A3_exclude",
+   "last10": 48.21,
+   "damage": 3.85,
+   "per_seed": [
+    43.76,
+    50.88,
+    48.27,
+    49.0,
+    49.14
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "M0_median",
+   "last10": 49.01,
+   "damage": 3.05,
+   "per_seed": [
+    47.19,
+    51.54,
+    50.21,
+    48.8,
+    47.32
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "M1_median_full",
+   "last10": 47.39,
+   "damage": 4.67,
+   "per_seed": [
+    43.11,
+    52.36,
+    47.82,
+    45.56,
+    48.1
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "N_control",
+   "last10": 52.06,
+   "damage": 0.0,
+   "per_seed": [
+    51.28,
+    53.2,
+    52.21,
+    52.09,
+    51.52
+   ]
+  }
+ ],
+ "verdict": {}
+}

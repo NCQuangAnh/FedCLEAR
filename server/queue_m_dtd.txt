@@ -1,0 +1,4 @@
+# CLEAR-v2 (gatef) rerun with --log_metrics, seeds 0-4, the two DTD settings where FedRG is ahead
+# on accuracy. DTD + DTD fits on the 12 GB card: --gpus 0 --per-gpu 2. About 1.5 h.
+dtd N_pair25_gatef
+dtd N_sym25_gatef

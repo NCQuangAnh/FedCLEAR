@@ -1,0 +1,210 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>CLEAR v2 client</title>
+<style>
+body{margin:0;background:#fff;display:flex;justify-content:center}
+svg{max-width:1410px;width:100%;font-family:Arial,Helvetica,sans-serif}
+text{fill:#222;font-size:15px}
+.s{font-size:13px;fill:#444}
+.h{font-size:16px}
+.b{font-weight:bold}
+.m{text-anchor:middle}
+.e{text-anchor:end}
+.fz{fill:#dbe6f6;stroke:#2f5fa8;stroke-width:1.6}
+.lr{fill:#fde3c8;stroke:#d9731a;stroke-width:1.6}
+.nt{fill:#f1f1f1;stroke:#777;stroke-width:1.4}
+.sv{fill:#fff3c9;stroke:#b8860b;stroke-width:1.6}
+.ok{fill:#e3f1df;stroke:#4f8a3a;stroke-width:1.6}
+.bad{fill:#f9e0dc;stroke:#b33a3a;stroke-width:1.6}
+.a{stroke:#555;stroke-width:1.8;fill:none;marker-end:url(#ar)}
+.l{stroke:#555;stroke-width:1.8;fill:none}
+.g{stroke:#b8860b}
+.nw{fill:#efe4fb;stroke:#7b3fbf;stroke-width:2.2}
+.p{fill:#7b3fbf}
+.xs{font-size:12px;fill:#444}
+.ap{stroke:#7b3fbf;stroke-width:2;fill:none;marker-end:url(#ar)}
+</style></head><body>
+<svg viewBox="0 0 1410 1130" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker>
+<symbol id="up" viewBox="0 0 64 64"><g transform="rotate(45 32 32)" fill="#d9731a"><rect x="26" y="2" width="12" height="6" rx="2"/><rect x="26" y="11" width="12" height="32"/><polygon points="26,46 38,46 32,60"/></g></symbol>
+<symbol id="fz" viewBox="0 0 64 64"><g transform="rotate(45 32 32)" fill="#2f5fa8"><rect x="26" y="2" width="12" height="6" rx="2"/><rect x="26" y="11" width="12" height="32"/><polygon points="26,46 38,46 32,60"/></g><line x1="8" y1="8" x2="56" y2="56" stroke="#fff" stroke-width="11" stroke-linecap="round"/><line x1="8" y1="8" x2="56" y2="56" stroke="#2f5fa8" stroke-width="5" stroke-linecap="round"/></symbol>
+</defs>
+
+<!-- server -->
+<g fill="#eaf1fb" stroke="#7fa3d6" stroke-width="3">
+<ellipse cx="62" cy="318" rx="34" ry="22"/><ellipse cx="100" cy="310" rx="36" ry="28"/><ellipse cx="82" cy="296" rx="26" ry="22"/>
+</g>
+<rect x="40" y="302" width="84" height="34" fill="#eaf1fb"/>
+<text class="h m" x="84" y="370">Server</text>
+<text class="s m" x="84" y="392">&#8595; P  (&#964; once)</text><text class="s m p" x="84" y="410">&#8595; gate (once), T</text><text class="s m" x="84" y="430">&#8593; trained P, s, flag, n</text><text class="s m p" x="84" y="448">&#8593; counts, 25 &#8467;(t)</text>
+<path class="a g" marker-start="url(#ar)" d="M132 288L204 130"/><path class="a g" marker-start="url(#ar)" d="M142 314H204"/><path class="a g" marker-start="url(#ar)" d="M124 336L204 500"/>
+<text class="h m" x="250" y="68">Client 1</text>
+<rect x="210" y="76" width="80" height="88" rx="10" fill="none" stroke="#5b8a3a" stroke-width="2" stroke-dasharray="7 5"/>
+<rect class="lr" x="222" y="84" width="56" height="30" rx="6"/><text class="m" x="250" y="104">P</text>
+<rect class="fz" x="222" y="126" width="56" height="30" rx="6"/><text class="m" x="250" y="146">D&#8321;</text>
+<text class="h m" x="250" y="264">Client k</text>
+<rect x="210" y="272" width="80" height="88" rx="10" fill="none" stroke="#c8641a" stroke-width="2" stroke-dasharray="7 5"/>
+<rect class="lr" x="222" y="280" width="56" height="30" rx="6"/><text class="m" x="250" y="300">P</text>
+<rect class="fz" x="222" y="322" width="56" height="30" rx="6"/><text class="m" x="250" y="342">D&#8342;</text>
+<text class="h m" x="250" y="460">Client N</text>
+<rect x="210" y="468" width="80" height="88" rx="10" fill="none" stroke="#b33a3a" stroke-width="2" stroke-dasharray="7 5"/>
+<rect class="lr" x="222" y="476" width="56" height="30" rx="6"/><text class="m" x="250" y="496">P</text>
+<rect class="fz" x="222" y="518" width="56" height="30" rx="6"/><text class="m" x="250" y="538">D&#8345;</text>
+<text class="h m" x="250" y="222">&#8942;</text><text class="h m" x="250" y="424">&#8942;</text>
+<path d="M302 302h26v-14l26 28-26 28v-14h-26z" fill="#f8cdb4" stroke="#d9641a" stroke-width="2"/>
+<g transform="translate(170,0)">
+<!-- frame -->
+<rect x="212" y="14" width="1012" height="1050" rx="26" fill="none" stroke="#c8641a" stroke-width="2.2" stroke-dasharray="9 6"/>
+<text class="h b" x="234" y="40">Client k  (CLEAR v2 = gatef)</text><rect class="nw" x="640" y="24" width="26" height="20" rx="4"/><text class="p" x="674" y="40">purple = new in v2; everything else is exactly CLEAR v1</text>
+
+<g transform="translate(0,26)">
+<!-- learnable text branch -->
+<text class="h" x="232" y="50">Prompt template, one per class (&#215;C)</text>
+<g class="m">
+<rect class="fz" x="232" y="62" width="48" height="36" rx="6"/><text x="256" y="85" class="s m">[SOS]</text>
+<rect class="lr" x="284" y="62" width="40" height="36" rx="6"/><text x="304" y="85">v&#8321;</text>
+<rect class="lr" x="328" y="62" width="40" height="36" rx="6"/><text x="348" y="85">v&#8322;</text>
+<rect class="lr" x="372" y="62" width="40" height="36" rx="6"/><text x="392" y="85">v&#8323;</text>
+<rect class="lr" x="416" y="62" width="40" height="36" rx="6"/><text x="436" y="85">v&#8324;</text>
+<rect class="fz" x="460" y="62" width="130" height="36" rx="6"/><text x="525" y="85" class="s m">&lt;class&gt; . [EOS] 0 &#8230;</text>
+</g>
+<use href="#up" x="444" y="48" width="27" height="27" transform="translate(-4,-5)"/><use href="#fz" x="578" y="48" width="27" height="27" transform="translate(-4,-5)"/>
+<path class="a" d="M590 80H628"/>
+<polygon class="fz" points="630,40 770,58 770,102 630,120"/>
+<text class="m" x="700" y="78">Text Encoder</text><text class="s m" x="700" y="95">12-layer Transformer</text>
+<use href="#fz" x="756" y="36" width="27" height="27" transform="translate(-4,-5)"/>
+<path class="a" d="M770 80H808"/>
+<rect class="nt" x="810" y="62" width="150" height="36" rx="8"/><text class="m" x="885" y="85">t&#8321; &#8230; t_C</text>
+<text class="s m" x="885" y="52">text features, received P</text>
+
+<!-- image branch -->
+<text class="h" x="232" y="150">Local images + labels</text>
+<rect class="fz" x="232" y="162" width="150" height="36" rx="8"/><text class="m" x="307" y="185">(x, y), n samples</text>
+<path class="a" d="M382 180H628"/>
+<polygon class="fz" points="630,140 770,158 770,202 630,220"/>
+<text class="m" x="700" y="178">Image Encoder</text><text class="s m" x="700" y="195">RN50 + attention pool</text>
+<use href="#fz" x="756" y="136" width="27" height="27" transform="translate(-4,-5)"/>
+<path class="a" d="M770 180H808"/>
+<rect class="nt" x="810" y="162" width="150" height="36" rx="8"/><text class="m" x="885" y="185">f(x)</text>
+<text class="s m" x="885" y="214">image feature, 1024-d</text>
+
+<!-- zero-shot text branch -->
+<text class="h" x="232" y="244">Zero-shot CLIP (frozen, computed once)</text>
+<rect class="fz" x="232" y="256" width="358" height="32" rx="6"/><text class="s m" x="411" y="277">hand-written prompt, e.g. "a type of pet, a photo of a &lt;class&gt;."</text>
+<use href="#fz" x="578" y="242" width="27" height="27" transform="translate(-4,-5)"/>
+<path class="a" d="M590 272H628"/>
+<rect class="fz" x="630" y="256" width="140" height="32" rx="6"/><text class="s m" x="700" y="277">same Text Encoder</text>
+<path class="a" d="M770 272H808"/>
+<rect class="nt" x="810" y="254" width="150" height="36" rx="8"/><text class="m" x="885" y="277">z&#8321; &#8230; z_C</text>
+
+<!-- matching: two predictions, then their average -->
+<path class="a" d="M960 80H989"/><path class="a" d="M960 272H989"/>
+<path class="a" d="M960 180H1000V91"/><path class="a" d="M1000 180V261"/>
+<circle cx="1000" cy="80" r="11" fill="#fff" stroke="#555" stroke-width="1.8"/><path class="l" d="M992 72L1008 88M1008 72L992 88"/>
+<circle cx="1000" cy="272" r="11" fill="#fff" stroke="#555" stroke-width="1.8"/><path class="l" d="M992 264L1008 280M1008 264L992 280"/>
+<path class="a" d="M1011 80H1038"/><path class="a" d="M1011 272H1038"/>
+<rect class="nt" x="1040" y="62" width="160" height="36" rx="8"/><text class="m" x="1120" y="85">p_g(&#183; | x)</text>
+<rect class="nt" x="1040" y="254" width="160" height="36" rx="8"/><text class="m" x="1120" y="277">p_z(&#183; | x)</text>
+<text class="s" x="1128" y="122">cosine &#215; 100</text><text class="s" x="1128" y="137">softmax</text>
+<path class="a" d="M1120 98V156"/><path class="a" d="M1120 254V200"/>
+<rect class="nt" x="1040" y="158" width="160" height="40" rx="8"/><text class="m" x="1120" y="175">P = &#189;(p_g + p_z)</text><text class="s m" x="1120" y="191">mixed prediction</text>
+<path class="a" d="M1200 178H1214V397H1202"/>
+
+<g transform="translate(0,40)">
+<!-- scoring row (right to left) -->
+<text class="h b" x="232" y="304">1. Score the client (every round, on the original data, P kept fixed) — same as v1</text>
+<rect class="nt" x="1000" y="332" width="200" height="50" rx="8"/><text class="m" x="1100" y="352">surprise of the label</text><text class="s m" x="1100" y="370">&#8722;log P(y&#8314;) &#8722; E&#8342;&#8764;P[&#8722;log P(k&#8314;)]</text>
+<text class="s" x="1000" y="400">y&#8314;: label merged with its most</text><text class="s" x="1000" y="415">similar class (CLIP text space)</text>
+<path class="a" d="M1000 357H962"/>
+<rect class="nt" x="800" y="339" width="160" height="36" rx="8"/><text class="m" x="880" y="362">s = mean over n</text>
+<text class="s m" x="880" y="327">Client score</text>
+<path class="a g" d="M940 339V300"/><text class="s" x="948" y="312">sent to server</text>
+<path class="a" d="M800 357H762"/>
+<rect class="nt" x="600" y="339" width="160" height="36" rx="8"/><text class="m" x="680" y="362">flag = s &gt; &#964;</text>
+<rect class="sv" x="640" y="392" width="80" height="26" rx="6"/><text class="m" x="680" y="410">&#964; = 0.05</text>
+<path class="a g" d="M680 392V377"/>
+<text class="s" x="728" y="410">fixed, same for every dataset</text>
+<path class="l" d="M600 357H560V480"/>
+
+<!-- branch -->
+<text class="h b" x="232" y="446">2. Repair only if flagged</text>
+<path class="a" d="M560 480H430V500"/><path class="a" d="M560 480H750V500"/>
+<text class="s e" x="490" y="474">no</text><text class="s" x="610" y="474">yes</text>
+<rect class="ok" x="300" y="502" width="260" height="44" rx="8"/><text class="m" x="430" y="520">Not flagged: train on the</text><text class="s m" x="430" y="538">original data, nothing touched</text>
+<rect class="nw" x="580" y="500" width="340" height="58" rx="8"/><text class="m b p" x="750" y="521">Gate open?</text><text class="s m" x="750" y="538">server decides once, after round 5:</text><text class="s m" x="750" y="551">open if LB&#8329;&#8325;(relabelled / suspects) &#8805; 0.12</text>
+<path class="a" d="M665 558V588"/><path class="ap" d="M835 558V588"/>
+<text class="s" x="672" y="574">closed (or r &#8804; 5)</text><text class="s p" x="842" y="574">open (r &gt; 5)</text>
+<rect class="nw" x="238" y="574" width="334" height="166" rx="8"/>
+<text class="m b p" x="405" y="594">Wilson lower bound (one-sided 95%)</text>
+<text class="s m" x="405" y="614">p = &#931; relabelled / &#931; suspects,  n = &#931; suspects</text>
+<text class="s m" x="405" y="630">(all clients, rounds 1&#8211;5; round 0 not counted), z = 1.645</text>
+<text class="s m" x="419" y="653">p + z&#178;/2n &#8722; z&#183;&#8730;( p(1&#8722;p)/n + z&#178;/4n&#178; )</text>
+<path d="M282 660H556" stroke="#444" stroke-width="1.2"/>
+<text class="s" x="248" y="665">LB =</text>
+<text class="s m" x="419" y="676">1 + z&#178;/n</text>
+<text class="s m b" x="405" y="698">open if LB &#8805; 0.12, decided once (never re-checked)</text>
+<text class="s m" x="405" y="716">30/200: p = 0.15, LB = 0.113 &#8594; closed</text>
+<text class="s m" x="405" y="732">40/200: p = 0.20, LB = 0.158 &#8594; open</text>
+<path class="ap" d="M600 558V600H574"/>
+<rect class="bad" x="580" y="590" width="170" height="50" rx="8"/><text class="m" x="665" y="610">Suspect: P(y) &lt; 0.1</text><text class="s m" x="665" y="629">&#8804; 60% of n  (v1 rule)</text>
+<rect class="nw" x="760" y="586" width="232" height="76" rx="8"/><text class="m" x="876" y="604">Suspect: &#960;(y) &lt; 0.05</text><text class="xs m" x="876" y="621">&#960; = sum of P_T over classes &#8804; label</text><text class="xs m" x="876" y="637">(label outside the 95% set of P_T)</text><text class="xs m p" x="876" y="654">floor: fewer than &#949;&#8320;&#183;n? add smallest &#960;</text>
+<rect class="nw" x="1000" y="428" width="218" height="232" rx="8"/>
+<text class="m b p" x="1109" y="446">Calibration (gate open)</text>
+<text class="xs m" x="1109" y="461">each round, before repair</text>
+<text class="xs" x="1008" y="481">1. 25 candidate t (0.1&#8230;2.0):</text>
+<text class="xs" x="1020" y="496">P_t = P^(1/t) &#8594; P_t(y), n &#215; 25</text>
+<text class="xs" x="1008" y="513">2. each t, try 96 &#949; (0&#8230;0.95):</text>
+<text class="xs" x="1020" y="528">&#931;&#7522; log[(1&#8722;&#949;)P_t(y&#7522;) + &#949;/C]</text>
+<text class="xs" x="1020" y="543">&#8467;(t) = best value over &#949;</text>
+<text class="xs p" x="1008" y="560">3. &#8593; send 25 &#8467;(t), nothing else</text>
+<text class="xs" x="1008" y="577">4. server: per t, sum &#8467;(t) over</text>
+<text class="xs" x="1020" y="592">clients; T = min(best t, 1) &#8595;</text>
+<text class="xs" x="1008" y="609">5. P_T = P^(1/T) (one P, used)</text>
+<text class="xs" x="1020" y="624">&#949; = best &#949; at T (own client)</text>
+<text class="xs" x="1020" y="639">&#949;&#8320; = &#949; at round 6, frozen</text>
+<text class="xs" x="1020" y="654">(never sent; only for the floor)</text>
+<path class="ap" d="M1000 624H994"/>
+<path class="a" d="M665 640V666"/><path class="a" d="M876 662V666"/>
+<rect class="bad" x="580" y="668" width="420" height="44" rx="8"/><text class="m" x="790" y="685">relabel to argmax P if max P &#8805; 0.5, else leave out</text><text class="s m" x="790" y="704">raw P = &#189;(p_g + p_z), not P_T  (same as v1)</text>
+<path class="ap" d="M1000 690H1013"/>
+<rect class="nw" x="1015" y="668" width="200" height="44" rx="8"/><text class="s m" x="1115" y="686">Send &#8593; #suspects,</text><text class="s m" x="1115" y="704">#relabelled (rounds 1&#8211;5)</text>
+<path class="a" d="M790 712V738"/><path class="a" d="M430 546V562H226V760H648" stroke-dasharray="5 3"/>
+<rect class="lr" x="650" y="740" width="280" height="40" rx="8"/><text class="m" x="790" y="765">Training set this round</text>
+<use href="#up" x="918" y="726" width="27" height="27" transform="translate(-4,-5)"/>
+<text class="s" x="950" y="755">re-scored next round from the original</text><text class="s" x="950" y="770">data, so a wrong call is undone</text>
+<path class="a" d="M790 780V806H220V872H230"/>
+
+<g transform="translate(0,160)">
+<!-- local training -->
+<text class="h b" x="232" y="676" dx="0" dy="6">3. Local prompt training (1 epoch): the only step that changes P</text>
+<rect class="lr" x="232" y="690" width="210" height="44" rx="8"/><text class="m" x="337" y="708">Batch of 16</text><text class="s m" x="337" y="726">(x, label y&#771;)</text>
+<path class="a" d="M442 712H466"/>
+<rect class="lr" x="468" y="690" width="226" height="44" rx="8"/><text class="m" x="581" y="708">Templates with current P</text><text class="s m" x="581" y="726">(v&#8321;&#8230;v&#8324;)</text>
+<use href="#up" x="682" y="676" width="27" height="27" transform="translate(-4,-5)"/>
+<path class="a" d="M694 712H718"/>
+<rect class="fz" x="720" y="690" width="210" height="44" rx="8"/><text class="m" x="825" y="708">Same two encoders</text><text class="s m" x="825" y="726">&#8594; t&#8321;&#8230;t_C and f(x)</text>
+<use href="#fz" x="918" y="676" width="27" height="27" transform="translate(-4,-5)"/>
+<path class="a" d="M930 712H954"/>
+<rect class="nt" x="956" y="690" width="244" height="44" rx="8"/><text class="m" x="1078" y="708">Loss = CE(p, y&#771;)</text><text class="s m" x="1078" y="726">backprop, gradient only for v</text>
+<path class="a" d="M1078 734V756H600V770" stroke="#c0392b"/>
+<rect class="lr" x="330" y="772" width="270" height="36" rx="8"/><text class="m" x="465" y="795">SGD (lr 0.002, momentum 0.9)</text>
+<use href="#up" x="588" y="758" width="27" height="27" transform="translate(-4,-5)"/>
+<path class="a g" d="M600 790H640"/>
+<rect class="sv" x="642" y="772" width="460" height="36" rx="8"/><text class="m" x="872" y="795">Send &#8593; trained P + s + flag + n</text>
+<text class="s" x="642" y="826">images, labels and CLIP stay on the client</text>
+</g>
+</g>
+</g>
+
+</g>
+<!-- legend -->
+<g transform="translate(60,260)">
+<use href="#fz" x="230" y="826" width="27" height="27" transform="translate(-4,-5)"/><text x="256" y="842">: Frozen</text>
+<use href="#up" x="380" y="826" width="27" height="27" transform="translate(-4,-5)"/><text x="406" y="842">: Learnable</text>
+<rect class="sv" x="540" y="826" width="26" height="20" rx="4"/><text x="574" y="842">: From / to server</text>
+<rect class="ok" x="740" y="826" width="26" height="20" rx="4"/><text x="774" y="842">: Clean path</text>
+<rect class="bad" x="900" y="826" width="26" height="20" rx="4"/><text x="934" y="842">: Repair path</text>
+<rect class="fz" x="1060" y="826" width="26" height="20" rx="4"/><text x="1094" y="842">: Local data / CLIP</text>
+<rect class="nw" x="1236" y="826" width="26" height="20" rx="4"/><text x="1268" y="842">: New (v2)</text></g>
+</svg>
+</body></html>

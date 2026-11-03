@@ -1,0 +1,967 @@
+{
+ "rows": [
+  {
+   "dataset": "caltech101",
+   "job": "A0_refuse",
+   "last10": 84.52,
+   "damage": NaN,
+   "per_seed": [
+    83.95,
+    85.61,
+    80.75,
+    86.4,
+    85.88
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "H_auto",
+   "last10": 88.72,
+   "damage": NaN,
+   "per_seed": [
+    88.38,
+    89.95,
+    87.57,
+    88.85,
+    88.86
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "H_band",
+   "last10": 88.72,
+   "damage": NaN,
+   "per_seed": [
+    86.73,
+    90.17,
+    88.41,
+    88.9,
+    89.37
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "H_soft",
+   "last10": 87.11,
+   "damage": NaN,
+   "per_seed": [
+    86.9,
+    88.58,
+    83.91,
+    87.77,
+    88.39
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "K_base",
+   "last10": 88.82,
+   "damage": NaN,
+   "per_seed": [
+    87.49,
+    90.28,
+    88.62,
+    88.85,
+    88.86
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "K_fix",
+   "last10": 89.47,
+   "damage": NaN,
+   "per_seed": [
+    89.21,
+    91.14,
+    89.62,
+    88.19,
+    89.2
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "K_fixconf",
+   "last10": 89.47,
+   "damage": NaN,
+   "per_seed": [
+    88.96,
+    90.84,
+    89.35,
+    88.91,
+    89.29
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "K_proto",
+   "last10": 88.43,
+   "damage": NaN,
+   "per_seed": [
+    87.14,
+    88.88,
+    89.25,
+    87.94,
+    88.92
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "K_restore",
+   "last10": 90.21,
+   "damage": NaN,
+   "per_seed": [
+    90.2,
+    90.79,
+    89.86,
+    89.67,
+    90.53
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "L_base",
+   "last10": 84.41,
+   "damage": NaN,
+   "per_seed": [
+    82.19,
+    86.98,
+    82.31,
+    85.77,
+    84.8
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "L_clip",
+   "last10": 87.16,
+   "damage": NaN,
+   "per_seed": [
+    85.95,
+    88.21,
+    87.08,
+    87.49,
+    87.06
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "L_clip_down",
+   "last10": 86.89,
+   "damage": NaN,
+   "per_seed": [
+    85.31,
+    88.23,
+    87.06,
+    87.49,
+    86.37
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "L_down",
+   "last10": 85.62,
+   "damage": NaN,
+   "per_seed": [
+    80.19,
+    88.91,
+    86.75,
+    87.03,
+    85.21
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "L_oracle60",
+   "last10": 88.84,
+   "damage": NaN,
+   "per_seed": [
+    86.61,
+    90.47,
+    89.57,
+    88.58,
+    88.97
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "Q_filter",
+   "last10": 89.61,
+   "damage": NaN,
+   "per_seed": [
+    89.19,
+    90.88,
+    89.08,
+    89.1,
+    89.82
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "Q_fixconf",
+   "last10": 89.77,
+   "damage": NaN,
+   "per_seed": [
+    89.58,
+    90.75,
+    89.51,
+    89.15,
+    89.88
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "Q_mae",
+   "last10": 89.79,
+   "damage": NaN,
+   "per_seed": [
+    90.36,
+    89.91,
+    89.49,
+    89.67,
+    89.5
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "Q_none",
+   "last10": 87.79,
+   "damage": NaN,
+   "per_seed": [
+    87.55,
+    88.35,
+    88.13,
+    87.57,
+    87.33
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "R_clip",
+   "last10": 87.68,
+   "damage": NaN,
+   "per_seed": [
+    87.51,
+    88.76,
+    86.04,
+    87.95,
+    88.12
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "R_none",
+   "last10": 85.43,
+   "damage": NaN,
+   "per_seed": [
+    84.28,
+    87.5,
+    83.29,
+    86.03,
+    86.06
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "R_oracle60",
+   "last10": 89.56,
+   "damage": NaN,
+   "per_seed": [
+    90.03,
+    90.06,
+    89.44,
+    88.67,
+    89.61
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "R_prec",
+   "last10": 89.69,
+   "damage": NaN,
+   "per_seed": [
+    89.95,
+    90.65,
+    88.73,
+    88.98,
+    90.12
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "R_prec_once",
+   "last10": 89.69,
+   "damage": NaN,
+   "per_seed": [
+    89.98,
+    90.65,
+    88.89,
+    88.98,
+    89.97
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "R_prec_once_hide",
+   "last10": 89.41,
+   "damage": NaN,
+   "per_seed": [
+    89.47,
+    89.95,
+    88.4,
+    89.02,
+    90.23
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "R_prec_once_turncoat",
+   "last10": 89.6,
+   "damage": NaN,
+   "per_seed": [
+    89.78,
+    90.27,
+    88.49,
+    88.77,
+    90.7
+   ]
+  },
+  {
+   "dataset": "caltech101",
+   "job": "R_prec_refresh",
+   "last10": 89.69,
+   "damage": NaN,
+   "per_seed": [
+    89.95,
+    90.65,
+    88.73,
+    88.98,
+    90.12
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "A0_refuse",
+   "last10": 47.56,
+   "damage": 4.5,
+   "per_seed": [
+    43.82,
+    50.65,
+    45.33,
+    49.75,
+    48.23
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "A1_refuse_audit",
+   "last10": 48.93,
+   "damage": 3.13,
+   "per_seed": [
+    44.06,
+    52.67,
+    49.04,
+    49.0,
+    49.88
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "H_auto",
+   "last10": 50.76,
+   "damage": 1.3,
+   "per_seed": [
+    46.38,
+    52.82,
+    50.16,
+    52.94,
+    51.52
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "L_base",
+   "last10": 49.26,
+   "damage": 2.8,
+   "per_seed": [
+    45.7,
+    52.84,
+    47.47,
+    51.34,
+    48.94
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "L_clip",
+   "last10": 49.78,
+   "damage": 2.28,
+   "per_seed": [
+    46.15,
+    53.26,
+    48.34,
+    51.95,
+    49.22
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "L_clip_down",
+   "last10": 50.28,
+   "damage": 1.78,
+   "per_seed": [
+    47.66,
+    52.98,
+    48.73,
+    51.95,
+    50.07
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "L_down",
+   "last10": 49.61,
+   "damage": 2.45,
+   "per_seed": [
+    46.4,
+    53.22,
+    47.05,
+    51.34,
+    50.06
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "L_oracle60",
+   "last10": 52.18,
+   "damage": -0.12,
+   "per_seed": [
+    50.23,
+    53.04,
+    54.54,
+    52.44,
+    50.65
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "L_tdr",
+   "last10": 50.16,
+   "damage": 1.9,
+   "per_seed": [
+    47.83,
+    53.13,
+    48.8,
+    51.95,
+    49.09
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "L_tdr_early",
+   "last10": 49.79,
+   "damage": 2.27,
+   "per_seed": [
+    46.68,
+    53.66,
+    48.01,
+    51.37,
+    49.22
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "N_audit",
+   "last10": 52.92,
+   "damage": -0.86,
+   "per_seed": [
+    51.33,
+    53.59,
+    54.02,
+    52.48,
+    53.16
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "N_control",
+   "last10": 52.06,
+   "damage": 0.0,
+   "per_seed": [
+    51.28,
+    53.2,
+    52.21,
+    52.09,
+    51.52
+   ]
+  },
+  {
+   "dataset": "dtd",
+   "job": "N_excl",
+   "last10": 50.66,
+   "damage": 1.4,
+   "per_seed": [
+    49.38,
+    51.18,
+    50.49,
+    50.83,
+    51.4
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "A0_refuse",
+   "last10": 75.88,
+   "damage": 5.35,
+   "per_seed": [
+    76.27,
+    78.79,
+    72.07,
+    77.96,
+    74.32
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "A1_refuse_audit",
+   "last10": 76.89,
+   "damage": 4.34,
+   "per_seed": [
+    77.01,
+    80.94,
+    72.33,
+    79.59,
+    74.58
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "D_inst_dbr",
+   "last10": 87.08,
+   "damage": -5.85,
+   "per_seed": [
+    87.81,
+    88.02,
+    87.41,
+    85.92,
+    86.23
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "D_inst_mae",
+   "last10": 87.5,
+   "damage": -6.26,
+   "per_seed": [
+    87.75,
+    88.5,
+    87.83,
+    87.83,
+    85.58
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "D_inst_none",
+   "last10": 82.24,
+   "damage": -1.0,
+   "per_seed": [
+    84.79,
+    86.88,
+    77.82,
+    83.36,
+    78.34
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "H_auto",
+   "last10": 85.15,
+   "damage": -3.92,
+   "per_seed": [
+    85.33,
+    87.43,
+    84.59,
+    82.9,
+    85.5
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "H_band",
+   "last10": 85.5,
+   "damage": -4.27,
+   "per_seed": [
+    86.35,
+    87.25,
+    83.24,
+    84.16,
+    86.52
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "H_soft",
+   "last10": 81.18,
+   "damage": 0.06,
+   "per_seed": [
+    83.16,
+    83.81,
+    78.5,
+    81.18,
+    79.23
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "K_base",
+   "last10": 85.45,
+   "damage": -4.21,
+   "per_seed": [
+    86.75,
+    87.24,
+    84.94,
+    84.43,
+    83.87
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "K_fix",
+   "last10": 85.93,
+   "damage": -4.69,
+   "per_seed": [
+    87.49,
+    86.86,
+    84.08,
+    85.95,
+    85.25
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "K_fixconf",
+   "last10": 85.53,
+   "damage": -4.3,
+   "per_seed": [
+    87.7,
+    86.75,
+    83.62,
+    85.94,
+    83.66
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "K_proto",
+   "last10": 87.24,
+   "damage": -6.01,
+   "per_seed": [
+    87.42,
+    88.81,
+    86.06,
+    87.34,
+    86.57
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "K_restore",
+   "last10": 87.88,
+   "damage": -6.65,
+   "per_seed": [
+    87.86,
+    88.67,
+    87.73,
+    87.81,
+    87.34
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "L_base",
+   "last10": 80.06,
+   "damage": 1.17,
+   "per_seed": [
+    80.81,
+    83.77,
+    76.54,
+    81.1,
+    78.09
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "L_clip",
+   "last10": 82.05,
+   "damage": -0.82,
+   "per_seed": [
+    81.57,
+    86.84,
+    80.15,
+    83.2,
+    78.51
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "L_clip_down",
+   "last10": 83.5,
+   "damage": -2.27,
+   "per_seed": [
+    82.32,
+    86.84,
+    81.63,
+    84.64,
+    82.08
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "L_down",
+   "last10": 81.5,
+   "damage": -0.27,
+   "per_seed": [
+    81.47,
+    84.96,
+    77.7,
+    81.81,
+    81.56
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "L_oracle60",
+   "last10": 86.71,
+   "damage": -5.47,
+   "per_seed": [
+    88.14,
+    87.81,
+    86.61,
+    85.73,
+    85.24
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "L_tdr",
+   "last10": 82.25,
+   "damage": -1.02,
+   "per_seed": [
+    81.57,
+    86.84,
+    80.18,
+    84.14,
+    78.52
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "L_tdr_early",
+   "last10": 82.61,
+   "damage": -1.38,
+   "per_seed": [
+    84.09,
+    86.26,
+    80.47,
+    82.91,
+    79.33
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "N_audit",
+   "last10": 82.24,
+   "damage": -1.01,
+   "per_seed": [
+    83.7,
+    82.28,
+    82.42,
+    82.5,
+    80.3
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "N_control",
+   "last10": 81.23,
+   "damage": 0.0,
+   "per_seed": [
+    82.58,
+    80.84,
+    81.05,
+    82.18,
+    79.52
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "N_excl",
+   "last10": 83.28,
+   "damage": -2.05,
+   "per_seed": [
+    82.18,
+    87.39,
+    84.77,
+    82.72,
+    79.34
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "Q_filter",
+   "last10": 86.97,
+   "damage": -5.74,
+   "per_seed": [
+    87.72,
+    87.52,
+    86.63,
+    86.69,
+    86.3
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "Q_fixconf",
+   "last10": 86.87,
+   "damage": -5.64,
+   "per_seed": [
+    88.23,
+    87.95,
+    84.14,
+    87.21,
+    86.83
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "Q_mae",
+   "last10": 88.12,
+   "damage": -6.88,
+   "per_seed": [
+    87.8,
+    88.64,
+    88.25,
+    88.23,
+    87.67
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "Q_none",
+   "last10": 80.46,
+   "damage": 0.77,
+   "per_seed": [
+    82.58,
+    80.84,
+    76.09,
+    83.2,
+    79.61
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "R_clip",
+   "last10": 85.45,
+   "damage": -4.21,
+   "per_seed": [
+    84.59,
+    87.42,
+    84.12,
+    87.17,
+    83.93
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "R_none",
+   "last10": 83.38,
+   "damage": -2.15,
+   "per_seed": [
+    83.38,
+    85.32,
+    81.72,
+    85.22,
+    81.26
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "R_oracle60",
+   "last10": 87.65,
+   "damage": -6.41,
+   "per_seed": [
+    87.18,
+    88.19,
+    87.53,
+    87.64,
+    87.69
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "R_prec",
+   "last10": 87.2,
+   "damage": -5.96,
+   "per_seed": [
+    86.17,
+    88.66,
+    86.03,
+    86.84,
+    88.28
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "R_prec_once",
+   "last10": 87.13,
+   "damage": -5.9,
+   "per_seed": [
+    86.04,
+    88.53,
+    86.41,
+    86.61,
+    88.08
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "R_prec_once_hide",
+   "last10": 87.24,
+   "damage": -6.01,
+   "per_seed": [
+    87.12,
+    88.18,
+    86.67,
+    87.55,
+    86.7
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "R_prec_once_turncoat",
+   "last10": 87.51,
+   "damage": -6.28,
+   "per_seed": [
+    86.32,
+    88.71,
+    87.65,
+    87.04,
+    87.84
+   ]
+  },
+  {
+   "dataset": "oxford_pets",
+   "job": "R_prec_refresh",
+   "last10": 87.2,
+   "damage": -5.96,
+   "per_seed": [
+    86.17,
+    88.66,
+    86.03,
+    86.84,
+    88.28
+   ]
+  }
+ ],
+ "verdict": {}
+}

@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minh hoạ cơ chế</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FBF8F3; --ink:#111111; --red:#C72202; --red-dk:#A31B02;
+  --tint:#F9E2DC; --muted:#6B6259; --line:#D9D2C8;
+  --ok:#1F6F3D; --ok-bg:#E3F0E6; --warn:#B86E00; --warn-bg:#FBEBCF;
+  --bad:#B22712; --bad-bg:#F9DDD6; --blue:#1D4E89; --blue-bg:#E1EAF5;
+  --serif:'Playfair Display', Georgia, serif;
+  --body:'Source Serif 4', Georgia, serif;
+  --mono:'JetBrains Mono', ui-monospace, Consolas, monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#2A2724;color:var(--ink);font-family:var(--body);
+  -webkit-font-smoothing:antialiased}
+.slide{position:relative;width:1280px;height:720px;margin:24px auto;background:var(--cream);
+  border:1.5px solid var(--ink);padding:26px 38px 22px;display:none;flex-direction:column;
+  box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden}
+.slide.on{display:flex}
+@media print{
+  html,body{background:#fff}
+  .slide{display:flex!important;margin:0;page-break-after:always;box-shadow:none}
+  #nav{display:none!important}
+}
+.hd{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1.5px solid var(--ink);
+  padding-bottom:9px;margin-bottom:12px}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.18em;color:var(--red);
+  text-transform:uppercase;margin-bottom:5px}
+h1{font-family:var(--serif);font-size:33px;line-height:1.1;margin:0;font-weight:700;letter-spacing:-.01em}
+h1 .lite{font-style:italic;font-weight:400}
+.pno{font-family:var(--mono);font-size:12px;letter-spacing:.14em;border:1.5px solid var(--ink);padding:5px 12px}
+.foot{margin-top:auto;background:var(--tint);border-left:6px solid var(--red);padding:9px 16px;
+  font-family:var(--mono);font-size:13px;color:var(--red-dk);line-height:1.5}
+.foot b{color:var(--ink)}
+
+/* ---------- interaction stage ---------- */
+.stage{position:relative;width:1204px;height:468px;margin:0 auto}
+.stage svg.wires{position:absolute;inset:0}
+.server{position:absolute;left:272px;top:6px;width:660px;height:150px;border:2px solid var(--ink);
+  background:#fff;display:flex;align-items:center;gap:14px;padding:10px 16px;box-shadow:5px 5px 0 var(--ink)}
+.server .t{font-family:var(--mono);font-weight:700;font-size:17px;letter-spacing:.1em}
+.server .s{font-size:15px;line-height:1.4;color:var(--muted);margin-top:6px}
+.clients{position:absolute;left:0;right:0;top:350px;display:flex;justify-content:space-between;padding:0 6px}
+.cl{width:104px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.cl .lap{width:92px;height:58px;border:2px solid currentColor;border-radius:4px;display:flex;
+  align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:13px;position:relative}
+.cl .lap::after{content:"";position:absolute;left:-10px;right:-10px;bottom:-8px;height:6px;
+  background:currentColor;border-radius:0 0 4px 4px}
+.cl .nm{margin-top:9px;font-size:12.5px;font-family:var(--mono);text-align:center;line-height:1.25}
+.cl.h{color:var(--ok)} .cl.h .lap{background:var(--ok-bg)}
+.cl.n{color:var(--warn)} .cl.n .lap{background:var(--warn-bg)}
+.cl.m{color:var(--bad)} .cl.m .lap{background:var(--bad-bg)}
+.callout{position:absolute;background:#fff;border:1.5px solid var(--ink);padding:9px 13px;font-size:14.5px;line-height:1.38}
+.callout .ttl{font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:.06em;margin-bottom:4px;
+  display:flex;align-items:center;gap:8px}
+.callout ul{margin:0;padding-left:18px}
+.callout li{margin:1px 0}
+.num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;
+  background:var(--red);color:#fff;font-family:var(--mono);font-weight:700;font-size:13px;flex:0 0 auto}
+.num.k{background:var(--ink)}
+.lock{position:absolute;font-family:var(--mono);font-size:12.5px;padding:5px 10px;border:1.5px dashed var(--ok);
+  color:var(--ok);background:var(--ok-bg)}
+.legend{position:absolute;display:flex;gap:16px;font-family:var(--mono);font-size:12px}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:13px;height:13px;border:1.5px solid currentColor;display:inline-block}
+
+/* ---------- inside view ---------- */
+.two{display:grid;gap:16px;flex:1 1 auto;min-height:0}
+.panel{border:1.5px solid var(--ink);background:#fff;padding:11px 14px;display:flex;flex-direction:column;gap:8px;min-height:0}
+.panel .ph{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-weight:700;font-size:14px;
+  letter-spacing:.1em;border-bottom:1.5px solid var(--ink);padding-bottom:6px}
+.panel .ph .tag{font-weight:400;letter-spacing:0;color:var(--muted);font-size:12px}
+.step{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.4}
+.step b{font-weight:700}
+.step .d{flex:1}
+.small{font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.hl{background:var(--tint);padding:0 3px}
+.fork{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}
+.fork > div{border:1.5px solid var(--line);padding:6px 9px;font-size:13.5px;line-height:1.33}
+.fork .hard{border-color:var(--ink)}
+.fork .t{font-family:var(--mono);font-size:12px;font-weight:700;margin-bottom:2px}
+.down{height:14px;display:flex;justify-content:center}
+.down::before{content:"▼";font-size:11px;color:var(--muted);line-height:14px}
+
+/* image tiles */
+.tiles{display:flex;gap:6px;align-items:flex-end}
+.tile{width:86px;border:1.5px solid var(--ink);background:#fff;font-size:11.5px;font-family:var(--mono);line-height:1.25;
+  display:flex;flex-direction:column}
+.tile .img{height:30px;display:flex;align-items:center;justify-content:center;font-family:var(--body);font-size:13px;
+  font-weight:600;border-bottom:1px solid var(--line);background:#F3EFE8}
+.tile .lb{padding:2px 4px}
+.tile .ls{height:5px;background:var(--red)}
+.tile.cut{opacity:.4;text-decoration:line-through}
+.tile.fix{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok-bg)}
+.tile.bad .lb{color:var(--bad)}
+.cutline{align-self:stretch;border-left:2.5px dashed var(--red);margin:0 3px;position:relative}
+.cutline span{position:absolute;top:-16px;left:-38px;width:80px;text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--red)}
+
+/* bars */
+.bars{display:flex;gap:9px;align-items:flex-end;height:74px;position:relative;padding:0 4px;border-bottom:1.5px solid var(--ink)}
+.bars i{display:block;width:22px;background:var(--ok)}
+.bars i.m{background:var(--bad)}
+.bars .cap{position:absolute;left:0;right:0;border-top:2px dashed var(--red)}
+.bars .cap span{position:absolute;right:0;top:-16px;font-family:var(--mono);font-size:10.5px;color:var(--red)}
+.chip{display:inline-block;font-family:var(--mono);font-size:11.5px;padding:1px 6px;border:1.2px solid currentColor;margin:0 1px}
+.chip.ok{color:var(--ok);background:var(--ok-bg)} .chip.no{color:var(--bad);background:var(--bad-bg)}
+
+#nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;
+  font-family:var(--mono);font-size:13px;color:#DDD;z-index:9}
+#nav button{font:inherit;border:1.2px solid var(--ink);background:var(--cream);cursor:pointer;padding:5px 14px}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ================= 1. NOISE: interaction ================= -->
+<section class="slide">
+  <div class="hd">
+    <div>
+      <div class="eyebrow">Kịch bản 1 · Chỉ có client cẩu thả · phương pháp K_fixconf</div>
+      <h1>Server và client <span class="lite">trao đổi gì</span> trong mỗi vòng</h1>
+    </div>
+    <div class="pno">1 / 4</div>
+  </div>
+
+  <div class="stage">
+    <svg class="wires" viewBox="0 0 1204 468">
+      <defs>
+        <marker id="aR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#C72202"/></marker>
+        <marker id="aK" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker>
+      </defs>
+      <path d="M58 330 L1146 330" stroke="#111" stroke-width="2"/>
+      <path d="M58 330 L58 348" stroke="#111" stroke-width="2"/><path d="M179 330 L179 348" stroke="#111" stroke-width="2"/><path d="M300 330 L300 348" stroke="#111" stroke-width="2"/><path d="M421 330 L421 348" stroke="#111" stroke-width="2"/><path d="M542 330 L542 348" stroke="#111" stroke-width="2"/><path d="M662 330 L662 348" stroke="#111" stroke-width="2"/><path d="M783 330 L783 348" stroke="#111" stroke-width="2"/><path d="M904 330 L904 348" stroke="#111" stroke-width="2"/><path d="M1025 330 L1025 348" stroke="#111" stroke-width="2"/><path d="M1146 330 L1146 348" stroke="#111" stroke-width="2"/>
+      <path d="M584 160 L584 318" stroke="#C72202" stroke-width="7" marker-end="url(#aR)"/>
+      <path d="M622 324 L622 166" stroke="#111" stroke-width="7" marker-end="url(#aK)"/>
+    </svg>
+
+    <div class="server">
+      <svg width="46" height="62" viewBox="0 0 46 62"><rect x="2" y="2" width="42" height="17" fill="none" stroke="#111" stroke-width="2.5"/><rect x="2" y="22" width="42" height="17" fill="none" stroke="#111" stroke-width="2.5"/><rect x="2" y="42" width="42" height="17" fill="none" stroke="#111" stroke-width="2.5"/><circle cx="36" cy="10.5" r="2.6" fill="#C72202"/><circle cx="36" cy="30.5" r="2.6" fill="#C72202"/><circle cx="36" cy="50.5" r="2.6" fill="#C72202"/></svg>
+      <div><div class="t">SERVER <span style="font-weight:400;letter-spacing:0;font-size:13px;color:var(--muted)">· giữ prompt chung (2.048 số)</span></div>
+        <div class="s" style="color:var(--ink)"><span class="num" style="width:20px;height:20px;font-size:11px;vertical-align:1px">3</span> Nhận về → <b>lấy trung bình</b> 10 prompt → prompt chung mới. Từ 10 mức lệch, tính lại <b>mức chuẩn</b> và <b>lệnh lọc</b>. Lặp 50 vòng.</div></div>
+    </div>
+
+    <div class="callout" style="left:120px;top:176px;width:440px">
+      <div class="ttl"><span class="num">1</span>SERVER GỬI XUỐNG · mỗi vòng</div>
+      <ul>
+        <li><b>Prompt chung</b> hiện tại</li>
+        <li><b>Mức lệch chuẩn</b>: client sạch thường bị mô hình chung “cãi” bao nhiêu % nhãn (1 con số)</li>
+        <li><b>Lệnh lọc</b>: CỨNG (bỏ / sửa nhãn) hay MỀM (chỉ giảm trọng số)</li>
+      </ul>
+    </div>
+
+    <div class="callout" style="left:646px;top:176px;width:440px">
+      <div class="ttl"><span class="num k">2</span>CLIENT GỬI LÊN · mỗi vòng</div>
+      <ul>
+        <li><b>Prompt đã học thêm</b> trên ảnh của mình (sau khi tự lọc)</li>
+        <li><b>Mức lệch của mình</b>: mô hình chung cãi bao nhiêu % nhãn của tôi (1 con số)</li>
+      </ul>
+    </div>
+
+    <div class="clients">
+      <div class="cl h"><div class="lap">C1</div><div class="nm">sạch</div></div>
+      <div class="cl n"><div class="lap">C2</div><div class="nm">cẩu thả</div></div>
+      <div class="cl h"><div class="lap">C3</div><div class="nm">sạch</div></div>
+      <div class="cl h"><div class="lap">C4</div><div class="nm">sạch</div></div>
+      <div class="cl n"><div class="lap">C5</div><div class="nm">cẩu thả</div></div>
+      <div class="cl h"><div class="lap">C6</div><div class="nm">sạch</div></div>
+      <div class="cl h"><div class="lap">C7</div><div class="nm">sạch</div></div>
+      <div class="cl h"><div class="lap">C8</div><div class="nm">sạch</div></div>
+      <div class="cl n"><div class="lap">C9</div><div class="nm">cẩu thả</div></div>
+      <div class="cl h"><div class="lap">C10</div><div class="nm">sạch</div></div>
+    </div>
+    <div class="legend" style="left:6px;top:446px">
+      <span style="color:var(--ok)"><i class="sw" style="background:var(--ok-bg)"></i>7 client sạch</span>
+      <span style="color:var(--warn)"><i class="sw" style="background:var(--warn-bg)"></i>3 client cẩu thả: 40% nhãn bị gắn nhầm ngẫu nhiên</span>
+      <span style="color:var(--ok)">🔒 ảnh và nhãn không bao giờ rời máy client</span>
+    </div>
+  </div>
+
+  <div class="foot">Kết quả (5 seed): <b>Pets</b> không phòng thủ 80.47 → phương pháp <b>86.87</b> (10 client sạch hết: 87.88) ·
+    <b>Caltech</b> 87.79 → <b>89.77</b> (90.21). Chỉ thêm <b>1 con số</b> mỗi chiều so với FL thường.</div>
+</section>
+
+<!-- ================= 2. NOISE: inside ================= -->
+<section class="slide">
+  <div class="hd">
+    <div>
+      <div class="eyebrow">Kịch bản 1 · Chỉ có client cẩu thả · bên trong từng bên</div>
+      <h1>Server <span class="lite">chỉ quyết “mạnh tay hay nhẹ tay”</span> — client tự dọn ảnh của mình</h1>
+    </div>
+    <div class="pno">2 / 4</div>
+  </div>
+
+  <div class="two" style="grid-template-columns:372px 1fr">
+    <div class="panel">
+      <div class="ph">TẠI SERVER <span class="tag">không thấy ảnh nào</span></div>
+      <div class="step"><span class="num k">a</span><div class="d">Nhận <b>mức lệch</b> của 10 client.<br>
+        <span class="small">vd: 0.12 · 0.10 · 0.41 · 0.14 · 0.38 …</span></div></div>
+      <div class="down"></div>
+      <div class="step"><span class="num k">b</span><div class="d">Lấy mức ở <b>nhóm thấp nhất (25%)</b> làm <b>mức lệch chuẩn</b> = “client sạch trông thế này”.
+        <span class="small">Không dùng trung vị vì tới một nửa số client có thể bẩn.</span></div></div>
+      <div class="down"></div>
+      <div class="step"><span class="num k">c</span><div class="d">Mức chuẩn thấp nghĩa là mô hình chung <b>đã đủ giỏi</b> để tin:
+        <div class="fork">
+          <div class="hard"><div class="t">&lt; 0.22 → CỨNG</div>cho phép bỏ ảnh, sửa nhãn</div>
+          <div><div class="t">≥ 0.22 → MỀM</div>chỉ giảm trọng số ảnh nghi</div>
+        </div>
+        <span class="small">Tính trên trung bình trượt, để không đổi qua đổi lại.</span></div></div>
+      <div class="down"></div>
+      <div class="step"><span class="num k">d</span><div class="d">Gửi mức chuẩn + lệnh xuống. Nhận prompt về, <b>lấy trung bình</b>.</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="ph">TẠI MỖI CLIENT <span class="tag">cứ 5 vòng chấm lại toàn bộ ảnh một lần</span></div>
+      <div class="step"><span class="num">1</span><div class="d"><b>Hỏi mô hình chung</b> về từng ảnh của mình → <b>mức lệch</b> = % ảnh mà nó đoán khác nhãn.</div></div>
+      <div class="step"><span class="num">2</span><div class="d"><b>Ước lượng mình bẩn bao nhiêu</b>: ngân sách ρ = (mức lệch của tôi − mức chuẩn) / (1 − mức chuẩn), tối đa 60%.<br>
+        Nếu ρ ≤ 0.10 → <span class="hl">coi là client sạch, không đụng gì</span>. Client sạch gần như luôn rơi vào đây.</div></div>
+      <div class="step"><span class="num">3</span><div class="d"><b>Xếp ảnh theo độ “khó học”</b> (loss cao = nhãn đáng ngờ, vì nhãn sai ngẫu nhiên rất khó khớp). Lấy ρ phần trên cùng làm <b>ảnh nghi</b>:</div></div>
+      <div style="padding-left:34px;margin:10px 0 2px">
+        <div class="tiles">
+          <div class="tile bad"><div class="img">Beagle</div><div class="lb">nhãn: Pug<br>đoán: Beagle 0.81</div><div class="ls" style="width:100%"></div></div>
+          <div class="tile bad"><div class="img">Sphynx</div><div class="lb">nhãn: Bombay<br>đoán: Pug 0.34</div><div class="ls" style="width:90%"></div></div>
+          <div class="cutline"><span>ngân sách ρ</span></div>
+          <div class="tile"><div class="img">Pug</div><div class="lb">nhãn: Pug<br>đoán: Pug</div><div class="ls" style="width:40%"></div></div>
+          <div class="tile"><div class="img">Pug</div><div class="lb">nhãn: Pug<br>đoán: Pug</div><div class="ls" style="width:25%"></div></div>
+          <div class="tile"><div class="img">Bombay</div><div class="lb">nhãn: Bombay<br>đoán: Bombay</div><div class="ls" style="width:12%"></div></div>
+          <div class="small" style="margin-left:6px;align-self:center">thanh đỏ = loss<br>trái → phải: nghi → yên tâm</div>
+        </div>
+      </div>
+      <div class="step"><span class="num">4</span><div class="d"><b>Xử lý ảnh nghi</b> theo lệnh của server:
+        <div class="fork">
+          <div class="hard"><div class="t">CỨNG</div>Mô hình chung đoán khác nhãn và tự tin ≥ 0.5 → <b>sửa nhãn</b> theo nó
+            <span class="chip ok">Beagle: Pug → Beagle</span>. Còn lại → <b>tạm bỏ</b> <span class="chip no">Sphynx</span></div>
+          <div><div class="t">MỀM</div>Không bỏ ảnh nào: ảnh càng nghi thì <b>trọng số càng nhỏ</b>, tổng phần bị giảm = ngân sách ρ.</div>
+        </div></div></div>
+      <div class="step"><span class="num">5</span><div class="d"><b>Học</b> 1 lượt trên dữ liệu đã dọn (chỉ chỉnh 2.048 số của prompt, CLIP đóng băng) → gửi prompt + mức lệch lên server.
+        <span class="small">Ảnh bị bỏ sẽ được chấm lại ở lần sau, nên có thể quay lại.</span></div></div>
+    </div>
+  </div>
+
+  <div class="foot">Ý chính: client nào <b>lệch nhiều hơn client sạch</b> thì tự dọn đúng phần “dư” đó. Client sạch có ngân sách 0 nên không bị đụng.
+    Điểm yếu còn lại: trên Pets có <b>3.2%</b> ảnh của client sạch bị bỏ nhầm hoặc sửa nhầm.</div>
+</section>
+
+<!-- ================= 3. MALICIOUS: interaction ================= -->
+<section class="slide">
+  <div class="hd">
+    <div>
+      <div class="eyebrow">Kịch bản 2 · Chỉ có kẻ chiếm máy · phương pháp R_prec (P_rec)</div>
+      <h1>Thêm một thứ gửi lên: <span class="lite">“ảnh đại diện”</span> để server tự kiểm tra</h1>
+    </div>
+    <div class="pno">3 / 4</div>
+  </div>
+
+  <div class="stage">
+    <svg class="wires" viewBox="0 0 1204 468">
+      <defs>
+        <marker id="bR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#C72202"/></marker>
+        <marker id="bK" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker>
+      </defs>
+      <path d="M58 330 L1146 330" stroke="#111" stroke-width="2"/>
+      <path d="M58 330 L58 348" stroke="#111" stroke-width="2"/><path d="M179 330 L179 348" stroke="#111" stroke-width="2"/><path d="M300 330 L300 348" stroke="#111" stroke-width="2"/><path d="M421 330 L421 348" stroke="#B22712" stroke-width="2"/><path d="M542 330 L542 348" stroke="#111" stroke-width="2"/><path d="M662 330 L662 348" stroke="#111" stroke-width="2"/><path d="M783 330 L783 348" stroke="#111" stroke-width="2"/><path d="M904 330 L904 348" stroke="#B22712" stroke-width="2"/><path d="M1025 330 L1025 348" stroke="#111" stroke-width="2"/><path d="M1146 330 L1146 348" stroke="#111" stroke-width="2"/>
+      <path d="M584 160 L584 318" stroke="#C72202" stroke-width="7" marker-end="url(#bR)"/>
+      <path d="M622 324 L622 166" stroke="#111" stroke-width="7" marker-end="url(#bK)"/>
+    </svg>
+
+    <div class="server">
+      <svg width="46" height="62" viewBox="0 0 46 62"><rect x="2" y="2" width="42" height="17" fill="none" stroke="#111" stroke-width="2.5"/><rect x="2" y="22" width="42" height="17" fill="none" stroke="#111" stroke-width="2.5"/><rect x="2" y="42" width="42" height="17" fill="none" stroke="#111" stroke-width="2.5"/><circle cx="36" cy="10.5" r="2.6" fill="#C72202"/><circle cx="36" cy="30.5" r="2.6" fill="#C72202"/><circle cx="36" cy="50.5" r="2.6" fill="#C72202"/></svg>
+      <div><div class="t">SERVER <span style="font-weight:400;letter-spacing:0;font-size:13px;color:var(--muted)">· prompt chung + CLIP gốc</span></div>
+        <div class="s" style="color:var(--ink)"><span class="num" style="width:20px;height:20px;font-size:11px;vertical-align:1px">3</span> <b>Cắt</b> bản cập nhật quá lớn → <b>kiểm tra</b> ảnh đại diện → client không khớp thì <b>thay</b> bằng bản dựng từ phần sạch của chính nó → lấy trung bình.</div></div>
+    </div>
+
+    <div class="callout" style="left:120px;top:176px;width:440px">
+      <div class="ttl"><span class="num">1</span>SERVER GỬI XUỐNG · như kịch bản 1</div>
+      <ul>
+        <li><b>Prompt chung</b> hiện tại</li>
+        <li>Mức lệch chuẩn + lệnh lọc (client sạch vẫn tự lọc như cũ)</li>
+      </ul>
+    </div>
+
+    <div class="callout" style="left:646px;top:170px;width:450px">
+      <div class="ttl"><span class="num k">2</span>CLIENT GỬI LÊN · mỗi vòng</div>
+      <ul>
+        <li>Prompt đã học thêm + mức lệch</li>
+        <li><b style="color:var(--red)">MỚI: ảnh đại diện.</b> Mỗi nhãn gom ảnh thành ≤ <b>3 cụm</b>, gửi <b>tâm cụm</b> (1.024 số đặc trưng CLIP, không phải ảnh) + số ảnh trong cụm.</li>
+      </ul>
+    </div>
+
+    <div class="clients">
+      <div class="cl h"><div class="lap">C1</div><div class="nm">sạch</div></div>
+      <div class="cl h"><div class="lap">C2</div><div class="nm">sạch</div></div>
+      <div class="cl h"><div class="lap">C3</div><div class="nm">sạch</div></div>
+      <div class="cl m"><div class="lap">C4 ☠</div><div class="nm">chiếm máy</div></div>
+      <div class="cl h"><div class="lap">C5</div><div class="nm">sạch</div></div>
+      <div class="cl h"><div class="lap">C6</div><div class="nm">sạch</div></div>
+      <div class="cl h"><div class="lap">C7</div><div class="nm">sạch</div></div>
+      <div class="cl m"><div class="lap">C8 ☠</div><div class="nm">chiếm máy</div></div>
+      <div class="cl h"><div class="lap">C9</div><div class="nm">sạch</div></div>
+      <div class="cl h"><div class="lap">C10</div><div class="nm">sạch</div></div>
+    </div>
+    <div class="legend" style="left:6px;top:446px">
+      <span style="color:var(--ok)"><i class="sw" style="background:var(--ok-bg)"></i>8 client sạch</span>
+      <span style="color:var(--bad)"><i class="sw" style="background:var(--bad-bg)"></i>2 kẻ chiếm máy: đổi 40% nhãn sang lớp nó muốn, không lọc, báo mức lệch giả, gửi cập nhật độc</span>
+    </div>
+  </div>
+
+  <div class="foot">Kết quả (5 seed): <b>Pets</b> không phòng thủ 83.38 → chỉ cắt 85.45 → <b>87.20</b> (trần 87.65, lấy lại 89%) ·
+    <b>Caltech</b> 85.43 → 87.68 → <b>89.69</b> (trần 89.56, lấy lại 103%). Trần = kẻ gian chỉ học 60% ảnh sạch.</div>
+</section>
+
+<!-- ================= 4. MALICIOUS: inside ================= -->
+<section class="slide">
+  <div class="hd">
+    <div>
+      <div class="eyebrow">Kịch bản 2 · Chỉ có kẻ chiếm máy · bên trong từng bên</div>
+      <h1>Client <span class="lite">tóm tắt ảnh</span> — server <span class="lite">đối chiếu và dựng lại</span></h1>
+    </div>
+    <div class="pno">4 / 4</div>
+  </div>
+
+  <div class="two" style="grid-template-columns:392px 1fr">
+    <div class="panel">
+      <div class="ph">TẠI CLIENT</div>
+      <div class="step"><span class="num">1</span><div class="d"><b>Client sạch</b>: tự lọc ảnh như kịch bản 1, rồi học prompt.</div></div>
+      <div class="step"><span class="num">2</span><div class="d"><b>Làm ảnh đại diện</b>: đưa từng ảnh qua bộ mã hoá ảnh CLIP (đóng băng) → mỗi ảnh thành 1 điểm. Với mỗi nhãn, gom các điểm thành ≤ 3 cụm và gửi <b>tâm</b> của từng cụm.</div></div>
+      <svg viewBox="0 0 360 132" width="100%" height="132" style="display:block">
+        <text x="4" y="14" font-family="JetBrains Mono" font-size="11" fill="#6B6259">các ảnh mang nhãn “Pug” của kẻ gian</text>
+        <ellipse cx="92" cy="72" rx="64" ry="40" fill="#E3F0E6" stroke="#1F6F3D" stroke-width="1.5"/>
+        <g fill="#1F6F3D"><circle cx="66" cy="60" r="4"/><circle cx="84" cy="80" r="4"/><circle cx="104" cy="58" r="4"/><circle cx="116" cy="84" r="4"/><circle cx="72" cy="92" r="4"/><circle cx="96" cy="70" r="4"/></g>
+        <path d="M92 64 l6 6 l-6 6 l-6 -6 z" fill="#111"/>
+        <text x="46" y="126" font-family="JetBrains Mono" font-size="11" fill="#1F6F3D">cụm A: đúng là Pug</text>
+        <ellipse cx="262" cy="72" rx="62" ry="38" fill="#F9DDD6" stroke="#B22712" stroke-width="1.5"/>
+        <g fill="#B22712"><circle cx="236" cy="64" r="4"/><circle cx="256" cy="86" r="4"/><circle cx="278" cy="58" r="4"/><circle cx="290" cy="82" r="4"/></g>
+        <path d="M262 64 l6 6 l-6 6 l-6 -6 z" fill="#111"/>
+        <text x="190" y="126" font-family="JetBrains Mono" font-size="11" fill="#B22712">cụm B: thật ra là Beagle</text>
+        <text x="146" y="30" font-family="JetBrains Mono" font-size="11" fill="#111">◆ = tâm cụm</text>
+      </svg>
+      <div class="step" style="background:var(--bad-bg);padding:6px 8px;border:1.5px solid var(--bad)"><span class="num" style="background:var(--bad)">☠</span><div class="d"><b>Kẻ chiếm máy</b>: không lọc, báo mức lệch giả. Ảnh đại diện vẫn phản ánh dữ liệu nó thật sự học, nên cụm B lộ ra.
+        <span class="small">Khi nó cố giấu (chỉ gửi cụm sạch), phương pháp vẫn giữ được 82–94% lợi ích nhờ bước so hướng (3).</span></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="ph">TẠI SERVER <span class="tag">mỗi vòng, theo thứ tự</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 16px">
+        <div>
+          <div class="step"><span class="num k">1</span><div class="d"><b>Cắt</b>: bản cập nhật nào dài hơn <b>2 × trung vị</b> thì bị thu ngắn lại, không cho một client đẩy quá mạnh.</div></div>
+          <div class="bars" style="margin:8px 0 0 34px;width:250px">
+            <i style="height:30px"></i><i style="height:36px"></i><i class="m" style="height:66px;background:linear-gradient(to top,var(--bad) 0 60px,rgba(178,39,18,.22) 60px)"></i><i style="height:28px"></i><i style="height:33px"></i><i class="m" style="height:70px;background:linear-gradient(to top,var(--bad) 0 60px,rgba(178,39,18,.22) 60px)"></i><i style="height:31px"></i>
+            <div class="cap" style="bottom:62px"><span>2 × trung vị</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="step"><span class="num k">2</span><div class="d"><b>Kiểm tra từng tâm cụm</b> bằng 2 “người đọc”: prompt chung hiện tại, và CLIP gốc (“a photo of a …”). <b>Ít nhất một người</b> đọc ra đúng nhãn thì cụm đó qua.</div></div>
+          <div style="margin:6px 0 0 34px;font-size:13px;line-height:1.55;font-family:var(--mono)">
+            cụm A “Pug” → đọc: Pug <span class="chip ok">qua</span><br>
+            cụm B “Pug” → đọc: Beagle, Beagle <span class="chip no">trượt</span>
+          </div>
+        </div>
+        <div>
+          <div class="step"><span class="num k">3</span><div class="d"><b>Gắn cờ client</b> nếu:<br>
+            • phần ảnh qua kiểm tra &lt; <b>80%</b>, hoặc<br>
+            • hướng bản cập nhật nó gửi <b>khác hẳn</b> hướng mà ảnh đại diện của chính nó chỉ ra (lệch xa hơn hẳn các client khác).</div></div>
+        </div>
+        <div>
+          <div class="step"><span class="num k">4</span><div class="d"><b>Dựng lại, không đuổi</b>: với client bị gắn cờ, server tự làm <b>1 bước học</b> trên các tâm cụm đã qua → ra bản cập nhật “sạch” của chính client đó (độ dài = trung vị) và dùng bản này <b>thay</b> bản nó gửi.</div></div>
+        </div>
+      </div>
+      <div class="step" style="margin-top:2px"><span class="num k">5</span><div class="d"><b>Lấy trung bình</b> 10 bản cập nhật → prompt chung mới. Nhờ bước 4, 60% ảnh sạch của kẻ gian <b>vẫn được dùng</b> thay vì mất trắng.</div></div>
+      <div style="display:flex;gap:10px;margin-top:auto">
+        <div style="flex:1;border:1.5px solid var(--bad);background:var(--bad-bg);padding:6px 10px;font-size:13.5px"><b>Kẻ chiếm máy</b> bị gắn cờ <b>100%</b> (Pets) / <b>97%</b> (Caltech) số vòng</div>
+        <div style="flex:1;border:1.5px solid var(--ok);background:var(--ok-bg);padding:6px 10px;font-size:13.5px"><b>Client sạch</b> bị gắn cờ nhầm <b>6.3%</b> / <b>2.6%</b> số vòng (giới hạn đặt trước: 10%)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">Cái giá: phải đổi giao thức (client gửi thêm tâm cụm) và tâm cụm để lộ một phần thông tin về ảnh. Đây là hướng bảo mật cần làm tiếp.</div>
+</section>
+
+</div>
+
+<div id="nav"><button id="prev">←</button><span id="counter">1 / 4</span><button id="next">→</button></div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  document.getElementById('counter').textContent=(i+1)+' / '+slides.length;
+  try{localStorage.setItem('mhcc-slide',i)}catch(e){}
+}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(i+1)}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+  if(e.key==='Home')show(0);
+  if(e.key==='End')show(slides.length-1);
+});
+let start=0;
+try{const v=localStorage.getItem('mhcc-slide');if(v!==null)start=parseInt(v,10)||0}catch(e){}
+show(start);
+</script>
+</body>
+</html>

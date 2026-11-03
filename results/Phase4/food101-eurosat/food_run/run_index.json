@@ -1,0 +1,61 @@
+{
+ "eurosat_ZSCLIP": {
+  "dataset": "eurosat",
+  "algo": "CLIP",
+  "method": "ZSCLIP",
+  "variant": "ZSCLIP",
+  "times": 1,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 43.5,
+  "log": "/kaggle/working/phase4/logs/eurosat_ZSCLIP.txt"
+ },
+ "food101_ZSCLIP": {
+  "dataset": "food101",
+  "algo": "CLIP",
+  "method": "ZSCLIP",
+  "variant": "ZSCLIP",
+  "times": 1,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper"
+  ],
+  "returncode": 0,
+  "seconds": 111.8,
+  "log": "/kaggle/working/phase4/logs/food101_ZSCLIP.txt"
+ },
+ "food101_P0_disguise": {
+  "dataset": "food101",
+  "algo": "CoOp",
+  "method": "PromptFL",
+  "variant": "P0_disguise",
+  "times": 5,
+  "rounds": 50,
+  "extra": [
+   "--data_transform",
+   "paper",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0.4",
+   "--noisy_client_frac",
+   "0.3",
+   "--malicious_client_frac",
+   "0.2",
+   "--log_signals",
+   "true",
+   "--attack_type",
+   "noise_disguise",
+   "--attack_rate",
+   "0.4"
+  ],
+  "returncode": 0,
+  "seconds": 24057.3,
+  "log": "/kaggle/working/phase4/logs/food101_P0_disguise.txt"
+ }
+}

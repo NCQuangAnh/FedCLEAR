@@ -1,0 +1,24 @@
+# Referee-strength gate (arm gate = CLEAR-FPL rounds 0-5, then cal's repair without its extra flag
+# only when relabelled / suspects is high). Plan and pre-registered rules:
+# results/side-research/calrepair/gate_confirm_plan.md. Pets, MNIST and EuroSAT run on Kaggle
+# (gate_pets_1/2, gate_mnist_eurosat), and the first five DTD runs in gate_dtd. Longest runs first; the weak-spot settings (W) lead.
+
+# Caltech101: weak spots (W), then the rest (S clean is not run: no suspects, gate always off)
+caltech101 N_sym75_gate
+caltech101 N_pair75_gate
+caltech101 S_sym_gate
+caltech101 S_pair_gate
+caltech101 S_inst_gate
+caltech101 S_het_gate
+caltech101 N_sym25_gate
+caltech101 N_sym50_gate
+caltech101 N_pair25_gate
+caltech101 N_pair50_gate
+
+# DTD: the weak spots (W) and S sym run on Kaggle (gate_dtd); the rest here
+dtd S_pair_gate
+dtd S_inst_gate
+dtd S_het_gate
+dtd S_clean_gate
+dtd N_sym50_gate
+dtd N_pair50_gate

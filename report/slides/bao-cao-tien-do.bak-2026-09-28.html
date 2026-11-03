@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Báo cáo tiến độ — Federated Prompt Learning dưới nhiễu nhãn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FBF8F3; --ink:#111111; --red:#C72202; --red-dk:#A31B02;
+  --tint:#F9E2DC; --rule:#111111; --muted:#6B6259; --line:#D9D2C8;
+  --ok:#1F6F3D; --bad:#B22712;
+  --serif:'Playfair Display', Georgia, 'Times New Roman', serif;
+  --body:'Source Serif 4', Georgia, serif;
+  --mono:'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#2A2724;color:var(--ink);
+  font-family:var(--body);-webkit-font-smoothing:antialiased}
+
+/* ---- deck shell ------------------------------------------------------- */
+#deck{width:100%}
+.slide{
+  position:relative;width:1280px;height:720px;margin:24px auto;background:var(--cream);
+  border:1.5px solid var(--ink);padding:30px 40px 26px;display:none;flex-direction:column;
+  box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;
+}
+.slide.on{display:flex}
+@media print{
+  html,body{background:#fff}
+  .slide{display:flex!important;margin:0;page-break-after:always;box-shadow:none;border:1px solid var(--ink)}
+  #nav,#hint{display:none!important}
+}
+
+/* ---- header / footer -------------------------------------------------- */
+.hd{display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1.5px solid var(--ink);padding-bottom:10px;margin-bottom:18px;flex:0 0 auto}
+.logo{font-family:var(--serif);font-weight:700;font-size:25px;letter-spacing:.005em}
+.logo em{color:var(--red);font-style:normal}
+.pno{font-family:var(--mono);font-size:12px;letter-spacing:.14em;border:1.5px solid var(--ink);
+  padding:5px 13px}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;color:var(--red);
+  text-transform:uppercase;margin-bottom:9px}
+h1{font-family:var(--serif);font-size:41px;line-height:1.08;margin:0 0 6px;font-weight:700;
+  letter-spacing:-.015em}
+h1 .lite{font-style:italic;font-weight:400}
+.bar{width:132px;height:6px;background:var(--red);margin:9px 0 16px}
+.body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.body-inner{display:flex;flex-direction:column;gap:12px;flex:1 1 auto;min-height:0;
+  transform-origin:top left;width:100%}
+.foot{flex:0 0 auto;margin-top:12px;background:var(--tint);border-left:6px solid var(--red);
+  padding:11px 17px;font-family:var(--mono);font-size:13.5px;color:var(--red-dk);line-height:1.5}
+
+/* ---- title slide ------------------------------------------------------ */
+.title-slide{justify-content:center;align-items:center;text-align:center;padding:0 90px}
+.title-slide .kick{font-family:var(--mono);font-size:14px;letter-spacing:.24em;
+  display:flex;align-items:center;gap:20px;margin-bottom:34px}
+.title-slide .kick::before,.title-slide .kick::after{content:"";width:74px;height:2.5px;background:var(--red)}
+.title-slide h1{font-size:62px;line-height:1.04;margin-bottom:22px}
+.title-slide h1 em{color:var(--red);font-style:normal}
+.sub{font-size:22px;line-height:1.5;color:var(--ink);max-width:930px;margin:0 auto}
+.chips{display:flex;gap:14px;margin-top:40px;justify-content:center;flex-wrap:wrap}
+.chip{border:1.5px solid var(--ink);padding:9px 17px;font-family:var(--mono);font-size:12.5px;
+  display:flex;align-items:center;gap:9px}
+.chip .dot{width:10px;height:10px;border-radius:50%;background:var(--red)}
+.rule-mini{width:220px;height:1.5px;background:var(--line);margin:28px auto 0}
+.tagline{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--muted);margin-top:16px}
+
+/* ---- generic bits ----------------------------------------------------- */
+.cols{display:flex;gap:15px;flex:1 1 auto;min-height:0}
+.card{border:1.5px solid var(--ink);padding:13px 15px;background:var(--cream);flex:1;
+  display:flex;flex-direction:column;min-width:0}
+.card.red{border-color:var(--red);background:#FDF4F1}
+.card h3{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  margin:0 0 10px;color:var(--red)}
+.card p{margin:0 0 6px;font-size:14.5px;line-height:1.45}
+.big{font-family:var(--serif);font-size:40px;font-weight:700;line-height:1;margin:4px 0 2px}
+.big.red{color:var(--red)} .big.ok{color:var(--ok)} .big.bad{color:var(--bad)}
+.lbl{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--muted);
+  text-transform:uppercase}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  text-align:left;padding:7px 9px;border-bottom:1.5px solid var(--ink);color:var(--muted);
+  font-weight:400;vertical-align:bottom}
+td{padding:6px 8px;border-bottom:1px solid var(--line);line-height:1.3}
+td.n,th.n{text-align:right;font-family:var(--mono);font-size:13.5px}
+tr.hi td{background:var(--tint);font-weight:600}
+tr.dim td{color:var(--muted)}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;padding:2.5px 8px;
+  border:1.2px solid currentColor;text-transform:uppercase;white-space:nowrap}
+.tag.pass{color:var(--ok)} .tag.fail{color:var(--bad)} .tag.wait{color:var(--muted)}
+
+ul.clean{margin:0;padding-left:0;list-style:none}
+ul.clean li{padding:7px 0 7px 22px;position:relative;font-size:15px;line-height:1.5;
+  border-bottom:1px solid var(--line)}
+ul.clean li:last-child{border-bottom:none}
+ul.clean li::before{content:"";position:absolute;left:0;top:15px;width:9px;height:9px;
+  background:var(--red)}
+strong{font-weight:600}
+.mono{font-family:var(--mono);font-size:.93em}
+
+/* ladder */
+.ladder{display:flex;flex-direction:column;gap:7px;flex:1 1 auto;justify-content:center}
+.rung{display:flex;align-items:center;gap:14px}
+.rung .nm{width:270px;font-size:14.5px;flex:0 0 auto}
+.rung .track{flex:1 1 auto;height:26px;background:#EFE9E0;position:relative;border:1px solid var(--line)}
+.rung .fill{position:absolute;left:0;top:0;bottom:0;background:var(--red);opacity:.22}
+.rung .fill.solid{opacity:1}
+.rung .fill.grey{background:var(--muted);opacity:.28}
+.rung .val{width:150px;flex:0 0 auto;text-align:right;font-family:var(--mono);font-size:14px}
+
+/* system diagram v2 */
+.diagram{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center}
+.diagram svg{width:100%;height:100%;max-height:100%}
+.sq.ok{fill:#D9D2C8;stroke:#B9B0A4;stroke-width:1}
+.sq.bad{fill:#C72202;stroke:#A31B02;stroke-width:1}
+.sq.gone{fill:none;stroke-width:1.3;stroke-dasharray:3 2}
+.sq.bad-o{stroke:#C72202}
+.sq.ok-o{stroke:#6B6259}
+.d-h{font-family:var(--mono);font-size:12px;letter-spacing:.14em;fill:var(--red);font-weight:700}
+.d-hs{font-family:var(--body);font-size:12.5px;fill:var(--muted)}
+.d-name{font-family:var(--body);font-size:16px;font-weight:600;fill:var(--ink)}
+.d-sub{font-family:var(--body);font-size:12.5px;fill:var(--muted)}
+.d-tag{font-family:var(--body);font-size:12.5px;fill:var(--ink)}
+.d-l{font-family:var(--body);font-size:15px;font-weight:600;fill:var(--ink)}
+.d-w{font-family:var(--mono);font-size:11.5px;fill:var(--ink)}
+.d-wr{font-family:var(--mono);font-size:11.5px;fill:var(--red-dk)}
+.d-panel{fill:#FDF4F1;stroke:var(--red);stroke-width:1.4}
+.d-srv{fill:var(--cream);stroke:var(--ink);stroke-width:1.5}
+.d-step{fill:var(--cream);stroke:var(--line);stroke-width:1.2}
+.d-step.acc{fill:var(--tint);stroke:var(--red)}
+.d-note{fill:#F3EFE8;stroke:none}
+.d-arr{stroke:#6B6259;stroke-width:1.3;fill:none}
+.d-big{stroke:var(--ink);stroke-width:2;fill:none}
+.d-back{stroke:var(--red);stroke-width:1.6;fill:none;stroke-dasharray:6 3}
+
+/* coverage matrix */
+table.cov{font-size:13.5px}
+table.cov th.c,table.cov td.c{text-align:center;width:86px;padding:6px 4px}
+table.cov td.c{font-size:17px;line-height:1}
+table.cov .y{color:var(--ink)}
+table.cov .p{color:var(--ink)}
+table.cov .n{color:#C9C0B4}
+table.cov .q{color:var(--muted);font-family:var(--mono);font-size:13px}
+table.cov .na{color:#C9C0B4;font-family:var(--mono);font-size:13px}
+table.cov tr.me td{background:var(--tint);font-weight:600}
+table.cov tr.me td.c{color:var(--red)}
+table.cov .who{font-size:12px;color:var(--muted);font-weight:400}
+.cmp td{vertical-align:top}
+.cmp td.k{font-weight:600;width:170px}
+.cmp td.us{background:#FDF4F1}
+
+/* settings slide */
+table.kv{font-size:16px}
+table.kv td{padding:4px 8px;border-bottom:1px solid var(--line);line-height:1.2}
+.card:has(table.kv) h3{font-size:13px;margin-bottom:6px}
+table.kv td:first-child{color:var(--muted);width:34%;white-space:nowrap}
+table.kv td:last-child{font-weight:600}
+table.kv tr:last-child td{border-bottom:none}
+
+/* flow */
+.flow{display:flex;align-items:stretch;gap:10px}
+.step{flex:1;border:1.5px solid var(--ink);padding:12px 12px;text-align:center;background:var(--cream);
+  display:flex;flex-direction:column;justify-content:center}
+.step.acc{border-color:var(--red);background:#FDF4F1}
+.step .t{font-family:var(--mono);font-size:12px;letter-spacing:.06em;font-weight:700;margin-bottom:5px}
+.step.acc .t{color:var(--red)}
+.step .d{font-size:12.5px;color:var(--muted);line-height:1.4}
+.arrow{display:flex;align-items:center;font-size:20px;color:var(--ink);flex:0 0 auto}
+
+#nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;
+  align-items:center;background:var(--cream);border:1.5px solid var(--ink);padding:7px 14px;
+  font-family:var(--mono);font-size:12.5px;z-index:9}
+#nav button{font:inherit;border:1.2px solid var(--ink);background:var(--cream);cursor:pointer;
+  padding:3px 11px}
+#nav button:hover{background:var(--tint)}
+#hint{position:fixed;top:14px;right:16px;font-family:var(--mono);font-size:11px;color:#C9C2B8;z-index:9}
+</style>
+</head>
+<body>
+<div id="hint">← → chuyển slide · P in ra PDF</div>
+<div id="deck">
+
+<!-- 1 ============================================================= -->
+<section class="slide title-slide">
+  <div class="kick">ĐỒ ÁN TỐT NGHIỆP · BÁO CÁO TIẾN ĐỘ</div>
+  <h1>Lọc ảnh, <em>không đuổi client</em></h1>
+  <div class="sub">Federated prompt learning trên CLIP đóng băng khi liên đoàn có cả client<br>gán nhãn cẩu thả lẫn client cố ý đầu độc — chế độ few-shot</div>
+  <div class="mono" style="font-size:13px;color:var(--muted);margin-top:14px;letter-spacing:.02em">Filter samples, not clients: robust federated prompt learning under noisy and malicious clients</div>
+  <div class="rule-mini"></div>
+  <div class="tagline">Nhận ra kẻ xấu thì làm được — nhưng cách chữa là lọc từng ảnh, không phải đuổi người</div>
+  <div class="chips">
+    <div class="chip"><span class="dot"></span> 11 cổng thí nghiệm</div>
+    <div class="chip">~110 giờ GPU T4</div>
+    <div class="chip">5 dataset · 5 seed/cấu hình</div>
+    <div class="chip">benchmark FLIP (NeurIPS 2025)</div>
+  </div>
+</section>
+
+<!-- intro A ======================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">02 / 22</div></div>
+  <div class="eyebrow">I · Bối cảnh</div>
+  <h1>Federated prompt learning là gì, <span class="lite">và vì sao nhãn sai là vấn đề</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>Cách hoạt động</h3>
+        <p>CLIP được giữ <strong>nguyên, không đụng tới</strong>. Mỗi client chỉ học một đoạn <strong>prompt</strong> — 2.048 con số — trên ảnh của mình.</p>
+        <p style="margin-top:7px">Server <strong>lấy trung bình</strong> các prompt rồi gửi lại. Ảnh không bao giờ rời khỏi máy client.</p></div>
+      <div class="card"><h3>Vì sao được dùng</h3>
+        <p><strong>Nhẹ:</strong> gửi 2.048 số thay vì ~100 triệu tham số của CLIP.</p>
+        <p style="margin-top:7px"><strong>Cần rất ít ảnh:</strong> 8 ảnh mỗi lớp đã học được — hợp với dữ liệu thật, vốn luôn ít.</p></div>
+      <div class="card red"><h3>Nhưng</h3>
+        <p><strong>Ít ảnh thì mỗi nhãn sai rất đắt:</strong> sai 3 trong 8 ảnh là sai 37,5% những gì mô hình biết về lớp đó.</p>
+        <p style="margin-top:7px">Và nhãn do <strong>chính client</strong> gán — cẩu thả hay cố ý, không ai kiểm được.</p></div>
+    </div>
+    <div class="cols" style="flex:1 1 auto">
+      <div class="card red" style="flex:0 0 330px;justify-content:center">
+        <div class="lbl">OxfordPets · 3 client cẩu thả + 2 phá hoại</div>
+        <div class="big bad" style="font-size:64px;margin-top:6px">−9,81</div>
+        <div class="lbl">điểm so với không huấn luyện gì</div></div>
+      <div class="card" style="justify-content:center">
+        <p style="font-size:17px;line-height:1.5">Huấn luyện chung được <strong>75,88</strong>. Cứ để nguyên CLIP, không huấn luyện gì: <strong>85,69</strong>.</p>
+        <p style="font-size:17px;line-height:1.5;margin-top:10px">Tham gia federated learning còn <strong>tệ hơn không làm gì</strong>. Câu hỏi của đồ án: làm sao cứu nó — khi server không nhìn thấy ảnh nào, nhãn nào?</p></div>
+    </div>
+  </div>
+  <div class="foot">Nền tảng: <strong>PromptFL</strong> (arXiv 2208.11625) = CoOp + FedAvg. Benchmark dùng xuyên suốt: <strong>FLIP</strong> (arXiv 2503.22263, NeurIPS 2025 D&amp;B).</div>
+</section>
+
+<!-- intro B ======================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">03 / 22</div></div>
+  <div class="eyebrow">I · Bối cảnh — các nghiên cứu đã có</div>
+  <h1>Mỗi mảnh đã có người làm, <span class="lite">nhưng chưa ai ghép đủ</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <table class="cov">
+      <tr><th>Hướng nghiên cứu</th><th class="c">Prompt trên CLIP</th><th class="c">Federated</th><th class="c">Few-shot</th><th class="c">Nhãn nhiễu</th><th class="c">Kẻ tấn công</th><th class="c">Cả hai cùng lúc</th><th class="c">Không cần dữ liệu sạch</th></tr>
+        <tr><td><strong>Federated prompt learning</strong><br><span class="who">PromptFL · FedOTP (CVPR 24) · FedPGP (ICML 24) · pFedMoAP (ICLR 25)</span></td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c n">○</td><td class="c n">○</td><td class="c n">○</td><td class="c na">—</td></tr>
+        <tr><td><strong>FPL chống tấn công</strong><br><span class="who">SABRE-FL (ICLR 26) · BadPromptFL</span></td><td class="c y">●</td><td class="c y">●</td><td class="c q">?</td><td class="c n">○</td><td class="c y">●</td><td class="c n">○</td><td class="c n">○</td></tr>
+        <tr><td><strong>Prompt học với nhãn nhiễu, không FL</strong><br><span class="who">NLPrompt (CVPR 25) · JoAPR (CVPR 24) · CRoF · TrustCLIP (MM 25)</span></td><td class="c y">●</td><td class="c n">○</td><td class="c p">◐</td><td class="c y">●</td><td class="c n">○</td><td class="c n">○</td><td class="c na">—</td></tr>
+        <tr><td><strong>FL nhãn nhiễu dùng LoRA</strong><br><span class="who">RFedLR (NeurIPS 25) · FedDR-LoRA (ICML 26)</span></td><td class="c n">○</td><td class="c y">●</td><td class="c n">○</td><td class="c y">●</td><td class="c n">○</td><td class="c n">○</td><td class="c n">○</td></tr>
+        <tr><td><strong>FL nhãn nhiễu dùng CLIP</strong><br><span class="who">FedPN (IEEE TBD 25) — tự nhận là bài đầu tiên</span></td><td class="c p">◐</td><td class="c y">●</td><td class="c q">?</td><td class="c y">●</td><td class="c n">○</td><td class="c n">○</td><td class="c q">?</td></tr>
+        <tr><td><strong>FL nhãn nhiễu, train từ đầu</strong><br><span class="who">FedSNC (Neurocomputing 26) · ClipFL</span></td><td class="c n">○</td><td class="c y">●</td><td class="c n">○</td><td class="c y">●</td><td class="c n">○</td><td class="c n">○</td><td class="c n">○</td></tr>
+        <tr><td><strong>Tách client nhiễu với kẻ tấn công</strong><br><span class="who">MUD-HoG (ESORICS 22) · Fed-RoSeC (ITASEC 26)</span></td><td class="c n">○</td><td class="c y">●</td><td class="c n">○</td><td class="c p">◐</td><td class="c y">●</td><td class="c y">●</td><td class="c q">?</td></tr>
+        <tr class="me"><td><strong>Đồ án này</strong><br><span class="who"></span></td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td><td class="c y">●</td></tr>
+    </table>
+    <p style="margin:4px 0 0;font-size:13px;color:var(--muted)">● có &nbsp;·&nbsp; ◐ một phần &nbsp;·&nbsp; ○ không &nbsp;·&nbsp; ? chưa xác minh được &nbsp;·&nbsp; — không áp dụng (không có server)</p>
+  </div>
+  <div class="foot">Đọc theo hàng: mỗi hướng chỉ phủ vài cột. Đọc theo cột: cột nào cũng có người làm. <strong>Chỉ hàng cuối phủ cả bảy.</strong> Nguồn: review có giao thức, <span class="mono">docs/literature/phase0*.md</span>.</div>
+</section>
+
+<!-- intro C ======================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">04 / 22</div></div>
+  <div class="eyebrow">I · Bối cảnh — điểm khác và điểm nổi bật</div>
+  <h1>Bài toán này khác ở đâu, <span class="lite">và vì sao đáng làm</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <table class="cmp">
+      <tr><th>Khía cạnh</th><th>Các bài hiện có</th><th>Đồ án này</th></tr>
+      <tr><td class="k">Loại client xấu</td>
+        <td>Chỉ <strong>một</strong> loại: hoặc cẩu thả (FedSNC, RFedLR), hoặc tấn công (SABRE-FL)</td>
+        <td class="us"><strong>Cả hai trong cùng một liên đoàn</strong>: 3 cẩu thả + 2 phá hoại trên 10 client</td></tr>
+      <tr><td class="k">Lượng dữ liệu</td>
+        <td>Đầy đủ — RFedLR, FedDR-LoRA chạy trên toàn bộ CIFAR-100</td>
+        <td class="us"><strong>8 ảnh/lớp cho cả liên đoàn</strong>, mỗi client ~30 ảnh</td></tr>
+      <tr><td class="k">Thứ được huấn luyện</td>
+        <td>Cả mô hình, hoặc LoRA</td>
+        <td class="us">Chỉ <strong>2.048 số</strong> prompt; CLIP giữ nguyên</td></tr>
+      <tr><td class="k">Server có gì để dựa vào</td>
+        <td>Tập dữ liệu sạch riêng (FedSNC, RFedLR), tập kiểm tra sạch (ClipFL), bộ phát hiện huấn luyện sẵn (SABRE-FL)</td>
+        <td class="us"><strong>Không có gì</strong> ngoài prompt các client gửi lên</td></tr>
+    </table>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card red"><h3>Nổi bật 1 · Chưa ai làm</h3>
+        <p>Chưa tìm thấy bài nào về federated prompt learning dưới <strong>nhãn nhiễu</strong> — càng chưa có bài nào xét <strong>nhãn nhiễu và kẻ tấn công cùng lúc</strong>.</p></div>
+      <div class="card red"><h3>Nổi bật 2 · Đi ngược thói quen</h3>
+        <p>Cả lĩnh vực xử lý client xấu bằng cách <strong>đuổi họ ra</strong>. Ở chế độ ít dữ liệu, đồ án đo được điều đó <strong>gần như vô ích</strong> — cách đúng là lọc <strong>từng ảnh</strong>, giữ lại client.</p></div>
+      <div class="card red"><h3>Nổi bật 3 · Không cần gì sạch</h3>
+        <p>Không tập sạch, không nhãn thật, không cần biết ai là ai. Server chỉ dùng prompt và <strong>một con số</strong> mỗi client.</p></div>
+    </div>
+  </div>
+  <div class="foot">"Chưa ai làm" nghĩa là <strong>chưa tìm thấy</strong> trong review có giao thức (arXiv, OpenAlex, trích dẫn xuôi, 16 truy vấn web; 2021–2026) — độ tin cậy <strong>trung bình</strong>, vì không thấy được bài đang chờ công bố.</div>
+</section>
+
+<!-- 2 ============================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">05 / 22</div></div>
+  <div class="eyebrow">I · Bài toán</div>
+  <h1>Ba loại client, hai loại hỏng <span class="lite">ngược nhau</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols">
+      <div class="card"><h3>Client thật thà</h3>
+        <div class="big">5 / 10</div><div class="lbl">nhãn đúng 100%</div>
+        <p style="margin-top:10px">Dữ liệu sạch. Mọi can thiệp lên nhóm này đều là thiệt hại thuần.</p></div>
+      <div class="card"><h3>Client nhiễu (cẩu thả)</h3>
+        <div class="big red">3 / 10</div><div class="lbl">lật 40% nhãn, ngẫu nhiên</div>
+        <p style="margin-top:10px">Không cố ý. <strong>60% dữ liệu vẫn tốt</strong> và vẫn cần dùng.</p></div>
+      <div class="card red"><h3>Client độc hại</h3>
+        <div class="big red">2 / 10</div><div class="lbl">lật 40% nhãn về MỘT lớp đích</div>
+        <p style="margin-top:10px">Cùng tỉ lệ lật, nên mọi thống kê "client này lệch bao nhiêu" <strong>nhìn thấy y hệt</strong> client nhiễu.</p>
+        <p style="margin-top:8px;padding-top:8px;border-top:1px solid var(--red)"><strong>Kiểu tấn công: đầu độc dữ liệu</strong> (đổi nhãn có mục tiêu). Kẻ gian chỉ động vào <strong>dữ liệu</strong>; phần mềm trên máy vẫn chạy chuẩn.</p></div>
+    </div>
+    <table>
+      <tr><th>Cấu hình</th><th>Nguồn</th><th class="n">DTD</th><th class="n">Caltech101</th><th class="n">OxfordPets</th></tr>
+      <tr><td>CLIP gốc, không huấn luyện</td><td class="mono">ZS-CLIP</td><td class="n">41,78</td><td class="n">85,76</td><td class="n">85,69</td></tr>
+      <tr class="hi"><td>10 client đều sạch — <strong>đích cần đuổi kịp</strong></td><td class="mono">PromptFL</td><td class="n">55,61</td><td class="n">90,28</td><td class="n">88,09</td></tr>
+      <tr><td>+ 3 client nhiễu</td><td class="mono">N_control</td><td class="n">52,06</td><td class="n">87,25</td><td class="n">81,23</td></tr>
+      <tr><td>+ 2 client độc hại</td><td class="mono">A0_refuse</td><td class="n">47,56</td><td class="n">–</td><td class="n">75,88</td></tr>
+    </table>
+  </div>
+  <div class="foot">Khoảng cách phải lấp trên DTD: <strong>8,05 điểm</strong> — 3,55 do client nhiễu, 4,50 do client độc hại. Kiểu kẻ gian <strong>chiếm quyền cả máy</strong> (bỏ bước lọc, gửi gì tuỳ ý) chưa được đo — sẽ chạy sau.</div>
+</section>
+
+<!-- diagram ======================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">06 / 22</div></div>
+  <div class="eyebrow">I · Bài toán</div>
+  <h1>Hệ thống chạy thế nào: <span class="lite">lọc ảnh, không đuổi người</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="diagram">
+      <svg viewBox="0 0 1180 404" preserveAspectRatio="xMidYMid meet" role="img"
+           aria-label="Mỗi client tự lọc bỏ những ảnh nghi là sai nhãn bên trong dữ liệu của mình, rồi chỉ gửi prompt lên server; server gộp prompt và gửi lại mức bẩn chuẩn cùng chế độ lọc. Không client nào bị loại.">
+        <defs>
+          <marker id="dah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#111111"/></marker>
+          <marker id="dahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#C72202"/></marker>
+        </defs>
+
+        <!-- column headers -->
+        <text class="d-h" x="12" y="30">① DỮ LIỆU MỖI CLIENT</text>
+        <text class="d-hs" x="12" y="48">~30 ảnh / client — mỗi ô là một ảnh</text>
+        <text class="d-h" x="452" y="30">② CLIENT TỰ LỌC ẢNH CỦA MÌNH</text>
+        <text class="d-hs" x="452" y="48">ảnh học mãi không thuộc → nghi là nhãn sai</text>
+
+        <!-- our contribution: the filter, inside each client -->
+        <rect class="d-panel" x="436" y="60" width="252" height="232"/>
+
+        
+        <text class="d-name" x="12" y="89">Thật thà</text>
+        <text class="d-sub" x="12" y="107">×5 · nhãn đúng hết</text>
+        <rect class="sq ok" x="208" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="226" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="244" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="262" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="280" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="298" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="316" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="334" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="352" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="370" y="78" width="14" height="14"/>
+        <path class="d-arr" d="M392,85 L436,85" marker-end="url(#dah)"/>
+        <rect class="sq ok" x="452" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="470" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="488" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="506" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="524" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="542" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="560" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="578" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="596" y="78" width="14" height="14"/>
+        <rect class="sq ok" x="614" y="78" width="14" height="14"/>
+        <text class="d-tag" x="452" y="112">hạn mức ≈ 0 → không đụng ảnh nào</text>
+        <text class="d-name" x="12" y="167">Cẩu thả</text>
+        <text class="d-sub" x="12" y="185">×3 · 40% nhãn sai ngẫu nhiên</text>
+        <rect class="sq ok" x="208" y="156" width="14" height="14"/>
+        <rect class="sq bad" x="226" y="156" width="14" height="14"/>
+        <rect class="sq ok" x="244" y="156" width="14" height="14"/>
+        <rect class="sq ok" x="262" y="156" width="14" height="14"/>
+        <rect class="sq bad" x="280" y="156" width="14" height="14"/>
+        <rect class="sq ok" x="298" y="156" width="14" height="14"/>
+        <rect class="sq bad" x="316" y="156" width="14" height="14"/>
+        <rect class="sq ok" x="334" y="156" width="14" height="14"/>
+        <rect class="sq ok" x="352" y="156" width="14" height="14"/>
+        <rect class="sq bad" x="370" y="156" width="14" height="14"/>
+        <path class="d-arr" d="M392,163 L436,163" marker-end="url(#dah)"/>
+        <rect class="sq ok" x="452" y="156" width="14" height="14"/>
+        <rect class="sq gone bad-o" x="470" y="156" width="14" height="14"/>
+        <rect class="sq ok" x="488" y="156" width="14" height="14"/>
+        <rect class="sq ok" x="506" y="156" width="14" height="14"/>
+        <rect class="sq gone bad-o" x="524" y="156" width="14" height="14"/>
+        <rect class="sq ok" x="542" y="156" width="14" height="14"/>
+        <rect class="sq bad" x="560" y="156" width="14" height="14"/>
+        <rect class="sq ok" x="578" y="156" width="14" height="14"/>
+        <rect class="sq gone ok-o" x="596" y="156" width="14" height="14"/>
+        <rect class="sq gone bad-o" x="614" y="156" width="14" height="14"/>
+        <text class="d-tag" x="452" y="190">bỏ 3/4 ảnh sai · oan 1 ảnh đúng</text>
+        <text class="d-name" x="12" y="245">Phá hoại</text>
+        <text class="d-sub" x="12" y="263">×2 · 40% dồn về 1 lớp đích</text>
+        <rect class="sq ok" x="208" y="234" width="14" height="14"/>
+        <rect class="sq ok" x="226" y="234" width="14" height="14"/>
+        <rect class="sq ok" x="244" y="234" width="14" height="14"/>
+        <rect class="sq ok" x="262" y="234" width="14" height="14"/>
+        <rect class="sq ok" x="280" y="234" width="14" height="14"/>
+        <rect class="sq ok" x="298" y="234" width="14" height="14"/>
+        <rect class="sq bad" x="316" y="234" width="14" height="14"/>
+        <rect class="sq bad" x="334" y="234" width="14" height="14"/>
+        <rect class="sq bad" x="352" y="234" width="14" height="14"/>
+        <rect class="sq bad" x="370" y="234" width="14" height="14"/>
+        <path class="d-arr" d="M392,241 L436,241" marker-end="url(#dah)"/>
+        <rect class="sq ok" x="452" y="234" width="14" height="14"/>
+        <rect class="sq ok" x="470" y="234" width="14" height="14"/>
+        <rect class="sq ok" x="488" y="234" width="14" height="14"/>
+        <rect class="sq ok" x="506" y="234" width="14" height="14"/>
+        <rect class="sq ok" x="524" y="234" width="14" height="14"/>
+        <rect class="sq ok" x="542" y="234" width="14" height="14"/>
+        <rect class="sq gone bad-o" x="560" y="234" width="14" height="14"/>
+        <rect class="sq gone bad-o" x="578" y="234" width="14" height="14"/>
+        <rect class="sq gone bad-o" x="596" y="234" width="14" height="14"/>
+        <rect class="sq gone bad-o" x="614" y="234" width="14" height="14"/>
+        <text class="d-tag" x="452" y="268">bỏ các ảnh bị đầu độc</text>
+
+        <!-- to the server -->
+        <path class="d-big" d="M696,176 L770,176" marker-end="url(#dah)"/>
+        <text class="d-w" x="700" y="164">chỉ gửi</text>
+        <text class="d-w" x="700" y="196">prompt</text>
+
+        <!-- server -->
+        <text class="d-h" x="778" y="30">③ SERVER</text>
+        <text class="d-hs" x="778" y="48">không thấy ảnh, không thấy nhãn, không biết ai là ai</text>
+        <rect class="d-srv" x="778" y="60" width="394" height="232"/>
+
+        <rect class="d-step" x="794" y="74" width="362" height="52"/>
+        <text class="d-l" x="808" y="96">Gộp 10 prompt (lấy trung bình)</text>
+        <text class="d-sub" x="808" y="114">→ prompt chung, dùng cho vòng sau</text>
+
+        <rect class="d-step acc" x="794" y="136" width="362" height="66"/>
+        <text class="d-l" x="808" y="158">Đo mức “bẩn bình thường”</text>
+        <text class="d-sub" x="808" y="176">= mô hình chung sai bao nhiêu trên client sạch nhất</text>
+        <text class="d-sub" x="808" y="193">→ chọn <tspan font-weight="700">xoá hẳn</tspan> hay <tspan font-weight="700">hạ trọng số</tspan></text>
+
+        <rect class="d-note" x="794" y="212" width="362" height="66"/>
+        <text class="d-sub" x="808" y="232"><tspan font-weight="700" fill="#111111">Không loại client nào.</tspan> Nhận diện kẻ phá hoại</text>
+        <text class="d-sub" x="808" y="249">được (AUC 0,91–0,99), nhưng loại họ chỉ +0,65</text>
+        <text class="d-sub" x="808" y="266">vì mất luôn 60% ảnh tốt của chính họ.</text>
+
+        <!-- back to the clients, for the next round -->
+        <path class="d-back" d="M975,292 L975,326 L562,326 L562,296" marker-end="url(#dahr)"/>
+        <text class="d-wr" x="600" y="344">gửi lại cho mọi client: mức bẩn bình thường + chế độ lọc</text>
+        <text class="d-sub" x="600" y="361">mỗi client tự so với mức đó để biết mình được lọc tối đa bao nhiêu ảnh</text>
+
+        <!-- legend -->
+        <rect class="sq ok" x="12" y="376" width="12" height="12"/>
+        <text class="d-sub" x="30" y="386">nhãn đúng</text>
+        <rect class="sq bad" x="112" y="376" width="12" height="12"/>
+        <text class="d-sub" x="130" y="386">nhãn sai</text>
+        <rect class="sq gone bad-o" x="206" y="376" width="12" height="12"/>
+        <text class="d-sub" x="224" y="386">bị lọc bỏ (đúng)</text>
+        <rect class="sq gone ok-o" x="340" y="376" width="12" height="12"/>
+        <text class="d-sub" x="358" y="386">bị lọc oan — bộ lọc không hoàn hảo</text>
+      </svg>
+    </div>
+  </div>
+  <div class="foot"><strong>Ý chính:</strong> ảnh sai nhãn bị lọc <strong>bên trong</strong> từng client, không client nào bị đuổi. Giả định: kẻ phá hoại tấn công bằng <strong>dữ liệu</strong> và vẫn chạy code lọc — kẻ sửa được code sẽ không tự lọc, trường hợp đó <strong>chưa được đo</strong>.</div>
+</section>
+
+<!-- settings ======================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">07 / 22</div></div>
+  <div class="eyebrow">I · Bài toán — thiết lập thí nghiệm</div>
+  <h1>Toàn bộ tham số, <span class="lite">trên một trang</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols">
+      <div class="card"><h3>Huấn luyện</h3>
+        <table class="kv">
+          <tr><td>Mô hình nền</td><td>CLIP RN50, giữ nguyên</td></tr>
+          <tr><td>Thứ được học</td><td>prompt, 2.048 số</td></tr>
+          <tr><td>Cách tối ưu</td><td>SGD · tốc độ học 0,002</td></tr>
+          <tr><td>Mỗi vòng</td><td>1 lượt dữ liệu, batch 16</td></tr>
+          <tr><td>Biến đổi ảnh</td><td>theo paper FLIP</td></tr>
+        </table></div>
+      <div class="card"><h3>Liên đoàn và dữ liệu</h3>
+        <table class="kv">
+          <tr><td>Số client</td><td>10, tham gia đủ mọi vòng</td></tr>
+          <tr><td>Số vòng</td><td>50</td></tr>
+          <tr><td>Gộp prompt</td><td>trung bình (FedAvg)</td></tr>
+          <tr><td>Lượng dữ liệu</td><td>8 ảnh/lớp cho cả liên đoàn</td></tr>
+          <tr><td>Chia cho client</td><td>lệch mạnh, α = 0,1</td></tr>
+        </table></div>
+      <div class="card red"><h3>Nhiễu và tấn công</h3>
+        <table class="kv">
+          <tr><td>Thật thà</td><td>5</td></tr>
+          <tr><td>Cẩu thả</td><td>3 · 40% nhãn sai ngẫu nhiên</td></tr>
+          <tr><td>Phá hoại</td><td>2 · 40% nhãn dồn về 1 lớp</td></tr>
+          <tr><td>Kiểu tấn công</td><td>đầu độc dữ liệu</td></tr>
+          <tr><td>Ai đóng vai gì</td><td>bốc ngẫu nhiên theo seed</td></tr>
+        </table></div>
+    </div>
+    <div class="cols">
+      <div class="card red"><h3>Bộ lọc (phương pháp)</h3>
+        <table class="kv">
+          <tr><td>Chấm lại</td><td>mỗi 5 vòng, trên toàn bộ ảnh gốc</td></tr>
+          <tr><td>Điểm nghi ngờ</td><td>sai số (loss) từng ảnh</td></tr>
+          <tr><td>Mốc “sạch”</td><td>client đứng thứ 3/10 về độ lệch</td></tr>
+          <tr><td>Miễn trừ</td><td>lệch hơn mốc ≤ 0,10 → không lọc</td></tr>
+          <tr><td>Lọc tối đa</td><td>60% ảnh mỗi client</td></tr>
+          <tr><td>Xoá hẳn khi</td><td>mô hình chung sai < 22%</td></tr>
+        </table></div>
+      <div class="card"><h3>Cách đánh giá</h3>
+        <table class="kv">
+          <tr><td>Chỉ số</td><td>last10 = trung bình 10 vòng cuối</td></tr>
+          <tr><td>Lặp lại</td><td>5 seed, t-test ghép cặp theo seed</td></tr>
+          <tr><td>Mốc so sánh</td><td>CLIP nguyên · PromptFL sạch · median</td></tr>
+          <tr><td>Phần cứng</td><td>Kaggle T4, ~110 giờ tổng</td></tr>
+        </table></div>
+    </div>
+  </div>
+  <div class="foot">Phần huấn luyện giữ đúng giao thức chuẩn của benchmark FLIP để so sánh được với các bài khác; chỉ phần <strong>nhiễu, tấn công và bộ lọc</strong> là của đồ án. Mọi con số đọc thẳng từ code chạy thật.</div>
+</section>
+
+
+
+<!-- 4 ============================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">08 / 22</div></div>
+  <div class="eyebrow">II · Phát hiện 1</div>
+  <h1>Huấn luyện có thể <span class="lite">tệ hơn không huấn luyện</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols">
+      <div class="card" style="flex:1.35">
+        <h3>So với cứ để nguyên CLIP, không huấn luyện gì</h3>
+        <table style="margin-top:4px">
+          <tr><th>Dataset</th><th class="n">CLIP nguyên</th><th class="n">+ 3 client cẩu thả</th><th class="n">+ thêm 2 kẻ tấn công</th></tr>
+          <tr><td>DTD</td><td class="n">41,78</td><td class="n">52,06 <span style="color:var(--ok)">+10,28</span></td><td class="n">47,56 <span style="color:var(--ok)">+5,78</span></td></tr>
+          <tr><td>Caltech101</td><td class="n">85,76</td><td class="n">87,25 <span style="color:var(--ok)">+1,49</span></td><td class="n">84,81 <span style="color:var(--bad)">−0,95</span></td></tr>
+          <tr class="hi"><td>OxfordPets</td><td class="n">85,69</td><td class="n">81,23 <span style="color:var(--bad)">−4,46</span></td><td class="n">75,88 <span style="color:var(--bad)">−9,81</span></td></tr>
+        </table>
+        <p style="margin-top:12px">Chỉ có client cẩu thả: <strong>1/3</strong> dataset rơi dưới mức không huấn luyện. Thêm kẻ tấn công: <strong>2/3</strong> — ở đó, <strong>không tham gia còn tốt hơn</strong>.</p>
+      </div>
+      <div class="card red">
+        <h3>Vì sao</h3>
+        <p>Huấn luyện chỉ đáng khi <strong>phần lãi</strong> lớn hơn <strong>phần bị lấy đi</strong>.</p>
+        <table style="margin-top:6px;font-size:13.5px">
+          <tr><th>Dataset</th><th class="n">Lãi nếu sạch</th><th class="n">Bị lấy đi</th><th class="n">Còn lại</th></tr>
+          <tr><td>DTD</td><td class="n">+13,83</td><td class="n">−8,05</td><td class="n" style="color:var(--ok)">+5,78</td></tr>
+          <tr><td>Caltech101</td><td class="n">+4,52</td><td class="n">−5,47</td><td class="n" style="color:var(--bad)">−0,95</td></tr>
+          <tr><td>OxfordPets</td><td class="n">+2,40</td><td class="n">−12,21</td><td class="n" style="color:var(--bad)">−9,81</td></tr>
+        </table>
+        <p style="margin-top:8px">CLIP vốn đã nhận ra chó mèo <strong>85,7%</strong> → phần lãi chỉ 2,4 điểm, rất dễ bị ăn hết.</p>
+      </div>
+    </div>
+    <div class="card" style="flex:0 0 auto">
+      <h3>Hệ quả cho cách đánh giá</h3>
+      <p>Mọi phương pháp phải được so với mốc <strong>"không huấn luyện gì"</strong>, không chỉ với "không phòng thủ". Và chỉ số <span class="mono">best</span> mà lĩnh vực hay dùng (lấy vòng tốt nhất) che bớt <strong>1,4–2,5 lần</strong> thiệt hại — đồ án dùng <span class="mono">last10</span>, trung bình 10 vòng cuối.</p>
+    </div>
+  </div>
+  <div class="foot">Caltech có tấn công đo ở giai đoạn 4 (code cũ hơn một chút; trên DTD hai giai đoạn lệch 0,7 điểm). Các số khác cùng một cấu hình, 5 seed.</div>
+</section>
+
+<!-- 5 ============================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">09 / 22</div></div>
+  <div class="eyebrow">II · Phát hiện 2 — cách làm</div>
+  <h1>Phân biệt cẩu thả với cố ý: <span class="lite">giao một việc chỉ kẻ gian mới từ chối</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="card" style="flex:0 0 auto">
+      <h3>Vấn đề</h3>
+      <p style="margin:0">Nhìn prompt gửi lên, client cẩu thả và kẻ tấn công <strong>trông giống nhau</strong> — cả hai đều học lệch. Không đọc được ý đồ từ đó.</p>
+    </div>
+    <div class="flow" style="flex:0 0 auto">
+      <div class="step"><div class="t">SERVER</div><div class="d">gửi mô hình chung</div></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="t">CLIENT</div><div class="d">sửa nhãn của mình<br>theo mô hình chung</div></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="t">CLIENT</div><div class="d">học lại trên<br>nhãn đã sửa</div></div>
+      <div class="arrow">→</div>
+      <div class="step acc"><div class="t">SERVER</div><div class="d">xem prompt có<br>đổi hướng không</div></div>
+    </div>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>Client cẩu thả: làm theo</h3>
+        <p>Không có gì để mất. Nhãn sai được sửa bớt → học lại ra <strong>hướng khác</strong> bản cũ.</p></div>
+      <div class="card red"><h3>Kẻ tấn công: từ chối</h3>
+        <p>Sửa nhãn thì <strong>mất luôn chất độc</strong>. Nên lờ đi, nộp lại bản cũ → hai hướng <strong>trùng nhau bất thường</strong> → lộ.</p></div>
+      <div class="card"><h3>Đo bằng gì</h3>
+        <p><span class="mono">r_align</span> = mức trùng hướng giữa bản học lại và bản gốc (cosine). Server <strong>tự tính từ prompt</strong>, không tin con số nào client tự khai.</p></div>
+    </div>
+  </div>
+  <div class="foot"><strong>Giới hạn:</strong> kẻ đủ tinh vi để giả vờ học lại vẫn qua được. <strong>Chi phí:</strong> một lượt huấn luyện thêm mỗi 5 vòng.</div>
+</section>
+
+<!-- 7 ============================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">10 / 22</div></div>
+  <div class="eyebrow">II · Phát hiện 2 — kết quả</div>
+  <h1>Và nó nhận ra được, <span class="lite">kể cả trong trường hợp khó</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card red" style="flex:0 0 190px"><div class="lbl">DTD</div><div class="big red">0,99</div><div class="lbl">AUC</div></div>
+      <div class="card red" style="flex:0 0 190px"><div class="lbl">OxfordPets</div><div class="big red">0,97</div><div class="lbl">AUC</div></div>
+      <div class="card"><h3>Con số này là gì</h3>
+        <p><strong>AUC</strong> = xác suất một kẻ tấn công bị xếp <strong>đáng ngờ hơn</strong> một client bất kỳ. <strong>1</strong> = luôn đúng · <strong>0,5</strong> = đoán mò. Không cần chọn ngưỡng, nên không "chỉnh cho đẹp" được.</p></div>
+    </div>
+    <div class="card" style="flex:1 1 auto">
+      <h3>Phép thử khó: so riêng với client cẩu thả — nhóm dễ nhầm nhất</h3>
+      <table style="margin-top:3px">
+        <tr><th>Tín hiệu</th><th class="n">So với mọi client</th><th class="n">So riêng với client cẩu thả</th></tr>
+        <tr class="hi"><td><span class="mono">r_align</span> · DTD</td><td class="n">0,993</td><td class="n">0,987</td></tr>
+        <tr class="hi"><td><span class="mono">r_align</span> · OxfordPets</td><td class="n">0,965</td><td class="n">0,907</td></tr>
+        <tr class="dim"><td>Tín hiệu cũ, nhìn hình dạng prompt (Gate C) · OxfordPets</td><td class="n">0,984</td><td class="n" style="color:var(--bad)">0,487 — đoán mò</td></tr>
+      </table>
+      <p style="margin-top:8px">Tín hiệu cũ trông rất tốt ở phép thử dễ, nhưng <strong>sụp</strong> ở phép thử khó. <span class="mono">r_align</span> gần như <strong>không tụt</strong>.</p>
+    </div>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>Đối chứng</h3>
+        <p>Không có kẻ tấn công → tín hiệu <strong>im lặng</strong> (0,35–0,49). Nó chỉ kêu khi có người từ chối.</p></div>
+      <div class="card"><h3>Dùng thực tế</h3>
+        <p>Luật cấm dựng trên tín hiệu này bắt <strong>7–9/10</strong> kẻ tấn công, bắt oan <strong>0–1/25</strong> client thật thà.</p></div>
+    </div>
+  </div>
+  <div class="foot">Cỡ mẫu: 5 seed · 400 cặp ở phép thử dễ, 150 cặp ở phép thử khó. Nhưng slide sau cho thấy: <strong>nhận ra được chưa có nghĩa là chữa được</strong>.</div>
+</section>
+
+<!-- 6 ============================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">11 / 22</div></div>
+  <div class="eyebrow">II · Phát hiện 3 — kết quả quan trọng nhất</div>
+  <h1>Nhưng nhận diện <span class="lite">không phải bài toán</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="ladder">
+      <div class="rung"><div class="nm">Đuổi <strong>cả 5 client hỏng</strong> (oracle)</div>
+        <div class="track"><div class="fill grey" style="width:0%"></div></div>
+        <div class="val" style="color:var(--bad)">46,25 &nbsp;−1,31</div></div>
+      <div class="rung"><div class="nm">Không phòng thủ</div>
+        <div class="track"><div class="fill grey" style="width:0%"></div></div>
+        <div class="val">47,56 &nbsp;— mốc</div></div>
+      <div class="rung"><div class="nm">Đuổi 2 client độc hại (oracle, từ vòng 0)</div>
+        <div class="track"><div class="fill" style="width:12%"></div></div>
+        <div class="val">48,57 &nbsp;+1,02</div></div>
+      <div class="rung"><div class="nm"><span class="mono">median</span> — phòng thủ chuẩn của lĩnh vực</div>
+        <div class="track"><div class="fill" style="width:17%"></div></div>
+        <div class="val">49,01 &nbsp;+1,45</div></div>
+      <div class="rung hi"><div class="nm"><strong>Lọc ở mức từng ảnh</strong> (phương pháp của ta)</div>
+        <div class="track"><div class="fill solid" style="width:38%"></div></div>
+        <div class="val" style="color:var(--red);font-weight:700">50,76 &nbsp;+3,21</div></div>
+      <div class="rung"><div class="nm">Xoá đúng từng ảnh hỏng (oracle)</div>
+        <div class="track"><div class="fill" style="width:72%"></div></div>
+        <div class="val">53,58 &nbsp;+6,02</div></div>
+      <div class="rung"><div class="nm">Trả lại nhãn thật (oracle) — trần sạch</div>
+        <div class="track"><div class="fill" style="width:100%"></div></div>
+        <div class="val">55,94 &nbsp;+8,39</div></div>
+    </div>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card red"><h3>Kết luận</h3>
+        <p><strong>Loại bỏ client là cần gạt sai.</strong> Kể cả biết trước hoàn hảo và loại ngay từ vòng 0 cũng chỉ mua ~1 điểm, không có ý nghĩa thống kê — trên cả 2 dataset.</p></div>
+      <div class="card"><h3>Vì sao</h3>
+        <p>Kẻ tấn công <strong>vẫn giữ 60% nhãn đúng</strong>. Ở mức 8 ảnh/lớp, 2 client là 20% dữ liệu của cả liên đoàn. Vứt nó đi là vứt cả phần tốt.</p></div>
+      <div class="card"><h3>Mức ảnh hơn mức client</h3>
+        <div class="big red">+7,33</div><div class="lbl">điểm · p = 0,011</div></div>
+    </div>
+  </div>
+  <div class="foot">Thang oracle cũng bác bỏ giả thuyết "khan hiếm dữ liệu là nút thắt": trả nhãn đúng cho <strong>55,94</strong>, đúng bằng baseline 10 client sạch (55,61). <strong>Nhãn bẩn giải thích toàn bộ khoảng cách.</strong></div>
+</section>
+
+<!-- 8 ============================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">12 / 22</div></div>
+  <div class="eyebrow">III · Phương pháp</div>
+  <h1>Mỗi client tự lọc, <span class="lite">trong một hạn mức</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols">
+      <div class="card"><h3>① Ảnh nào đáng ngờ?</h3>
+        <p class="mono" style="color:var(--red);font-size:14px">"ảnh này học mãi không thuộc"</p>
+        <p style="margin-top:8px">Nhãn sai thì mô hình không tài nào khớp, nên <strong>sai số (loss) cao và ở lì</strong>. Đây là con số mô hình vốn đang tính để huấn luyện — chỉ cần giữ lại theo từng ảnh. <strong>Chi phí: 0.</strong></p>
+        <div style="margin-top:auto;padding-top:10px;border-top:1px solid var(--line)">
+          <div class="lbl">Trong số ảnh bị lọc, bao nhiêu thật sự hỏng</div>
+          <p style="margin:4px 0 0"><strong>~70%</strong> trên DTD &nbsp;·&nbsp; <strong>85–94%</strong> trên OxfordPets</p></div>
+      </div>
+      <div class="card red"><h3>② Lọc bao nhiêu ảnh?</h3>
+        <p>Mỗi client báo <strong>một con số</strong>: tỉ lệ ảnh của mình mà mô hình chung phản đối. Server lấy mức của nhóm sạch nhất làm <strong>mốc</strong>, phát lại. Client cao hơn mốc bao nhiêu thì <strong>được lọc bấy nhiêu</strong>.</p>
+        <table style="margin-top:8px;font-size:13.5px">
+          <tr><th>Vai trò</th><th class="n">Hạn mức ước ra</th><th class="n">Mức hỏng thật</th></tr>
+          <tr><td>thật thà</td><td class="n">0,04</td><td class="n">0,00</td></tr>
+          <tr><td>nhiễu</td><td class="n">0,41</td><td class="n">0,40</td></tr>
+          <tr><td>độc hại</td><td class="n">0,33</td><td class="n">0,40</td></tr>
+        </table>
+        <p style="margin-top:8px">Dưới <strong>0,10</strong> coi như sạch → không đụng ảnh nào.</p>
+      </div>
+      <div class="card"><h3>③ Xoá hẳn hay hạ trọng số?</h3>
+        <p>Server nhìn mốc ở bước ②: nó cũng chính là <strong>tỉ lệ sai của mô hình chung</strong>.</p>
+        <p style="margin-top:8px">Mô hình chung sai <strong>dưới 22%</strong> → bộ lọc đáng tin → <strong>xoá hẳn</strong>.<br>Sai nhiều hơn → bộ lọc hay nhầm → <strong>hạ trọng số</strong> để lỡ nhầm thì đỡ hại.</p>
+        <p style="margin-top:8px;color:var(--muted)">Vì sao cần bước này: xem hai slide sau.</p>
+      </div>
+    </div>
+    <div class="card" style="flex:0 0 auto">
+      <h3>Đã thử và bỏ: luật thứ hai "nhìn cả lớp"</h3>
+      <p>Một lớp mà mô hình chung phản đối gần hết thì cả lớp đáng ngờ. Nó bắt được <strong>83%</strong> chất độc ở client phá hoại (luật ① chỉ 19%) — nhưng kéo theo <strong>ảnh sạch cùng lớp</strong>. Thua ở cả <strong>3 lượt chạy</strong>, nên phương pháp cuối <strong>chỉ dùng luật ①</strong>.</p>
+    </div>
+  </div>
+  <div class="foot">Toàn bộ chạy trên máy client. Qua đường truyền chỉ thêm <strong>một số thực mỗi client mỗi 5 vòng</strong>, so với prompt 2.048 số. Không client nào bị đuổi, và mỗi 5 vòng chấm lại từ đầu nên ảnh bị lọc oan quay lại được.</div>
+</section>
+
+<!-- 9 ============================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">13 / 22</div></div>
+  <div class="eyebrow">III · Phương pháp — vì sao phải lọc chính xác</div>
+  <h1>Bỏ nhầm ảnh sạch <span class="lite">đắt hơn bỏ đúng ảnh bẩn</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><div class="lbl">Bỏ đúng 1.000 ảnh bẩn</div><div class="big ok">+0,33</div><div class="lbl">điểm</div></div>
+      <div class="card"><div class="lbl">Bỏ nhầm 1.000 ảnh sạch</div><div class="big bad">−0,44</div><div class="lbl">điểm — đắt gấp 1,34 lần</div></div>
+      <div class="card red" style="flex:1.4"><div class="lbl">Nên trong số ảnh bị bỏ, phải có trên</div><div class="big red">57,3%</div>
+        <div class="lbl">là ảnh hỏng thật — dưới mức này, lọc càng nhiều càng hại</div></div>
+    </div>
+    <div class="cols">
+      <div class="card" style="flex:1.3"><h3>Bằng chứng: các bản đầu của bộ lọc · DTD</h3>
+        <table style="margin-top:3px">
+          <tr><th>Bản</th><th class="n">Bỏ đúng</th><th class="n">Lấy lại</th></tr>
+          <tr><td>Luật "cả lớp", không giới hạn</td><td class="n">51%</td><td class="n" style="color:var(--bad)">−10,27</td></tr>
+          <tr><td>Luật "cả lớp" + hạn mức</td><td class="n">64%</td><td class="n">+0,84</td></tr>
+          <tr class="hi"><td>Luật sai số + hạn mức</td><td class="n">71%</td><td class="n">+2,33</td></tr>
+        </table>
+        <p style="margin-top:8px">Luật "cả lớp" bắt được <strong>nhiều</strong> ảnh hỏng hơn nhưng <strong>kém chính xác</strong> hơn — và thua.</p></div>
+      <div class="card"><h3>Đúng bao nhiêu thì lấy lại tối đa bao nhiêu</h3>
+        <table style="margin-top:3px">
+          <tr><th>Bỏ đúng</th><th class="n">Tối đa lấy lại</th></tr>
+          <tr><td>71%</td><td class="n">+2,78</td></tr>
+          <tr><td>80%</td><td class="n">+4,06</td></tr>
+          <tr><td>90%</td><td class="n">+5,20</td></tr>
+          <tr class="dim"><td>100% (oracle)</td><td class="n">+6,11</td></tr>
+        </table>
+        <p style="margin-top:8px">Muốn hơn: <strong>bỏ đúng hơn</strong>, hoặc làm bỏ nhầm <strong>rẻ hơn</strong> — hạ trọng số thay vì xoá.</p></div>
+    </div>
+  </div>
+  <div class="foot">Tỉ giá này khớp cả 5 điểm đo, kể cả oracle (dự đoán +6,11, thực tế +6,02). Nó cũng là lý do cho việc chọn chế độ ở slide 15.</div>
+</section>
+
+<!-- 10 ============================================================ -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">14 / 22</div></div>
+  <div class="eyebrow">III &middot; K&#7871;t qu&#7843; ph&#432;&#417;ng ph&aacute;p</div>
+  <h1>So v&#7899;i c&aacute;c m&#7889;c <span class="lite">c&#7911;a l&#297;nh v&#7921;c</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols">
+      <div class="card" style="flex:1.75">
+        <h3>last10 &middot; 10 client &middot; Dirichlet &alpha; = 0,1 &middot; 8 shot &middot; 50 v&ograve;ng &middot; 5 seed &middot; CLIP RN50</h3>
+        <table style="margin-top:4px">
+          <tr><th>C&#7845;u h&igrave;nh</th><th class="n">DTD</th><th class="n">OxfordPets</th><th>Ghi ch&uacute;</th></tr>
+          <tr class="dim"><td>ZS-CLIP &mdash; kh&ocirc;ng hu&#7845;n luy&#7879;n</td><td class="n">41,78</td><td class="n">85,69</td><td>s&agrave;n</td></tr>
+          <tr class="dim"><td>PromptFL &mdash; d&#7919; li&#7879;u s&#7841;ch</td><td class="n">55,61</td><td class="n">88,09</td><td>tr&#7847;n</td></tr>
+          <tr><td><strong>PromptFL &mdash; 3 nhi&#7877;u + 2 ph&aacute; ho&#7841;i</strong></td><td class="n">47,56</td><td class="n">75,88</td><td>m&#7889;c so s&aacute;nh</td></tr>
+          <tr><td>+ g&#7897;p median<br><span class="lbl">chu&#7849;n c&#7911;a l&#297;nh v&#7921;c</span></td><td class="n">49,01</td><td class="n">80,49</td><td>+1,45 / +4,61</td></tr>
+          <tr><td>+ lo&#7841;i client &#273;&atilde; nh&#7853;n di&#7879;n</td><td class="n">48,21</td><td class="n">&mdash;</td><td>+0,65, kh&ocirc;ng &yacute; ngh&#297;a</td></tr>
+          <tr class="hi"><td><strong>+ l&#7885;c m&#7913;c &#7843;nh, m&aacute;y t&#7921; ch&#7885;n ch&#7871; &#273;&#7897;</strong></td><td class="n">50,76</td><td class="n">85,15</td><td><strong>+3,21 / +9,27</strong></td></tr>
+          <tr class="dim"><td>Oracle &mdash; xo&aacute; &#273;&uacute;ng t&#7915;ng &#7843;nh h&#7887;ng</td><td class="n">53,58</td><td class="n">&mdash;</td><td>tr&#7847;n m&#7913;c &#7843;nh</td></tr>
+          <tr class="dim"><td>Oracle &mdash; tr&#7843; l&#7841;i nh&atilde;n &#273;&uacute;ng</td><td class="n">55,94</td><td class="n">&mdash;</td><td>= baseline s&#7841;ch</td></tr>
+        </table>
+      </div>
+      <div class="card red">
+        <h3>H&#417;n median bao nhi&ecirc;u</h3>
+        <div class="big red">+1,75</div><div class="lbl">DTD</div>
+        <div class="big red" style="margin-top:12px">+4,66</div><div class="lbl">OxfordPets</div>
+        <p style="margin-top:14px;padding-top:12px;border-top:1.5px solid var(--red)">
+          L&#7847;n &#273;&#7847;u v&#432;&#7907;t <strong>h&#7859;n</strong> ph&#432;&#417;ng ph&aacute;p ph&ograve;ng th&#7911; ti&ecirc;u chu&#7849;n, v&agrave; v&#432;&#7907;t &#7903;
+          <strong>c&#7843; hai</strong> dataset.</p>
+      </div>
+    </div>
+    <div class="card" style="flex:0 0 auto">
+      <h3>Ph&#7843;i n&oacute;i cho &#273;&uacute;ng m&#7913;c</h3>
+      <p>Tr&ecirc;n Pets, 85,15 so v&#7899;i zero-shot 85,69 &rarr; <strong>m&#7899;i l&agrave; ho&agrave; v&#7889;n, ch&#432;a v&#432;&#7907;t</strong>. Ph&aacute;t bi&#7875;u &#273;&uacute;ng:
+      ph&#432;&#417;ng ph&aacute;p bi&#7871;n m&#7897;t l&#432;&#7907;t hu&#7845;n luy&#7879;n &#273;ang c&oacute; <strong>gi&aacute; tr&#7883; &acirc;m</strong> (75,88, th&#7845;p h&#417;n zero-shot 9,81 &#273;i&#7875;m)
+      th&agrave;nh m&#7897;t l&#432;&#7907;t ho&agrave; v&#7889;n. Tr&ecirc;n DTD n&oacute; chi&#7871;m <strong>53%</strong> kho&#7843;ng c&aacute;ch t&#7899;i oracle m&#7913;c &#7843;nh.</p>
+    </div>
+  </div>
+  <div class="foot">&Ocirc; tr&#7889;ng c&#7911;a Pets l&agrave; oracle ch&#432;a ch&#7841;y tr&ecirc;n dataset &#273;&oacute;, kh&ocirc;ng ph&#7843;i k&#7871;t qu&#7843; b&#7883; b&#7887;. FedOTP kh&ocirc;ng c&oacute; trong b&#7843;ng v&igrave; b&#7843;n &#273;o duy nh&#7845;t d&ugrave;ng train transform kh&aacute;c, gh&eacute;p v&agrave;o s&#7869; l&agrave; so s&aacute;nh sai.</div>
+</section>
+
+<!-- 11 ============================================================ -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">15 / 22</div></div>
+  <div class="eyebrow">III · Kết quả</div>
+  <h1>Xoá hẳn hay hạ trọng số? <span class="lite">Tuỳ bộ lọc giỏi đến đâu</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card" style="flex:1.35"><h3>Không cách nào thắng ở mọi nơi · lấy lại so với không phòng thủ</h3>
+        <table style="margin-top:3px">
+          <tr><th>Dataset</th><th class="n">Bộ lọc bỏ đúng</th><th class="n">Hạ trọng số</th><th class="n">Xoá hẳn</th><th>Thắng</th></tr>
+          <tr><td>DTD <span class="lbl">10 seed</span></td><td class="n">66%</td><td class="n">+2,93</td><td class="n">+2,66</td><td>hoà <span class="mono">(p = 0,60)</span></td></tr>
+          <tr class="hi"><td>OxfordPets <span class="lbl">5 seed</span></td><td class="n">85%</td><td class="n">+5,29</td><td class="n">+9,62</td><td><strong>xoá hẳn</strong> <span class="mono">(p = 0,006)</span></td></tr>
+        </table></div>
+      <div class="card"><h3>Vì sao</h3>
+        <p>Bộ lọc <strong>hay nhầm</strong> → hạ trọng số: lỡ nhầm thì ảnh đó vẫn còn nửa giá trị.</p>
+        <p style="margin-top:6px">Bộ lọc <strong>giỏi</strong> → xoá hẳn: nương tay chỉ giữ lại nửa chất độc.</p></div>
+    </div>
+    <div class="card red" style="flex:0 0 auto"><h3>Server tự chọn — không cần nhãn thật</h3>
+      <p>Server không đo được bộ lọc đúng bao nhiêu (việc đó cần nhãn thật). Thay vào đó nó nhìn <strong>mô hình chung đang sai bao nhiêu</strong> trên các client sạch nhất: sai <strong>dưới 22%</strong> → xoá hẳn, nhiều hơn → hạ trọng số. Con số này server <strong>đã có sẵn</strong>.</p></div>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>DTD</h3>
+        <p class="mono" style="font-size:13.5px;line-height:1.7">ép hạ trọng số &nbsp;50,75<br><strong>server tự chọn &nbsp;50,76</strong><br>ép xoá hẳn &nbsp;&nbsp;&nbsp;&nbsp;49,85</p>
+        <p style="margin-top:6px">Bám cách tốt nhất, lệch <strong>0,01</strong>.</p></div>
+      <div class="card"><h3>OxfordPets</h3>
+        <p class="mono" style="font-size:13.5px;line-height:1.7">ép hạ trọng số &nbsp;81,18<br><strong>server tự chọn &nbsp;85,15</strong><br>ép xoá hẳn &nbsp;&nbsp;&nbsp;&nbsp;85,50</p>
+        <p style="margin-top:6px">Lệch <strong>0,35</strong>, tránh được cách thua <strong>3,97</strong> điểm.</p></div>
+    </div>
+  </div>
+  <div class="foot">Ngưỡng 22% được rút ra từ chính DTD và Pets, nên đây mới là <strong>kiểm tra nhất quán</strong>. Bài kiểm tra thật ở slide sau.</div>
+</section>
+
+<!-- 12 ============================================================ -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">16 / 22</div></div>
+  <div class="eyebrow">III · Kết quả — sắp chạy</div>
+  <h1>Bài thi thật: <span class="lite">hai dataset mà luật chưa từng thấy</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="card red" style="flex:0 0 auto"><h3>Vì sao cần</h3>
+      <p style="margin:0">Ngưỡng 22% được rút ra từ DTD và Pets, rồi thử lại trên chính hai dataset đó — <strong>như ra đề rồi tự chấm</strong>. Phải thử trên dataset mới.</p></div>
+    <div class="card" style="flex:1 1 auto"><h3>Vì sao chọn hai dataset này</h3>
+      <table style="margin-top:3px">
+        <tr><th style="width:110px">Dataset</th><th class="n" style="width:70px">Số lớp</th><th style="width:170px">Mô hình chung</th><th style="width:130px">Dự đoán</th><th>Kiểm tra điều gì</th></tr>
+        <tr><td><strong>EuroSAT</strong></td><td class="n">10</td><td>yếu</td><td><strong>hạ trọng số</strong></td><td>Ít lớp nhất trong 5 dataset. Nếu luật thật ra chỉ đang đo <em>số lớp</em>, ở đây sẽ lộ</td></tr>
+        <tr><td><strong>Caltech101</strong></td><td class="n">102</td><td>rất giỏi (90,28%)</td><td><strong>xoá hẳn</strong></td><td>Nhiều lớp <em>và</em> thầy giỏi — tách được hai yếu tố đang lẫn vào nhau ở DTD và Pets</td></tr>
+      </table></div>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>Chạy gì</h3>
+        <p>Mỗi dataset 4 nhánh: không phòng thủ · ép hạ trọng số · ép xoá hẳn · server tự chọn. Thiếu một nhánh là không kết luận được.</p></div>
+      <div class="card"><h3>Đạt khi nào — ghi trước</h3>
+        <p>Server tự chọn bám <strong>cách thắng</strong> ở cả hai dataset. Bám cách thua → <strong>luật bị bác</strong>.</p></div>
+    </div>
+  </div>
+  <div class="foot">Điểm yếu đã biết: con số dùng để chọn dự báo tốt <strong>giữa các dataset</strong> nhưng kém <strong>trong cùng một dataset</strong>. Food101 nằm đúng ranh giới nên là phép thử sắc nhất, nhưng tốn ~20 giờ — để sau.</div>
+</section>
+
+<!-- 3 ============================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">17 / 22</div></div>
+  <div class="eyebrow">IV · Tổng kết</div>
+  <h1>Toàn cảnh: <span class="lite">mười một câu hỏi, mỗi câu có tiêu chí ghi trước</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <table>
+      <tr><th style="width:52px">Cổng</th><th style="width:330px">Câu hỏi</th><th style="width:96px">Kết quả</th><th>Trả lời</th></tr>
+      <tr><td class="mono">1</td><td>Tái lập benchmark FLIP</td><td><span class="tag pass">đạt</span></td><td>Khớp 9/9 kết quả của paper, sau khi vá 11 chỗ trong code gốc</td></tr>
+      <tr><td class="mono">A</td><td>Nhiễu nhãn hại bao nhiêu?</td><td><span class="tag pass">đạt</span></td><td>Mất 4,7–13,2 điểm. Đuổi client chỉ cứu được tối đa 3,1</td></tr>
+      <tr><td class="mono">B</td><td>Gộp bền vững (median, Krum) có đủ?</td><td><span class="tag fail">trượt</span></td><td>Có ích ở 1/4 trường hợp; hay đuổi nhầm client cẩu thả</td></tr>
+      <tr><td class="mono">C</td><td>Đoán ý đồ từ hình dạng prompt?</td><td><span class="tag fail">trượt</span></td><td>Tín hiệu phụ thuộc số lớp của dataset, không phải ý đồ</td></tr>
+      <tr><td class="mono">D/E</td><td>Giao việc kiểm tra tuân thủ?</td><td><span class="tag pass">đạt</span></td><td>Nhận ra kẻ tấn công, AUC 0,91–0,99</td></tr>
+      <tr><td class="mono">F</td><td>Đuổi kẻ tấn công đã nhận ra?</td><td><span class="tag fail">trượt</span></td><td>Chỉ +0,65 — không có ý nghĩa thống kê</td></tr>
+      <tr><td class="mono">G</td><td>Sửa nhãn bằng mô hình chung?</td><td><span class="tag fail">trượt</span></td><td>Mô hình chung sai nhiều hơn nhãn gốc: sửa 1, phá 8,5</td></tr>
+      <tr><td class="mono">H</td><td>Lọc từng ảnh, giữ client?</td><td><span class="tag pass">đạt</span></td><td>+3,21 (DTD), +9,27 (Pets) — hơn median ở cả hai</td></tr>
+      <tr><td class="mono">I</td><td>Xoá hẳn hay hạ trọng số?</td><td><span class="tag fail">hoà</span></td><td>Không cách nào thắng mọi nơi — tuỳ độ chính xác bộ lọc</td></tr>
+      <tr class="hi"><td class="mono">J</td><td>Server tự chọn cách xử lý?</td><td><span class="tag pass">đạt</span></td><td>Lệch 0,01 (DTD) và 0,35 (Pets) so với lựa chọn tốt nhất</td></tr>
+      <tr><td class="mono">K</td><td>Đúng trên dataset chưa từng thấy?</td><td><span class="tag wait">sắp chạy</span></td><td>EuroSAT và Caltech101</td></tr>
+    </table>
+  </div>
+  <div class="foot">Đọc dọc cột kết quả: mọi cách xử lý <strong>cả client</strong> (B, F) đều trượt; mọi cách xử lý <strong>từng ảnh</strong> (H, J) đều đạt.</div>
+</section>
+
+<!-- failures ====================================================== -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">18 / 22</div></div>
+  <div class="eyebrow">V · Trung thực</div>
+  <h1>Đã thử ở mức client: <span class="lite">cả bốn đều thất bại</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <table>
+      <tr><th style="width:230px">Hướng</th><th>Kết quả đo được</th><th style="width:74px">Kết luận</th></tr>
+      <tr><td><strong>Gộp bền vững</strong><br><span class="lbl">median, Krum, multikrum</span></td>
+        <td>Có lợi ở 1/4 tổ hợp dataset×luật. Luật nào có quyết định thì <strong>quyết định sai đối tượng</strong>: multikrum loại client nhiễu gấp 17,7× client thật thà và làm Pets tệ hơn 1,63 điểm so với không phòng thủ</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td><strong>Suy đoán ý đồ từ hình học prompt</strong><br><span class="lbl">Gate C, 5 dataset</span></td>
+        <td>Phụ thuộc <strong>số lớp</strong> (Spearman +0,90), không phải mức huấn luyện. Chỉ hơn baseline Krum ở chỗ <strong>cả hai đều yếu</strong>; nơi tín hiệu mạnh thì baseline cũng mạnh</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td><strong>Thế lưỡng nan của kẻ tấn công</strong><br><span class="lbl">Gate E1, F2</span></td>
+        <td>Kẻ tấn công tuân thủ chỉ mất 18–23% cuộc tấn công. Tăng liều kiểm toán 2,5 lần → giữ lại <strong>82% → 94%</strong>, tức ngược chiều</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td><strong>Loại trừ client đã nhận diện</strong><br><span class="lbl">Gate F1, F3</span></td>
+        <td>Bắt đúng 7–9/10 kẻ tấn công mà chỉ mua +0,65 / +0,96 điểm, không có ý nghĩa. Oracle hoàn hảo cũng chỉ +1,02. Ghép với median còn <strong>tệ đi</strong> 1,62 điểm</td><td><span class="tag fail">fail</span></td></tr>
+    </table>
+  </div>
+  <div class="foot">Chung một nguyên nhân: mọi cách <strong>xử lý cả client</strong> đều vứt luôn phần dữ liệu tốt của họ — 60% ở client nhiễu, 60% ở client phá hoại. Ở 8 ảnh/lớp, thứ đó quá đắt.</div>
+</section>
+
+<!-- failures ====================================================== -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">19 / 22</div></div>
+  <div class="eyebrow">V · Trung thực</div>
+  <h1>Đã thử ở mức ảnh: <span class="lite">hướng đúng, cách làm chưa đúng</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <table>
+      <tr><th style="width:290px">Đã thử</th><th>Kết quả</th><th style="width:74px">Kết luận</th></tr>
+      <tr><td><strong>Sửa nhãn bằng mô hình chung</strong></td><td>Mô hình chung chỉ đúng <strong>47%</strong>, nhãn gốc của client đúng <strong>60%</strong> → sửa 1 nhãn thì phá <strong>8,5</strong> nhãn đúng</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td><strong>Chỉ sửa khi mô hình thật chắc</strong></td><td>Nhãn tốt lên <strong>29 lần</strong>, nhưng accuracy <strong>không đổi</strong> (+0,86 → +0,75)</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td><strong>Luật "nhìn cả lớp"</strong></td><td>Bắt <strong>83%</strong> chất độc nhưng kéo theo ảnh sạch cùng lớp. Thua cả <strong>3 lần</strong> chạy</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td><strong>Hạ trọng số tốt hơn xoá hẳn</strong></td><td>Hơn <strong>+0,86</strong> ở 5 seed đầu, <strong>đổi dấu</strong> ở 5 seed sau → chỉ là may rủi</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td><strong>Trọng số theo điểm thay vì thứ hạng</strong></td><td>Thua <strong>−1,14</strong> vì <strong>2 lỗi code của tôi</strong>. Sửa xong thì <strong>hoà</strong> (+0,20)</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td><strong>Khởi động bằng client tin cậy</strong></td><td>Mô hình giỏi lên ở client sạch, <strong>không</strong> giỏi lên ở client cẩu thả. Accuracy +0,01</td><td><span class="tag fail">fail</span></td></tr>
+    </table>
+  </div>
+  <div class="foot">Khác với mức client, các thất bại này <strong>không bác bỏ hướng đi</strong> — mỗi cái chỉ ra một chỗ hỏng cụ thể, và phương pháp cuối tránh được từng chỗ.</div>
+</section>
+
+<!-- 10 ============================================================ -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">20 / 22</div></div>
+  <div class="eyebrow">V · Trung thực</div>
+  <h1>Những chỗ tôi đã sai <span class="lite">và đã sửa</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <ul class="clean">
+      <li><strong>Quy tắc thống kê ban đầu sai.</strong> Đặt tiêu chí mà thêm seed không bao giờ đạt được. Đổi sang t-test ghép cặp, ghi lại như một đính chính.</li>
+      <li><strong>Chọn sai nhóm đối chứng ở Gate E1.</strong> Phép so đổi hai thứ cùng lúc. So lại cho đúng thì kết quả tệ hơn hẳn.</li>
+      <li><strong>Kết luận vội "thiếu dữ liệu mới là vấn đề".</strong> Oracle bác bỏ: trả nhãn đúng là đạt trần sạch. Vấn đề là <strong>nhãn</strong>, không phải số lượng.</li>
+      <li><strong>Bỏ qua cảnh báo khi chạy thử trên CPU.</strong> Tưởng do dữ liệu giả. Lên GPU mất <strong>10,27 điểm</strong>.</li>
+      <li><strong>Nói quá "hạ trọng số tốt hơn xoá hẳn".</strong> Dựa trên 5 seed, p = 0,40. Thêm seed thì đổi dấu; trên Pets thì ngược hẳn.</li>
+      <li><strong>Một lượt chạy vô hiệu vì lỗi sinh notebook.</strong> Mất <strong>2 giờ GPU</strong>. Giờ in tham số thật của mọi chế độ trước khi chạy.</li>
+      <li><strong>Chẩn đoán sai lỗi trọng-số-theo-điểm.</strong> Tưởng do phân bố dữ liệu; thật ra do code chỉ co giãn một chiều.</li>
+      <li><strong>Dự đoán "bắt nhiều quan trọng hơn bắt đúng".</strong> Sai: hai bản bắt được như nhau cho kết quả chênh 2,3 lần. <strong>Bắt đúng</strong> mới quyết định.</li>
+    </ul>
+  </div>
+  <div class="foot">Mọi tiêu chí, dự đoán và đính chính được ghi lại ngay sau mỗi lượt chạy, trong <strong>16 tài liệu</strong> dưới <span class="mono">results/</span>.</div>
+</section>
+
+<!-- 11 ============================================================ -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">21 / 22</div></div>
+  <div class="eyebrow">VI · Đóng góp</div>
+  <h1>Luận điểm của đồ án</h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="card red" style="flex:0 0 auto;padding:20px 24px">
+      <p style="font-family:var(--serif);font-size:25px;line-height:1.35;margin:0">
+        <strong>Nhận ra kẻ xấu thì làm được. Nhưng cách chữa là lọc từng ảnh, không phải đuổi client.</strong><br>
+        <span style="font-size:20px;font-style:italic">Khi dữ liệu ít, đuổi client — cách cả lĩnh vực đang dùng — vứt luôn phần dữ liệu tốt của họ.</span></p>
+    </div>
+    <div class="cols">
+      <div class="card"><h3>1 · Nghiên cứu hệ thống đầu tiên</h3>
+        <p>Đo kỹ federated prompt learning dưới nhãn nhiễu, kèm <strong>trần tối đa (oracle)</strong> cho từng cách can thiệp: đuổi client, lọc ảnh, sửa nhãn.</p></div>
+      <div class="card"><h3>2 · Hai kết quả âm có lời giải thích</h3>
+        <p>Đoán ý đồ từ prompt thất bại vì tín hiệu <strong>phụ thuộc số lớp</strong>. Đuổi client thất bại vì <strong>vứt cả dữ liệu tốt</strong>.</p></div>
+      <div class="card"><h3>3 · Phương pháp lọc từng ảnh</h3>
+        <p><strong>+3,21</strong> trên DTD, <strong>+9,27</strong> trên OxfordPets — hơn median <strong>+1,75 / +4,66</strong>. Không cần biết ai xấu.</p></div>
+      <div class="card"><h3>4 · Tỉ giá bỏ nhầm / bỏ đúng</h3>
+        <p>Bỏ nhầm 1 ảnh sạch đắt bằng <strong>1,34</strong> ảnh bẩn bỏ đúng → bộ lọc phải đúng trên <strong>57,3%</strong>. Dùng được cho mọi bộ lọc sau này.</p></div>
+      <div class="card red"><h3>5 · Server tự chọn cách xử lý</h3>
+        <p>Xoá hẳn hay hạ trọng số tuỳ bộ lọc giỏi đến đâu. Server tự đoán điều đó từ <strong>con số có sẵn</strong> — bám lựa chọn tốt nhất trong <strong>0,01 và 0,35</strong> điểm.</p></div>
+    </div>
+    <div class="card" style="flex:0 0 auto">
+      <h3>Điều khiến các kết quả âm trở nên có giá trị</h3>
+      <p>Mọi tiêu chí được <strong>ghi trước khi chạy</strong>, ghép cặp theo seed, và không sửa sau khi nhìn số. Nên "hướng này không đi được" là một <strong>phép đo</strong>, không phải một lời biện hộ.</p>
+    </div>
+  </div>
+  <div class="foot">Đích nhắm: <strong>NeurIPS Datasets &amp; Benchmarks</strong> — đúng nơi benchmark FLIP đã công bố.</div>
+</section>
+
+<!-- 16 ============================================================ -->
+<section class="slide">
+  <div class="hd"><div class="logo">Robust&#8202;<em>FPL</em></div><div class="pno">22 / 22</div></div>
+  <div class="eyebrow">VII · Tiếp theo</div>
+  <h1>Còn lại <span class="lite">khoảng 15 giờ GPU</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <table>
+      <tr><th style="width:44px">#</th><th>Việc</th><th>Trả lời câu gì</th><th class="n" style="width:70px">Giờ</th></tr>
+      <tr class="hi"><td class="mono">1</td><td><strong>EuroSAT — 4 nhánh</strong></td>
+        <td>Dataset ít lớp nhất. Nếu luật chọn chế độ thật ra chỉ đang đo <strong>số lớp</strong> chứ không phải chất lượng người thầy, ở đây nó sẽ lộ</td><td class="n">3,0</td></tr>
+      <tr class="hi"><td class="mono">2</td><td><strong>Caltech101 — 4 nhánh</strong></td>
+        <td>Nhiều lớp <em>và</em> thầy giỏi. Cùng phía Pets nhưng qua đường khác → tách được hai biến đã trộn lẫn ở DTD và Pets</td><td class="n">12,0</td></tr>
+      <tr><td class="mono">3</td><td>Food101</td>
+        <td>Nằm <strong>đúng trên</strong> ranh giới (thầy ~76% → ngưỡng ~0,25). Phép kiểm sắc nhất, nhưng 96 giây/vòng</td><td class="n">~20</td></tr>
+      <tr><td class="mono">4</td><td>Quét mức nhiễm 10 / 40 / 80%</td>
+        <td>Biến hạn chế thành <strong>điều kiện áp dụng</strong>. Chỉ đáng hỏi sau khi luật chọn chế độ đứng vững</td><td class="n">5,0</td></tr>
+      <tr class="dim"><td class="mono">—</td><td>Thêm seed cho mềm-vs-cứng trên DTD</td>
+        <td><strong>Không làm.</strong> Đã bác ở 10 seed, đúng theo tiêu chí ghi trước. Chứng minh chênh lệch 0,20 còn lại cần ~116 seed ≈ 146 giờ</td><td class="n">—</td></tr>
+      <tr class="dim"><td class="mono">—</td><td>Trọng số theo điểm thật</td>
+        <td><strong>Không làm.</strong> Sau khi sửa hai lỗi thì hoà với thứ hạng, không thắng</td><td class="n">—</td></tr>
+    </table>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>Mốc đuổi theo — DTD</h3>
+        <p class="mono" style="font-size:13.5px;line-height:1.7">không phòng thủ&nbsp;47,56<br>median&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;49,01<br><strong>hiện tại&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50,76</strong><br>oracle mức ảnh&nbsp;&nbsp;53,58<br>trần sạch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;55,61</p></div>
+      <div class="card"><h3>Mốc đuổi theo — Pets</h3>
+        <p class="mono" style="font-size:13.5px;line-height:1.7">không phòng thủ&nbsp;75,88<br>median&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;80,49<br><strong>hiện tại&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;85,15</strong><br>zero-shot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;85,69<br>trần sạch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;88,09</p></div>
+      <div class="card red"><h3>Sau mục 1 và 2 thì dừng và viết</h3>
+        <p>Đã có đủ chất: một phương pháp hơn phòng thủ chuẩn trên <strong>hai</strong> dataset, một <strong>luật chọn chế độ</strong> không cần nhãn, bốn kết quả âm có cơ chế, và một bộ oracle làm trần.</p></div>
+    </div>
+  </div>
+  <div class="foot">Chi tiết số liệu: <span class="mono">report/statistic/ket-qua-thi-nghiem.xlsx</span> · Hồ sơ đầy đủ: <span class="mono">results/</span> (16 tài liệu, mỗi lượt một tiêu chí ghi trước) và <span class="mono">docs/</span></div>
+</section>
+
+</div>
+
+<div id="nav">
+  <button id="prev">←</button>
+  <span id="counter">1 / 22</span>
+  <button id="next">→</button>
+</div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  document.getElementById('counter').textContent=(i+1)+' / '+slides.length;
+  window.scrollTo(0,0);
+  try{localStorage.setItem('tfpl-slide',i)}catch(e){}
+}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(i+1)}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+  if(e.key==='Home')show(0);
+  if(e.key==='End')show(slides.length-1);
+  if(e.key==='p'||e.key==='P')window.print();
+});
+// Auto-fit. Content is written dense on purpose; rather than hand-tuning every slide, each
+// body is measured and scaled down when it does not fit.
+//
+// The measurement has to force a natural height first. `.body` is a flex column, so its
+// children SHRINK to the space available instead of making it taller — scrollHeight then
+// equals clientHeight however much is really in there, and a naive overflow check never
+// fires. Setting height:auto lets the children take their content size, which is the number
+// the scale has to be computed from.
+function fit(){
+  slides.forEach(sl=>{
+    const b=sl.querySelector('.body'); if(!b) return;
+    // Scale an INNER wrapper, never .body itself. .body is a flex item with flex:1 1 auto, so
+    // an explicit height on it is simply shrunk back by the flex algorithm -- measured: set to
+    // 582px, reported back as 439px, and the transform then had nothing to work against. The
+    // wrapper is free to be as tall as the content needs while .body keeps its flex height and
+    // clips, which is exactly what a scaled-down block should do.
+    let inner=b.querySelector(':scope > .body-inner');
+    if(!inner){
+      inner=document.createElement('div');
+      inner.className='body-inner';
+      while(b.firstChild) inner.appendChild(b.firstChild);
+      b.appendChild(inner);
+    }
+    inner.style.transform=''; inner.style.width=''; inner.style.height='';
+    inner.style.flex='';
+    const avail=b.clientHeight;
+    if(!avail) return;
+    const rows=[...inner.querySelectorAll('.cols')];
+    rows.forEach(r=>r.style.height='auto');
+    inner.style.height='auto';
+    // Two kinds of overflow add up. Block flow of the wrapper gives the first. The second
+    // hides inside a .card: cards in a row stretch to the row height, so a card whose text is
+    // taller paints outside its border without making any ancestor taller.
+    let need=inner.scrollHeight;
+    rows.forEach(r=>{
+      let worst=0;
+      r.querySelectorAll('.card').forEach(c=>{worst=Math.max(worst, c.scrollHeight-c.clientHeight)});
+      need+=worst;
+    });
+    rows.forEach(r=>r.style.height='');
+    if(need>avail+2){
+      const k=Math.max(.62, avail/need);
+      // flex:0 0 auto or the explicit height is shrunk straight back by the flex algorithm,
+      // which is what defeated the first two attempts at this
+      inner.style.flex='0 0 auto';
+      inner.style.height=(avail/k)+'px';
+      inner.style.width=(100/k)+'%';
+      inner.style.transform='scale('+k+')';
+    }else{
+      inner.style.height='';
+    }
+  });
+}
+let start=0;
+try{const v=localStorage.getItem('tfpl-slide');if(v!==null)start=parseInt(v,10)||0}catch(e){}
+// measure with every slide briefly laid out, then restore. The first pass runs on the
+// fallback fonts; the webfonts land later and reflow taller, so measure again once they
+// are ready (and once more on resize).
+slides.forEach(s=>s.classList.add('on'));
+function remeasure(){
+  const cur=i; slides.forEach(s=>s.classList.add('on')); fit(); show(cur);
+}
+requestAnimationFrame(()=>{fit();show(start)});
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(()=>setTimeout(remeasure,60))}
+window.addEventListener('resize',()=>{clearTimeout(window.__rt);window.__rt=setTimeout(remeasure,150)});
+window.addEventListener('beforeprint',()=>{slides.forEach(s=>s.classList.add('on'));fit()});
+</script>
+</body>
+</html>

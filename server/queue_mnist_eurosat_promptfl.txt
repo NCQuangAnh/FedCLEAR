@@ -1,0 +1,28 @@
+# MNIST then EuroSAT, PromptFL reference (same arms PromptFL used on Pets / DTD / Caltech) + zero-shot CLIP on MNIST.
+# EuroSAT zero-shot is not rerun: results/Phase4/food101-eurosat (RN50, same template) gave 26.11%.
+# Plan: results/side-research/mnist_eurosat/plan.md
+
+mnist S_clean_zs
+mnist D_sym_none
+mnist D_pair_none
+mnist D_inst_none
+mnist D_het_none
+mnist D_clean_none
+mnist N_sym25_none
+mnist N_sym50_none
+mnist N_sym75_none
+mnist N_pair25_none
+mnist N_pair50_none
+mnist N_pair75_none
+
+eurosat D_sym_none
+eurosat D_pair_none
+eurosat D_inst_none
+eurosat D_het_none
+eurosat D_clean_none
+eurosat N_sym25_none
+eurosat N_sym50_none
+eurosat N_sym75_none
+eurosat N_pair25_none
+eurosat N_pair50_none
+eurosat N_pair75_none

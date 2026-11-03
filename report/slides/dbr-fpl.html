@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DBR-FPL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FBF8F3; --ink:#111111; --red:#C72202; --red-dk:#A31B02;
+  --tint:#F9E2DC; --rule:#111111; --muted:#6B6259; --line:#D9D2C8;
+  --ok:#1F6F3D; --bad:#B22712;
+  --serif:'Playfair Display', Georgia, 'Times New Roman', serif;
+  --body:'Source Serif 4', Georgia, serif;
+  --mono:'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#2A2724;color:var(--ink);
+  font-family:var(--body);-webkit-font-smoothing:antialiased}
+
+/* ---- deck shell ------------------------------------------------------- */
+#deck{width:100%}
+.slide{
+  position:relative;width:1280px;height:720px;margin:24px auto;background:var(--cream);
+  border:1.5px solid var(--ink);padding:30px 40px 26px;display:none;flex-direction:column;
+  box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;
+}
+.slide.on{display:flex}
+@media print{
+  html,body{background:#fff}
+  .slide{display:flex!important;margin:0;page-break-after:always;box-shadow:none;border:1px solid var(--ink)}
+  #nav,#hint{display:none!important}
+}
+
+/* ---- header / footer -------------------------------------------------- */
+.hd{display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1.5px solid var(--ink);padding-bottom:10px;margin-bottom:18px;flex:0 0 auto}
+.logo{font-family:var(--serif);font-weight:700;font-size:25px;letter-spacing:.005em}
+.logo em{color:var(--red);font-style:normal}
+.pno{font-family:var(--mono);font-size:12px;letter-spacing:.14em;border:1.5px solid var(--ink);
+  padding:5px 13px}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;color:var(--red);
+  text-transform:uppercase;margin-bottom:9px}
+h1{font-family:var(--serif);font-size:41px;line-height:1.08;margin:0 0 6px;font-weight:700;
+  letter-spacing:-.015em}
+h1 .lite{font-style:italic;font-weight:400}
+.bar{width:132px;height:6px;background:var(--red);margin:9px 0 16px}
+.body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.body-inner{display:flex;flex-direction:column;gap:12px;flex:1 1 auto;min-height:0;
+  transform-origin:top left;width:100%}
+.foot{flex:0 0 auto;margin-top:12px;background:var(--tint);border-left:6px solid var(--red);
+  padding:11px 17px;font-family:var(--mono);font-size:13.5px;color:var(--red-dk);line-height:1.5}
+
+/* ---- title slide ------------------------------------------------------ */
+.title-slide{justify-content:center;align-items:center;text-align:center;padding:0 90px}
+.title-slide .kick{font-family:var(--mono);font-size:14px;letter-spacing:.24em;
+  display:flex;align-items:center;gap:20px;margin-bottom:34px}
+.title-slide .kick::before,.title-slide .kick::after{content:"";width:74px;height:2.5px;background:var(--red)}
+.title-slide h1{font-size:62px;line-height:1.04;margin-bottom:22px}
+.title-slide h1 em{color:var(--red);font-style:normal}
+.sub{font-size:22px;line-height:1.5;color:var(--ink);max-width:930px;margin:0 auto}
+.chips{display:flex;gap:14px;margin-top:40px;justify-content:center;flex-wrap:wrap}
+.chip{border:1.5px solid var(--ink);padding:9px 17px;font-family:var(--mono);font-size:12.5px;
+  display:flex;align-items:center;gap:9px}
+.chip .dot{width:10px;height:10px;border-radius:50%;background:var(--red)}
+.rule-mini{width:220px;height:1.5px;background:var(--line);margin:28px auto 0}
+.tagline{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--muted);margin-top:16px}
+
+/* ---- generic bits ----------------------------------------------------- */
+.cols{display:flex;gap:15px;flex:1 1 auto;min-height:0}
+.card{border:1.5px solid var(--ink);padding:13px 15px;background:var(--cream);flex:1;
+  display:flex;flex-direction:column;min-width:0}
+.card.red{border-color:var(--red);background:#FDF4F1}
+.card h3{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  margin:0 0 10px;color:var(--red)}
+.card p{margin:0 0 6px;font-size:14.5px;line-height:1.45}
+.big{font-family:var(--serif);font-size:40px;font-weight:700;line-height:1;margin:4px 0 2px}
+.big.red{color:var(--red)} .big.ok{color:var(--ok)} .big.bad{color:var(--bad)}
+.lbl{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--muted);
+  text-transform:uppercase}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  text-align:left;padding:7px 9px;border-bottom:1.5px solid var(--ink);color:var(--muted);
+  font-weight:400;vertical-align:bottom}
+td{padding:6px 8px;border-bottom:1px solid var(--line);line-height:1.3}
+td.n,th.n{text-align:right;font-family:var(--mono);font-size:13.5px}
+tr.hi td{background:var(--tint);font-weight:600}
+tr.dim td{color:var(--muted)}
+table.tight td{padding:3.5px 8px}
+table.tight th{padding:5px 9px}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;padding:2.5px 8px;
+  border:1.2px solid currentColor;text-transform:uppercase;white-space:nowrap}
+.tag.pass{color:var(--ok)} .tag.fail{color:var(--bad)} .tag.wait{color:var(--muted)}
+
+ul.clean{margin:0;padding-left:0;list-style:none}
+ul.clean li{padding:7px 0 7px 22px;position:relative;font-size:15px;line-height:1.5;
+  border-bottom:1px solid var(--line)}
+ul.clean li:last-child{border-bottom:none}
+ul.clean li::before{content:"";position:absolute;left:0;top:15px;width:9px;height:9px;
+  background:var(--red)}
+strong{font-weight:600}
+.mono{font-family:var(--mono);font-size:.93em}
+
+/* ladder */
+.ladder{display:flex;flex-direction:column;gap:7px;flex:1 1 auto;justify-content:center}
+.rung{display:flex;align-items:center;gap:14px}
+.rung .nm{width:270px;font-size:14.5px;flex:0 0 auto}
+.rung .track{flex:1 1 auto;height:26px;background:#EFE9E0;position:relative;border:1px solid var(--line)}
+.rung .fill{position:absolute;left:0;top:0;bottom:0;background:var(--red);opacity:.22}
+.rung .fill.solid{opacity:1}
+.rung .fill.grey{background:var(--muted);opacity:.28}
+.rung .val{width:150px;flex:0 0 auto;text-align:right;font-family:var(--mono);font-size:14px}
+
+/* system diagram v2 */
+.diagram{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center}
+.diagram svg{width:100%;height:100%;max-height:100%}
+.sq.ok{fill:#D9D2C8;stroke:#B9B0A4;stroke-width:1}
+.sq.bad{fill:#C72202;stroke:#A31B02;stroke-width:1}
+.sq.gone{fill:none;stroke-width:1.3;stroke-dasharray:3 2}
+.sq.bad-o{stroke:#C72202}
+.sq.ok-o{stroke:#6B6259}
+.d-h{font-family:var(--mono);font-size:12px;letter-spacing:.14em;fill:var(--red);font-weight:700}
+.d-hs{font-family:var(--body);font-size:12.5px;fill:var(--muted)}
+.d-name{font-family:var(--body);font-size:16px;font-weight:600;fill:var(--ink)}
+.d-sub{font-family:var(--body);font-size:12.5px;fill:var(--muted)}
+.d-tag{font-family:var(--body);font-size:12.5px;fill:var(--ink)}
+.d-l{font-family:var(--body);font-size:15px;font-weight:600;fill:var(--ink)}
+.d-w{font-family:var(--mono);font-size:11.5px;fill:var(--ink)}
+.d-wr{font-family:var(--mono);font-size:11.5px;fill:var(--red-dk)}
+.d-panel{fill:#FDF4F1;stroke:var(--red);stroke-width:1.4}
+.d-srv{fill:var(--cream);stroke:var(--ink);stroke-width:1.5}
+.d-step{fill:var(--cream);stroke:var(--line);stroke-width:1.2}
+.d-step.acc{fill:var(--tint);stroke:var(--red)}
+.d-note{fill:#F3EFE8;stroke:none}
+.d-arr{stroke:#6B6259;stroke-width:1.3;fill:none}
+.d-big{stroke:var(--ink);stroke-width:2;fill:none}
+.d-back{stroke:var(--red);stroke-width:1.6;fill:none;stroke-dasharray:6 3}
+
+/* coverage matrix */
+table.cov{font-size:13.5px}
+table.cov th.c,table.cov td.c{text-align:center;width:86px;padding:6px 4px}
+table.cov td.c{font-size:17px;line-height:1}
+table.cov .y{color:var(--ink)}
+table.cov .p{color:var(--ink)}
+table.cov .n{color:#C9C0B4}
+table.cov .q{color:var(--muted);font-family:var(--mono);font-size:13px}
+table.cov .na{color:#C9C0B4;font-family:var(--mono);font-size:13px}
+table.cov tr.me td{background:var(--tint);font-weight:600}
+table.cov tr.me td.c{color:var(--red)}
+table.cov .who{font-size:12px;color:var(--muted);font-weight:400}
+.cmp td{vertical-align:top}
+.cmp td.k{font-weight:600;width:170px}
+.cmp td.us{background:#FDF4F1}
+
+/* settings slide */
+table.kv{font-size:16px}
+table.kv td{padding:4px 8px;border-bottom:1px solid var(--line);line-height:1.2}
+.card:has(table.kv) h3{font-size:13px;margin-bottom:6px}
+table.kv td:first-child{color:var(--muted);width:34%;white-space:nowrap}
+table.kv td:last-child{font-weight:600}
+table.kv tr:last-child td{border-bottom:none}
+
+/* flow */
+.flow{display:flex;align-items:stretch;gap:10px}
+.step{flex:1;border:1.5px solid var(--ink);padding:12px 12px;text-align:center;background:var(--cream);
+  display:flex;flex-direction:column;justify-content:center}
+.step.acc{border-color:var(--red);background:#FDF4F1}
+.step .t{font-family:var(--mono);font-size:12px;letter-spacing:.06em;font-weight:700;margin-bottom:5px}
+.step.acc .t{color:var(--red)}
+.step .d{font-size:12.5px;color:var(--muted);line-height:1.4}
+.arrow{display:flex;align-items:center;font-size:20px;color:var(--ink);flex:0 0 auto}
+
+#nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;
+  align-items:center;background:var(--cream);border:1.5px solid var(--ink);padding:7px 14px;
+  font-family:var(--mono);font-size:12.5px;z-index:9}
+#nav button{font:inherit;border:1.2px solid var(--ink);background:var(--cream);cursor:pointer;
+  padding:3px 11px}
+#nav button:hover{background:var(--tint)}
+#hint{position:fixed;top:14px;right:16px;font-family:var(--mono);font-size:11px;color:#C9C2B8;z-index:9}
+</style>
+</head>
+<body>
+<div id="hint">← → chuyển slide · P in ra PDF</div>
+<div id="deck">
+
+<!-- 1 title ======================================================= -->
+<section class="slide title-slide">
+  <div class="kick">ĐỒ ÁN TỐT NGHIỆP · BÀI TOÁN CLIENT NHIỄU NHÃN</div>
+  <h1>DBR-<em>FPL</em></h1>
+  <div class="sub">Disagreement-Budgeted Relabeling for Federated Prompt Learning<br>Học prompt liên kết trên CLIP khi một phần client gán nhãn cẩu thả</div>
+  <div class="rule-mini"></div>
+  <div class="tagline">Mỗi client tự ước lượng mình bẩn bao nhiêu, rồi chỉ dọn đúng phần đó</div>
+  <div class="chips">
+    <div class="chip"><span class="dot"></span> CLIP RN50 + CoOp, few-shot</div>
+    <div class="chip">10 client · 3 client cẩu thả</div>
+    <div class="chip">OxfordPets · Caltech101 · 5 seed</div>
+  </div>
+</section>
+
+<!-- 2 problem ===================================================== -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">02 / 12</div></div>
+  <div class="eyebrow">I · Bài toán</div>
+  <h1>Vài client gán nhãn cẩu thả <span class="lite">đủ kéo cả liên minh đi xuống</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols">
+      <div class="card"><h3>Bối cảnh</h3>
+        <p><strong>Federated prompt learning:</strong> nhiều client cùng học một prompt cho CLIP mà không gửi ảnh đi.</p>
+        <p>CLIP <strong>đóng băng</strong>; chỉ học <strong>4 × 512 = 2.048 số</strong> prompt.</p>
+        <p><strong>Few-shot:</strong> 8 ảnh/lớp cho cả liên minh, mỗi client chỉ ~30 (Pets) đến ~80 (Caltech) ảnh.</p>
+        <p>Nhãn do từng client tự gán; server không thấy ảnh, không có tập dữ liệu sạch nào.</p>
+      </div>
+      <div class="card red"><h3>Nhiễu làm mất bao nhiêu (last10)</h3>
+        <table class="tight">
+          <tr><th></th><th class="n">Pets</th><th class="n">Caltech</th></tr>
+          <tr><td>10 client sạch</td><td class="n">87.88</td><td class="n">90.21</td></tr>
+          <tr><td>7 sạch + 3 cẩu thả, không phòng thủ</td><td class="n">80.47</td><td class="n">87.79</td></tr>
+          <tr class="hi"><td>Thiệt hại</td><td class="n">−7.41</td><td class="n">−2.42</td></tr>
+          <tr class="dim"><td>CLIP gốc, không học gì (zero-shot)</td><td class="n">85.69</td><td class="n">85.76</td></tr>
+        </table>
+        <p style="margin-top:10px">Trên Pets, học có nhiễu còn <strong>thua cả CLIP không học gì</strong>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Mục tiêu: lấy lại phần độ chính xác bị nhiễu làm mất, <strong>không đuổi client nào</strong> và <strong>không cần dữ liệu sạch</strong> ở server.</div>
+</section>
+
+<!-- 3 noise definition =========================================== -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">03 / 12</div></div>
+  <div class="eyebrow">I · Định nghĩa kiểu nhiễu</div>
+  <h1>Client cẩu thả: <span class="lite">40% nhãn bị gán nhầm ngẫu nhiên</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols">
+      <div class="card"><h3>Hai loại client</h3>
+        <table class="kv">
+          <tr><td>Client sạch</td><td>mọi nhãn đúng</td></tr>
+          <tr><td>Client cẩu thả</td><td>mỗi nhãn bị đổi với xác suất 40%</td></tr>
+          <tr><td>Số lượng</td><td>7 sạch + 3 cẩu thả / 10 client</td></tr>
+          <tr><td>Ý định</td><td>không cố ý, không nói dối</td></tr>
+        </table>
+      </div>
+      <div class="card red"><h3>Nhiễu đối xứng (symmetric)</h3>
+        <p>Một nhãn bị đổi thì chuyển sang <strong>một lớp khác bất kỳ, xác suất đều nhau</strong>.</p>
+        <p class="mono" style="font-size:14px;margin:8px 0">P(nhãn ghi = j | lớp thật = i) = 0,6 nếu j = i<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 0,4 / (C − 1) nếu j ≠ i</p>
+        <p>Ví dụ (Pets, C = 37): ảnh Beagle có 60% giữ nhãn "Beagle", 40% thành một trong 36 giống còn lại.</p>
+        <p>Nhiễu được gắn <strong>sau khi</strong> chia dữ liệu cho client, nên mỗi lượt có nhiễu ghép cặp được với lượt sạch cùng seed.</p>
+      </div>
+    </div>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>Tính trên cả liên minh</h3><p>3 client × 40% ≈ <strong>12% số ảnh</strong> mang nhãn sai.</p></div>
+      <div class="card"><h3>Ngoài phạm vi phần này</h3><p>Nhiễu cặp (pair), nhiễu theo nội dung ảnh, và client cố ý đầu độc: để cho các phần sau.</p></div>
+    </div>
+  </div>
+  <div class="foot">Nhãn sai ngẫu nhiên <strong>khó học</strong> (mô hình không khớp được), đó là đặc điểm phương pháp dựa vào để tìm ra chúng.</div>
+</section>
+
+<!-- 4 method overview ============================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">04 / 12</div></div>
+  <div class="eyebrow">II · Phương pháp</div>
+  <h1>DBR-FPL: <span class="lite">tự ước lượng mức bẩn, rồi dọn đúng phần dư</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="flow">
+      <div class="step"><div class="t">1 · MỨC LỆCH d</div><div class="d">Client hỏi mô hình chung: bao nhiêu % nhãn của tôi bị nó phản đối?</div></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="t">2 · MỐC SẠCH b</div><div class="d">Server lấy mức lệch ở mốc 25% thấp nhất = "client sạch trông thế này"</div></div>
+      <div class="arrow">→</div>
+      <div class="step acc"><div class="t">3 · NGÂN SÁCH ρ</div><div class="d">ρ = (d − b)/(1 − b), tối đa 60%; ρ ≤ 0,10 → coi là sạch</div></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="t">4 · CHỌN ẢNH NGHI</div><div class="d">ρ phần ảnh mà mô hình chung ít tin vào nhãn nhất</div></div>
+      <div class="arrow">→</div>
+      <div class="step acc"><div class="t">5 · XỬ LÝ</div><div class="d">MỀM: giảm trọng số · CỨNG: sửa nhãn nếu tin ≥ 50%, còn lại tạm bỏ</div></div>
+    </div>
+    <div class="cols">
+      <div class="card"><h3>Chế độ thích nghi</h3>
+        <p>Server tự chọn: trung bình trượt của <em>b</em> &lt; 0,20 → <strong>CỨNG</strong>; &gt; 0,24 → <strong>MỀM</strong>; ở giữa giữ nguyên.</p>
+        <p>Mô hình chung còn yếu thì không cho nó sửa nhãn.</p></div>
+      <div class="card"><h3>Chỉ trao đổi thêm 1 con số</h3>
+        <p>Lên: prompt + <strong>d</strong> + số ảnh. Xuống: prompt + <strong>b</strong> + lệnh.</p>
+        <p>Ảnh, nhãn và CLIP không rời máy client.</p></div>
+      <div class="card"><h3>Luôn sửa sai được</h3>
+        <p>Cứ 5 vòng chấm lại từ <strong>dữ liệu gốc</strong>; ảnh bỏ hay sửa nhầm có thể quay lại.</p>
+        <p>Không đuổi client nào.</p></div>
+    </div>
+  </div>
+  <div class="foot">Tên gọi: <strong>D</strong>isagreement-<strong>B</strong>udgeted <strong>R</strong>elabeling. Ngân sách sửa/bỏ của mỗi client được tính từ mức lệch của nó so với mốc sạch.</div>
+</section>
+
+<!-- 5 comparison ================================================== -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">05 / 12</div></div>
+  <div class="eyebrow">II · So sánh với các công trình liên quan</div>
+  <h1>Thành phần đã có người làm, <span class="lite">bối cảnh thì chưa</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <table class="cmp">
+      <tr><th>Phương pháp</th><th>Bối cảnh</th><th>Phát hiện client / ảnh nhiễu</th><th>Xử lý nhãn</th><th>Trao đổi thêm</th></tr>
+      <tr><td class="k">PromptFL</td><td>FL học prompt CLIP</td><td>không có</td><td>không xử lý</td><td>không</td></tr>
+      <tr><td class="k">FedCorr <span class="who">CVPR 22</span></td><td>FL, mô hình học từ đầu, nhiều dữ liệu</td><td>chiều không gian dự đoán (LID) + GMM; sai số từng ảnh</td><td>sửa nhãn theo mô hình, theo nhiều giai đoạn</td><td>LID mỗi client</td></tr>
+      <tr><td class="k">FedDiv <span class="who">AAAI 24</span></td><td>FL, mô hình học từ đầu</td><td>bộ lọc nhiễu chung của liên minh (dựa trên sai số)</td><td>lọc + gán nhãn lại</td><td>tham số bộ lọc</td></tr>
+      <tr><td class="k">NLPrompt / JoAPR <span class="who">CVPR 25 / CVPR 24</span></td><td>học prompt CLIP, <strong>tập trung</strong></td><td>tách sạch/nhiễu trên toàn bộ dữ liệu</td><td>loss chống nhiễu / sửa nhãn</td><td>— (không có server)</td></tr>
+      <tr class="me"><td class="k">DBR-FPL</td><td class="us"><strong>FL học prompt CLIP, few-shot</strong></td><td class="us">mức lệch so với <strong>mốc sạch của liên minh</strong>, ra ngân sách từng client</td><td class="us">giảm trọng số hoặc sửa nhãn có ngưỡng tin, chế độ do server chọn</td><td class="us"><strong>1 số</strong> mỗi chiều</td></tr>
+    </table>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>Không nhận là mới</h3><p>Ước lượng mức nhiễu từng client, xếp ảnh theo sai số, sửa nhãn bằng mô hình chung: đều đã có (FedCorr và các bài FL nhãn nhiễu).</p></div>
+      <div class="card red"><h3>Phần đóng góp</h3><p>Đưa vào học prompt liên kết few-shot; ngân sách tính từ mốc sạch của liên minh; chế độ MỀM/CỨNG thích nghi; chỉ 1 số trao đổi thêm.</p></div>
+    </div>
+  </div>
+  <div class="foot">Chưa tìm thấy bài nào kết hợp học prompt liên kết + CLIP + few-shot + client nhiễu nhãn. Mức trùng ước lượng khoảng 50–60%.</div>
+</section>
+
+<!-- 6 client (blank) ============================================== -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">06 / 12</div></div>
+  <div class="eyebrow">II · Hoạt động tại client</div>
+  <h1>Bên trong một client <span class="lite">mỗi vòng</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div style="flex:1 1 auto;border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--mono);font-size:13px">[ chèn sơ đồ hoạt động tại client ]</div>
+  </div>
+</section>
+
+<!-- 7 server (blank) ============================================== -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">07 / 12</div></div>
+  <div class="eyebrow">II · Hoạt động tại server</div>
+  <h1>Server <span class="lite">mỗi vòng</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div style="flex:1 1 auto;border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--mono);font-size:13px">[ chèn sơ đồ hoạt động tại server ]</div>
+  </div>
+</section>
+
+<!-- 8 setup ======================================================= -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">08 / 12</div></div>
+  <div class="eyebrow">III · Thiết lập thí nghiệm</div>
+  <h1>Cùng seed, cùng cách chia, <span class="lite">so sánh ghép cặp</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols">
+      <div class="card"><h3>Mô hình và dữ liệu</h3>
+        <table class="kv">
+          <tr><td>Mô hình</td><td>CLIP RN50 + CoOp, 4 từ prompt</td></tr>
+          <tr><td>Bộ dữ liệu</td><td>OxfordPets (37 lớp) · Caltech101 (100 lớp)</td></tr>
+          <tr><td>Dữ liệu</td><td>8 ảnh/lớp cho cả liên minh</td></tr>
+          <tr><td>Chia client</td><td>10 client, Dirichlet α = 0,1</td></tr>
+          <tr><td>Ảnh/client</td><td>Pets ~30 (10–38) · Caltech 80 (53–95)</td></tr>
+          <tr><td>Nhiễu</td><td>3 client, đối xứng 40%</td></tr>
+        </table>
+      </div>
+      <div class="card"><h3>Huấn luyện và đánh giá</h3>
+        <table class="kv">
+          <tr><td>Vòng</td><td>50, mọi client mỗi vòng</td></tr>
+          <tr><td>Học cục bộ</td><td>1 lượt, nhóm 16 ảnh, SGD 0,002</td></tr>
+          <tr><td>Chấm lại ảnh</td><td>5 vòng một lần</td></tr>
+          <tr><td>Seed</td><td>5 (0–4), ghép cặp giữa các lượt</td></tr>
+          <tr><td>Chỉ số chính</td><td>last10: trung bình 10 vòng cuối</td></tr>
+          <tr><td>Kiểm định</td><td>t-test ghép cặp, p &lt; 0,05</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>Các lượt so sánh</h3><p><strong>Không phòng thủ</strong> · <strong>Chỉ lọc</strong> (không sửa nhãn) · <strong>DBR-FPL</strong> · <strong>Mức trần</strong>: 10 client sạch, cùng seed.</p></div>
+      <div class="card"><h3>Vì sao last10 chứ không phải "best"</h3><p>"Best" = đỉnh cao nhất trên tập test qua 50 vòng, tương đương dừng sớm bằng tập test, mà liên minh nhiễu không có tập sạch để làm vậy.</p></div>
+    </div>
+  </div>
+  <div class="foot">Tiêu chí đạt được ghi <strong>trước khi chạy</strong>: lấy lại ≥ 80% phần bị mất; client sạch bị đụng nhầm &lt; 1%.</div>
+</section>
+
+<!-- 9 main results ================================================ -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">09 / 12</div></div>
+  <div class="eyebrow">IV · Kết quả · độ chính xác</div>
+  <h1>DBR-FPL lấy lại <span class="lite">82–86% phần bị nhiễu làm mất</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <table class="tight">
+      <tr><th>Chỉ số (5 seed)</th><th class="n">Không phòng thủ</th><th class="n">Chỉ lọc</th><th class="n">DBR-FPL</th><th class="n">Mức trần</th><th class="n">Không phòng thủ</th><th class="n">Chỉ lọc</th><th class="n">DBR-FPL</th><th class="n">Mức trần</th></tr>
+      <tr class="dim"><td></td><td class="n" colspan="4" style="text-align:center">OXFORDPETS</td><td class="n" colspan="4" style="text-align:center">CALTECH101</td></tr>
+      <tr class="hi"><td>Last10 (± độ lệch seed)</td><td class="n">80.47 ± 2.83</td><td class="n">86.97 ± 0.61</td><td class="n">86.87 ± 1.63</td><td class="n">87.88 ± 0.49</td><td class="n">87.79 ± 0.43</td><td class="n">89.61 ± 0.77</td><td class="n">89.77 ± 0.60</td><td class="n">90.21 ± 0.46</td></tr>
+      <tr><td>Vòng cuối</td><td class="n">79.99</td><td class="n">86.98</td><td class="n">86.84</td><td class="n">87.88</td><td class="n">87.64</td><td class="n">89.59</td><td class="n">89.86</td><td class="n">90.21</td></tr>
+      <tr><td>Đỉnh cao nhất (tham khảo)</td><td class="n">85.53</td><td class="n">87.92</td><td class="n">88.01</td><td class="n">88.86</td><td class="n">89.69</td><td class="n">90.35</td><td class="n">90.37</td><td class="n">90.82</td></tr>
+      <tr><td>Seed tệ nhất</td><td class="n">76.09</td><td class="n">86.30</td><td class="n">84.14</td><td class="n">87.34</td><td class="n">87.33</td><td class="n">89.08</td><td class="n">89.15</td><td class="n">89.67</td></tr>
+      <tr><td>Trung bình 50 vòng</td><td class="n">81.49</td><td class="n">86.13</td><td class="n">86.03</td><td class="n">87.58</td><td class="n">87.72</td><td class="n">89.12</td><td class="n">89.17</td><td class="n">89.81</td></tr>
+      <tr><td>Dao động 10 vòng cuối</td><td class="n">0.94</td><td class="n">0.21</td><td class="n">0.24</td><td class="n">0.19</td><td class="n">0.48</td><td class="n">0.19</td><td class="n">0.22</td><td class="n">0.20</td></tr>
+      <tr><td>Thời gian / vòng (giây, T4)</td><td class="n">13.3</td><td class="n">15.5</td><td class="n">16.0</td><td class="n">9.8*</td><td class="n">36.1</td><td class="n">43.0</td><td class="n">45.4</td><td class="n">21.3*</td></tr>
+      <tr><td>Truyền mỗi client / vòng (lên · xuống)</td><td class="n">2.049 · 2.048</td><td class="n">2.050 · 2.050</td><td class="n">2.050 · 2.050</td><td class="n">2.049 · 2.048</td><td class="n">2.049 · 2.048</td><td class="n">2.050 · 2.050</td><td class="n">2.050 · 2.050</td><td class="n">2.049 · 2.048</td></tr>
+    </table>
+    <p style="margin:2px 0 0;font-size:12px;color:var(--muted)">Truyền: số lượng con số (≈ 8 KB mỗi chiều). PromptFL gửi lên prompt + số ảnh n; DBR-FPL thêm d lên, b và lệnh xuống. Thời gian: thêm chi phí chỉ ở các vòng chấm lại ảnh (Pets ~25 → 36 s, Caltech ~82 → 125 s), các vòng khác ≈ như nhau. * Lượt mức trần chạy không bật ghi log thăm dò nên nhanh hơn, không dùng để so chi phí.</p>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card red"><h3>Pets</h3><div class="big red">+6.40</div><p>so với không phòng thủ (p 0,001) · lấy lại <strong>86%</strong> · cách mức trần 1,01 (p 0,21)</p></div>
+      <div class="card red"><h3>Caltech</h3><div class="big red">+1.99</div><p>so với không phòng thủ (p 0,001) · lấy lại <strong>82%</strong> · cách mức trần 0,44 (p 0,017)</p></div>
+      <div class="card"><h3>Tiêu chí 1: lấy lại ≥ 80%</h3><p><span class="tag pass">đạt</span> trên cả hai bộ</p></div>
+    </div>
+  </div>
+  <div class="foot">Mô hình ổn định khi kết thúc (vòng cuối ≈ last10); dao động giảm từ 0,94 xuống 0,24 trên Pets. Trên Pets, DBR-FPL kém ổn định giữa các seed hơn "chỉ lọc" (± 1,63 so với ± 0,61).</div>
+</section>
+
+<!-- 10 cleaning metrics =========================================== -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">10 / 12</div></div>
+  <div class="eyebrow">IV · Kết quả · xử lý nhãn</div>
+  <h1>Sửa đúng 45–65% nhãn sai, <span class="lite">nhưng đụng nhầm client sạch trên Pets</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <table>
+      <tr><th>Chỉ số</th><th class="n">Pets · chỉ lọc</th><th class="n">Pets · DBR-FPL</th><th class="n">Caltech · chỉ lọc</th><th class="n">Caltech · DBR-FPL</th></tr>
+      <tr><td>% nhãn sai được bỏ / giảm trọng số / sửa</td><td class="n">79.1%</td><td class="n">64.4%</td><td class="n">85.9%</td><td class="n">76.9%</td></tr>
+      <tr class="hi"><td>trong đó % được <strong>sửa đúng</strong></td><td class="n">0%</td><td class="n">44.6%</td><td class="n">0%</td><td class="n">64.5%</td></tr>
+      <tr><td>Độ chính xác của hành động (đụng đúng ảnh sai)</td><td class="n">90.7%</td><td class="n">75.4%</td><td class="n">87.4%</td><td class="n">80.5%</td></tr>
+      <tr class="hi"><td>Client sạch bị đụng nhầm</td><td class="n">3.45%</td><td class="n">3.23%</td><td class="n">0.36%</td><td class="n">0.30%</td></tr>
+    </table>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>Đọc bảng</h3><p>"Chỉ lọc" đụng được nhiều ảnh sai hơn nhưng toàn là bỏ. DBR-FPL <strong>biến gần nửa số nhãn sai thành ảnh học được</strong>, đổi lại có những lần sửa sai.</p></div>
+      <div class="card red"><h3>Tiêu chí 2: đụng nhầm &lt; 1%</h3><p><span class="tag fail">trượt</span> trên Pets (3,23%: 797 bỏ nhầm + 844 sửa nhầm / 50.847) · <span class="tag pass">đạt</span> trên Caltech (0,30%)</p></div>
+    </div>
+  </div>
+  <div class="foot">Pets: các giống chó mèo trông rất giống nhau, client sạch cũng hay bị mô hình chung phản đối, nên ranh giới "sạch / cẩu thả" hẹp. Các chỉ số cộng dồn mọi lượt chấm, kể cả vòng 0 và 5 khi ngân sách thường bằng 0.</div>
+</section>
+
+<!-- 11 ablation =================================================== -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">11 / 12</div></div>
+  <div class="eyebrow">IV · Kết quả · phần nào đóng góp</div>
+  <h1>Khi chỉ có nhiễu, <span class="lite">phần lọc làm gần hết việc</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="ladder">
+      <div class="rung"><div class="nm">Pets · không phòng thủ</div><div class="track"><div class="fill grey" style="width:0%"></div></div><div class="val">80.47 · 0%</div></div>
+      <div class="rung"><div class="nm">Pets · chỉ lọc</div><div class="track"><div class="fill" style="width:88%"></div></div><div class="val">86.97 · 88%</div></div>
+      <div class="rung"><div class="nm"><strong>Pets · DBR-FPL</strong></div><div class="track"><div class="fill solid" style="width:86%"></div></div><div class="val">86.87 · 86%</div></div>
+      <div class="rung"><div class="nm">Caltech · không phòng thủ</div><div class="track"><div class="fill grey" style="width:0%"></div></div><div class="val">87.79 · 0%</div></div>
+      <div class="rung"><div class="nm">Caltech · chỉ lọc</div><div class="track"><div class="fill" style="width:75%"></div></div><div class="val">89.61 · 75%</div></div>
+      <div class="rung"><div class="nm"><strong>Caltech · DBR-FPL</strong></div><div class="track"><div class="fill solid" style="width:82%"></div></div><div class="val">89.77 · 82%</div></div>
+    </div>
+    <div class="cols" style="flex:0 0 auto">
+      <div class="card"><h3>DBR-FPL − chỉ lọc</h3><p>Pets −0,10 (p 0,87) · Caltech +0,16 (p 0,21): <strong>không có ý nghĩa thống kê</strong>.</p></div>
+      <div class="card"><h3>Vì sao lọc đã đủ</h3><p>Chỉ ~12% ảnh nhãn sai; nhãn sai <strong>kéo ngược</strong> prompt (sai số lớn gấp ~10 lần), bỏ đi thì chỉ mất ít thông tin; CLIP đã giỏi sẵn nên cần ít ảnh.</p></div>
+      <div class="card red"><h3>Vẫn giữ phần sửa nhãn</h3><p>Không thua khi chỉ có nhiễu; Caltech qua ngưỡng 80% (lọc: 75%); có lợi rõ khi có kẻ gian dữ liệu (+0,65 trên Caltech, phần sau).</p></div>
+    </div>
+  </div>
+  <div class="foot">Thanh ngang: phần trăm khoảng cách "không phòng thủ → mức trần" đã lấy lại được.</div>
+</section>
+
+<!-- 12 limits ===================================================== -->
+<section class="slide">
+  <div class="hd"><div class="logo">DBR-<em>FPL</em></div><div class="pno">12 / 12</div></div>
+  <div class="eyebrow">V · Hạn chế và bước tiếp theo</div>
+  <h1>Đạt mục tiêu chính, <span class="lite">còn bốn việc phải làm</span></h1>
+  <div class="bar"></div>
+  <div class="body">
+    <div class="cols">
+      <div class="card"><h3>Đã có</h3>
+        <ul class="clean">
+          <li>Lấy lại 86% (Pets) và 82% (Caltech) phần bị nhiễu làm mất; cả hai p 0,001.</li>
+          <li>Không cần dữ liệu sạch ở server, không đuổi client, chỉ trao đổi thêm 1 số.</li>
+          <li>Caltech gần như không đụng client sạch (0,30%).</li>
+        </ul></div>
+      <div class="card red"><h3>Hạn chế và việc tiếp</h3>
+        <ul class="clean">
+          <li><strong>Pets đụng nhầm client sạch 3,2%</strong>, trượt tiêu chí &lt; 1%.</li>
+          <li><strong>Chưa có đối thủ cùng bối cảnh</strong>: cần chạy một bản kiểu FedCorr và loss của NLPrompt trong học prompt liên kết.</li>
+          <li>Mới có 2 bộ dữ liệu; DTD (khó, CLIP yếu) và EuroSAT (giữ làm bài kiểm tra cuối) chưa chạy.</li>
+          <li>Chưa ghi độ chính xác theo từng lớp; chưa thử nhiễu cặp và nhiễu theo nội dung.</li>
+        </ul></div>
+    </div>
+  </div>
+  <div class="foot">Phần client cố ý đầu độc và trộn hai loại client xấu: trình bày ở các phần sau.</div>
+</section>
+
+</div>
+
+<div id="nav">
+  <button id="prev">←</button>
+  <span id="counter">1 / 12</span>
+  <button id="next">→</button>
+</div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  document.getElementById('counter').textContent=(i+1)+' / '+slides.length;
+  window.scrollTo(0,0);
+  try{localStorage.setItem('dbrfpl-slide',i)}catch(e){}
+}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(i+1)}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+  if(e.key==='Home')show(0);
+  if(e.key==='End')show(slides.length-1);
+  if(e.key==='p'||e.key==='P')window.print();
+});
+// Auto-fit. Content is written dense on purpose; rather than hand-tuning every slide, each
+// body is measured and scaled down when it does not fit.
+//
+// The measurement has to force a natural height first. `.body` is a flex column, so its
+// children SHRINK to the space available instead of making it taller — scrollHeight then
+// equals clientHeight however much is really in there, and a naive overflow check never
+// fires. Setting height:auto lets the children take their content size, which is the number
+// the scale has to be computed from.
+function fit(){
+  slides.forEach(sl=>{
+    const b=sl.querySelector('.body'); if(!b) return;
+    // Scale an INNER wrapper, never .body itself. .body is a flex item with flex:1 1 auto, so
+    // an explicit height on it is simply shrunk back by the flex algorithm -- measured: set to
+    // 582px, reported back as 439px, and the transform then had nothing to work against. The
+    // wrapper is free to be as tall as the content needs while .body keeps its flex height and
+    // clips, which is exactly what a scaled-down block should do.
+    let inner=b.querySelector(':scope > .body-inner');
+    if(!inner){
+      inner=document.createElement('div');
+      inner.className='body-inner';
+      while(b.firstChild) inner.appendChild(b.firstChild);
+      b.appendChild(inner);
+    }
+    inner.style.transform=''; inner.style.width=''; inner.style.height='';
+    inner.style.flex='';
+    const avail=b.clientHeight;
+    if(!avail) return;
+    const rows=[...inner.querySelectorAll('.cols')];
+    rows.forEach(r=>r.style.height='auto');
+    inner.style.height='auto';
+    // Two kinds of overflow add up. Block flow of the wrapper gives the first. The second
+    // hides inside a .card: cards in a row stretch to the row height, so a card whose text is
+    // taller paints outside its border without making any ancestor taller.
+    let need=inner.scrollHeight;
+    rows.forEach(r=>{
+      let worst=0;
+      r.querySelectorAll('.card').forEach(c=>{worst=Math.max(worst, c.scrollHeight-c.clientHeight)});
+      need+=worst;
+    });
+    rows.forEach(r=>r.style.height='');
+    if(need>avail+2){
+      const k=Math.max(.62, avail/need);
+      // flex:0 0 auto or the explicit height is shrunk straight back by the flex algorithm,
+      // which is what defeated the first two attempts at this
+      inner.style.flex='0 0 auto';
+      inner.style.height=(avail/k)+'px';
+      inner.style.width=(100/k)+'%';
+      inner.style.transform='scale('+k+')';
+    }else{
+      inner.style.height='';
+    }
+  });
+}
+let start=0;
+try{const v=localStorage.getItem('dbrfpl-slide');if(v!==null)start=parseInt(v,10)||0}catch(e){}
+// measure with every slide briefly laid out, then restore. The first pass runs on the
+// fallback fonts; the webfonts land later and reflow taller, so measure again once they
+// are ready (and once more on resize).
+slides.forEach(s=>s.classList.add('on'));
+function remeasure(){
+  const cur=i; slides.forEach(s=>s.classList.add('on')); fit(); show(cur);
+}
+requestAnimationFrame(()=>{fit();show(start)});
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(()=>setTimeout(remeasure,60))}
+window.addEventListener('resize',()=>{clearTimeout(window.__rt);window.__rt=setTimeout(remeasure,150)});
+window.addEventListener('beforeprint',()=>{slides.forEach(s=>s.classList.add('on'));fit()});
+</script>
+</body>
+</html>

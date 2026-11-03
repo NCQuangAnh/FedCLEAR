@@ -1,0 +1,74 @@
+{
+ "caltech101_S_sym_full": {
+  "dataset": "caltech101",
+  "arm": "S_sym_full",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0.4",
+   "--noisy_client_frac",
+   "0.3",
+   "--sure",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 9772.1
+ },
+ "caltech101_S_pair_full": {
+  "dataset": "caltech101",
+  "arm": "S_pair_full",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "pair",
+   "--noise_rate",
+   "0.4",
+   "--noisy_client_frac",
+   "0.3",
+   "--sure",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 9843.4
+ },
+ "caltech101_S_inst_full": {
+  "dataset": "caltech101",
+  "arm": "S_inst_full",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "instance",
+   "--noise_rate",
+   "0.4",
+   "--noisy_client_frac",
+   "0.3",
+   "--sure",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 9891.6
+ }
+}

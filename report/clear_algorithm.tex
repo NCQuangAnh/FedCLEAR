@@ -1,0 +1,65 @@
+% Algorithm block of FedCLEAR (v1, matches the current Method section of samplepaper.tex).
+% Style follows Algorithm 1 of FedCoLLM (arXiv 2411.11707): numbered inputs, server side and
+% ClientUpdate function, triangle comments.
+%
+% 1) Add to the preamble of samplepaper.tex (after \usepackage{float}):
+%      \usepackage{algorithm}
+%      \usepackage{algpseudocode}
+% 2) Paste the block below at the end of Sec. "Federated aggregation", after "Overall procedure"
+%    (or replace that paragraph with "Algorithm~\ref{alg:fedclear} summarizes the procedure.").
+
+\begin{algorithm}[t]
+\caption{FedCLEAR}
+\label{alg:fedclear}
+\begin{algorithmic}[1]
+\Statex \textbf{Input:}
+\State $K$: number of clients; $R$: total number of rounds; $E$: number of local epochs;
+\State $\mathcal{D}_k = \{(\mathbf{x}_i, \tilde{y}_i)\}_{i=1}^{n_k}$: local dataset of client $k$;
+\State $\mathbf{t}^{\mathrm{zs}}$: hand-crafted templates; $\nu(\cdot)$: look-alike class of each class;
+\State $\tau, \delta, \gamma, \kappa$: thresholds of client flag, suspect, cap and relabel.
+\Statex \textbf{Output:} global prompt $\mathbf{v}^{R}$.
+\State Initialize the global prompt $\mathbf{v}^{0}$
+\For{$r = 0, 1, \dots, R-1$}
+    \State \textit{// Server side:}
+    \State Broadcast the global prompt $\mathbf{v}^{r}$ to all $K$ clients
+    \State $(\mathbf{v}^{r}_k, \hat{n}^{r}_k) \gets \textsc{ClientUpdate}(\mathbf{v}^{r})$ for each client $k$
+    \State $\mathbf{v}^{r+1} \gets \sum_{k=1}^{K} \frac{\hat{n}^{r}_k}{\sum_{j=1}^{K} \hat{n}^{r}_j} \mathbf{v}^{r}_k$
+           \Comment{Eq.~\eqref{eq:agg}}
+    \Statex
+    \Function{ClientUpdate}{$\mathbf{v}^{r}$}
+        \For{each client $k$ \textbf{in parallel}}
+            \State $\triangleright$ \textit{noise detection}
+            \State Compute $\mathbf{P}_i$ for every $i \in \mathcal{D}_k$
+                   \Comment{Eq.~\eqref{eq:ref}}
+            \State Compute $s_i$ and $S_k = \frac{1}{n_k}\sum_i s_i$
+                   \Comment{Eqs.~\eqref{eq:surprise}, \eqref{eq:score}}
+            \State $\hat{\mathcal{D}}^{r}_k \gets \mathcal{D}_k$
+                   \Comment{copy of the original labels}
+            \If{$S_k > \tau$}
+                \State $\mathcal{S}_k \gets \{ i : P_{i,\tilde{y}_i} < \delta \}$, keep the
+                       $\lfloor \gamma n_k \rfloor$ lowest $P_{i,\tilde{y}_i}$
+                       \Comment{Eq.~\eqref{eq:suspect}}
+                \State $\triangleright$ \textit{noise correction}
+                \For{each $i \in \mathcal{S}_k$}
+                    \If{$\max_c P_{i,c} \ge \kappa$}
+                        \State Replace $\tilde{y}_i$ by $\hat{y}_i = \arg\max_c P_{i,c}$ in
+                               $\hat{\mathcal{D}}^{r}_k$ \Comment{Eq.~\eqref{eq:correct}}
+                    \Else
+                        \State Remove $(\mathbf{x}_i, \tilde{y}_i)$ from $\hat{\mathcal{D}}^{r}_k$
+                    \EndIf
+                \EndFor
+            \EndIf
+            \State $\triangleright$ \textit{local training}
+            \State $\mathbf{v}_k \gets \mathbf{v}^{r}$
+            \For{$e = 1, 2, \dots, E$}
+                \State Update $\mathbf{v}_k$ with the cross-entropy loss on $\hat{\mathcal{D}}^{r}_k$
+                       \Comment{Eq.~\eqref{eq:local}}
+            \EndFor
+            \State $\mathbf{v}^{r}_k \gets \mathbf{v}_k$, \; $\hat{n}^{r}_k \gets |\hat{\mathcal{D}}^{r}_k|$
+            \State Upload $(\mathbf{v}^{r}_k, \hat{n}^{r}_k)$ to the server
+        \EndFor
+        \State \Return $(\mathbf{v}^{r}_k, \hat{n}^{r}_k)$
+    \EndFunction
+\EndFor
+\end{algorithmic}
+\end{algorithm}

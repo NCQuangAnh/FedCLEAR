@@ -1,0 +1,9 @@
+# FedRG (CVPR 2026, CLIP-adapted; results/side-research/fedrg/fedrg_plan.md) on Caltech101, seeds 0-4.
+# The runs of kaggle/rg_caltech_1 and rg_caltech_2, moved to the server on 2026-11-02.
+# Caltech never runs next to another run: start with --gpus 0 and no --per-gpu.
+caltech101 S_sym_rg
+caltech101 S_pair_rg
+caltech101 S_inst_rg
+caltech101 S_het_rg
+caltech101 S_clean_rg
+caltech101 N_sym25_rg

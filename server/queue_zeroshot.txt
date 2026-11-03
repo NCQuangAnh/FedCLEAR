@@ -1,0 +1,7 @@
+# Zero-shot CLIP (FLIP --prompt_algo CLIP): frozen CLIP RN50, hand-written CUSTOM_TEMPLATES
+# sentence per class, no prompt learning, no training, no FL rounds. Accuracy on the full test set.
+# It never reads training labels or client splits, so noise settings cannot change it: one run per
+# dataset (the clean setting) stands for all 11 settings. 5 seeds as usual; they must agree.
+oxford_pets S_clean_zs
+dtd S_clean_zs
+caltech101 S_clean_zs

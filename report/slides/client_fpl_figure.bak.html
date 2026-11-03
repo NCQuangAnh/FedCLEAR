@@ -1,0 +1,143 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Client-side workflow</title>
+<style>
+body{margin:0;background:#fff;display:flex;justify-content:center}
+svg{max-width:1410px;width:100%;font-family:Arial,Helvetica,sans-serif}
+text{fill:#222;font-size:15px}
+.s{font-size:13px;fill:#444}
+.h{font-size:16px}
+.b{font-weight:bold}
+.m{text-anchor:middle}
+.e{text-anchor:end}
+.fz{fill:#dbe6f6;stroke:#2f5fa8;stroke-width:1.6}
+.lr{fill:#fde3c8;stroke:#d9731a;stroke-width:1.6}
+.nt{fill:#f1f1f1;stroke:#777;stroke-width:1.4}
+.sv{fill:#fff3c9;stroke:#b8860b;stroke-width:1.6}
+.dr{fill:#fafafa;stroke:#999;stroke-width:1.4;stroke-dasharray:4 3}
+.a{stroke:#555;stroke-width:1.8;fill:none;marker-end:url(#ar)}
+.l{stroke:#555;stroke-width:1.8;fill:none}
+.g{stroke:#b8860b}
+</style></head><body>
+<svg viewBox="0 0 1410 676" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker>
+<symbol id="up" viewBox="0 0 64 64"><g transform="rotate(45 32 32)" fill="#d9731a"><rect x="26" y="2" width="12" height="6" rx="2"/><rect x="26" y="11" width="12" height="32"/><polygon points="26,46 38,46 32,60"/></g></symbol>
+<symbol id="fz" viewBox="0 0 64 64"><g transform="rotate(45 32 32)" fill="#2f5fa8"><rect x="26" y="2" width="12" height="6" rx="2"/><rect x="26" y="11" width="12" height="32"/><polygon points="26,46 38,46 32,60"/></g><line x1="8" y1="8" x2="56" y2="56" stroke="#fff" stroke-width="11" stroke-linecap="round"/><line x1="8" y1="8" x2="56" y2="56" stroke="#2f5fa8" stroke-width="5" stroke-linecap="round"/></symbol>
+</defs>
+
+<!-- server -->
+<g fill="#eaf1fb" stroke="#7fa3d6" stroke-width="3">
+<ellipse cx="62" cy="318" rx="34" ry="22"/><ellipse cx="100" cy="310" rx="36" ry="28"/><ellipse cx="82" cy="296" rx="26" ry="22"/>
+</g>
+<rect x="40" y="302" width="84" height="34" fill="#eaf1fb"/>
+<text class="h m" x="84" y="370">Server</text>
+<text class="s m" x="84" y="392">&#8595; P, b, mode</text><text class="s m" x="84" y="410">&#8593; d, trained P</text>
+<path class="a g" marker-start="url(#ar)" d="M132 288L204 130"/><path class="a g" marker-start="url(#ar)" d="M142 314H204"/><path class="a g" marker-start="url(#ar)" d="M124 336L204 500"/>
+<text class="h m" x="250" y="68">Client 1</text>
+<rect x="210" y="76" width="80" height="88" rx="10" fill="none" stroke="#5b8a3a" stroke-width="2" stroke-dasharray="7 5"/>
+<rect class="lr" x="222" y="84" width="56" height="30" rx="6"/><text class="m" x="250" y="104">P</text>
+<rect class="fz" x="222" y="126" width="56" height="30" rx="6"/><text class="m" x="250" y="146">D&#8321;</text>
+<text class="h m" x="250" y="264">Client k</text>
+<rect x="210" y="272" width="80" height="88" rx="10" fill="none" stroke="#c8641a" stroke-width="2" stroke-dasharray="7 5"/>
+<rect class="lr" x="222" y="280" width="56" height="30" rx="6"/><text class="m" x="250" y="300">P</text>
+<rect class="fz" x="222" y="322" width="56" height="30" rx="6"/><text class="m" x="250" y="342">D&#8342;</text>
+<text class="h m" x="250" y="460">Client N</text>
+<rect x="210" y="468" width="80" height="88" rx="10" fill="none" stroke="#b33a3a" stroke-width="2" stroke-dasharray="7 5"/>
+<rect class="lr" x="222" y="476" width="56" height="30" rx="6"/><text class="m" x="250" y="496">P</text>
+<rect class="fz" x="222" y="518" width="56" height="30" rx="6"/><text class="m" x="250" y="538">D&#8345;</text>
+<text class="h m" x="250" y="222">&#8942;</text><text class="h m" x="250" y="424">&#8942;</text>
+<path d="M302 302h26v-14l26 28-26 28v-14h-26z" fill="#f8cdb4" stroke="#d9641a" stroke-width="2"/>
+<g transform="translate(170,0)">
+<!-- frame -->
+<rect x="212" y="14" width="1012" height="604" rx="26" fill="none" stroke="#c8641a" stroke-width="2.2" stroke-dasharray="9 6"/>
+<text class="h b" x="234" y="40">Client k</text>
+
+<g transform="translate(0,26)">
+<!-- text branch -->
+<text class="h" x="232" y="50">Prompt template, one per class (&#215;37)</text>
+<g class="m">
+<rect class="fz" x="232" y="62" width="48" height="36" rx="6"/><text x="256" y="85" class="s m">[SOS]</text>
+<rect class="lr" x="284" y="62" width="40" height="36" rx="6"/><text x="304" y="85">v&#8321;</text>
+<rect class="lr" x="328" y="62" width="40" height="36" rx="6"/><text x="348" y="85">v&#8322;</text>
+<rect class="lr" x="372" y="62" width="40" height="36" rx="6"/><text x="392" y="85">v&#8323;</text>
+<rect class="lr" x="416" y="62" width="40" height="36" rx="6"/><text x="436" y="85">v&#8324;</text>
+<rect class="fz" x="460" y="62" width="130" height="36" rx="6"/><text x="525" y="85" class="s m">&lt;class&gt; . [EOS] 0 &#8230;</text>
+</g>
+<use href="#up" x="444" y="48" width="27" height="27" transform="translate(-4,-5)"/><use href="#fz" x="578" y="48" width="27" height="27" transform="translate(-4,-5)"/>
+<path class="a" d="M370 100V116" stroke-dasharray="4 3"/>
+<rect class="lr" x="284" y="118" width="172" height="28" rx="6"/><text class="s m" x="370" y="137">P_ref (copy of received P)</text>
+<text class="s" x="464" y="137">kept fixed within the round</text>
+<path class="a" d="M590 80H628"/>
+<polygon class="fz" points="630,40 770,58 770,102 630,120"/>
+<text class="m" x="700" y="78">Text Encoder</text><text class="s m" x="700" y="95">12-layer Transformer</text>
+<use href="#fz" x="756" y="36" width="27" height="27" transform="translate(-4,-5)"/>
+<path class="a" d="M770 80H808"/>
+<rect class="nt" x="810" y="62" width="150" height="36" rx="8"/><text class="m" x="885" y="85">t&#8321; &#8230; t&#8323;&#8327;</text>
+<text class="s m" x="885" y="52">Text features</text>
+<text class="s m" x="885" y="114">37 &#215; 1024, L2-norm</text>
+
+<!-- image branch -->
+<text class="h" x="232" y="200">Local images + labels</text>
+<rect class="fz" x="232" y="212" width="150" height="36" rx="8"/><text class="m" x="307" y="235">(x, y), n samples</text>
+<text class="s" x="232" y="266">224 &#215; 224 &#215; 3, CLIP-normalised</text>
+<path class="a" d="M382 230H628"/>
+<polygon class="fz" points="630,190 770,208 770,252 630,270"/>
+<text class="m" x="700" y="228">Image Encoder</text><text class="s m" x="700" y="245">RN50 + attention pool</text>
+<use href="#fz" x="756" y="186" width="27" height="27" transform="translate(-4,-5)"/>
+<path class="a" d="M770 230H808"/>
+<rect class="nt" x="810" y="212" width="150" height="36" rx="8"/><text class="m" x="885" y="235">f(x)</text>
+<text class="s m" x="885" y="266">Image feature, 1024-d, L2-norm</text>
+
+<!-- matching -->
+<path class="a" d="M960 80H1010V142"/><path class="a" d="M960 230H1010V168"/>
+<circle cx="1010" cy="155" r="11" fill="#fff" stroke="#555" stroke-width="1.8"/><path class="l" d="M1002 147L1018 163M1018 147L1002 163"/>
+<text class="s e" x="992" y="159">cosine &#215; 100</text>
+<path class="a" d="M1021 155H1048"/>
+<text class="s m" x="1125" y="128">Global-model output</text>
+<rect class="nt" x="1050" y="137" width="150" height="36" rx="8"/><text class="m" x="1125" y="160">y&#770; ,  p(y | x)</text>
+<text class="s m" x="1125" y="190">prediction, label confidence</text>
+<path class="a" d="M1125 198V330"/>
+
+<!-- scoring row (right to left) -->
+<text class="h b" x="232" y="304">Label-noise scoring and filtering (re-scored every 5 rounds)</text>
+<rect class="nt" x="1050" y="332" width="150" height="36" rx="8"/><text class="m" x="1125" y="355">disagree: y&#770; &#8800; y</text>
+<path class="a" d="M1050 350H1012"/>
+<text class="s m" x="915" y="322">Deviation rate</text>
+<rect class="nt" x="850" y="332" width="160" height="36" rx="8"/><text class="m" x="930" y="355">d = #disagree / n</text>
+<path class="a g" d="M995 332V296"/><text class="s" x="1003" y="310">sent to server</text>
+<path class="a" d="M850 350H812"/>
+<text class="s m" x="710" y="322">Suspect budget (max 0.6; &#961; &#8804; 0.1 &#8594; 0)</text>
+<rect class="nt" x="610" y="332" width="200" height="36" rx="8"/><text class="m" x="710" y="355">&#961; = (d &#8722; b) / (1 &#8722; b)</text>
+<rect class="sv" x="690" y="392" width="40" height="26" rx="6"/><text class="m" x="710" y="410">b</text>
+<path class="a g" d="M710 392V370"/>
+<text class="s" x="738" y="410">from server (b = &#8709; at round 0 &#8594; &#961; = 0, only d is recorded)</text>
+<path class="a" d="M610 350H572"/>
+<text class="s m" x="435" y="322">Suspect selection</text>
+<rect class="nt" x="300" y="332" width="270" height="36" rx="8"/><text class="m" x="435" y="355">rank by p(y | x) &#8593;, take top-&#961;</text>
+
+<!-- mode switch -->
+<path class="l" d="M320 368V504"/><path class="a" d="M320 448H338"/><path class="a" d="M320 504H338"/>
+<text class="s" x="232" y="452">from server</text>
+<rect class="sv" x="232" y="460" width="64" height="26" rx="6"/><text class="m" x="264" y="478">mode</text>
+<path class="a g" d="M296 473H318"/>
+<rect class="nt" x="340" y="430" width="380" height="36" rx="8"/><text class="m" x="530" y="453">SOFT: keep all, down-weight top-2&#961; (w: 0 &#8594; 1)</text>
+<rect class="nt" x="340" y="486" width="380" height="36" rx="8"/><text class="m" x="530" y="509">HARD: relabel if y&#770; &#8800; y and conf &#8805; 0.5, else drop</text>
+<path class="l" d="M720 448H756V504H720"/><path class="a" d="M756 476H788"/>
+<rect class="lr" x="790" y="458" width="170" height="36" rx="8"/><text class="m" x="875" y="481">Cleaned local set</text>
+<use href="#up" x="948" y="444" width="27" height="27" transform="translate(-4,-5)"/>
+<text class="s" x="790" y="512">kept for 5 rounds, then re-scored</text><text class="s" x="790" y="528">from the original data</text>
+<path class="a" d="M960 476H1018"/>
+<rect class="dr" x="1020" y="458" width="180" height="36" rx="8"/><text class="m" x="1110" y="481">Local prompt training</text>
+<text class="s m" x="1110" y="512">(next step)</text>
+</g>
+
+</g>
+<!-- legend -->
+<g transform="translate(60,0)">
+<use href="#fz" x="230" y="640" width="27" height="27" transform="translate(-4,-5)"/><text x="256" y="656">: Frozen (unchanged across rounds)</text>
+<use href="#up" x="540" y="640" width="27" height="27" transform="translate(-4,-5)"/><text x="566" y="656">: Updated across rounds</text>
+<rect class="sv" x="780" y="640" width="26" height="20" rx="4"/><text x="814" y="656">: Received from server</text>
+<circle cx="1010" cy="650" r="9" fill="#fff" stroke="#555" stroke-width="1.6"/><path class="l" d="M1004 644L1016 656M1016 644L1004 656"/><text x="1026" y="656">: Similarity</text>
+<rect class="fz" x="1120" y="640" width="26" height="20" rx="4"/><text x="1154" y="656">: Local data</text></g>
+</svg>
+</body></html>

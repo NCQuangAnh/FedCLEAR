@@ -1,0 +1,610 @@
+diff --git a/flcore/clients/client_base.py b/flcore/clients/client_base.py
+index 7cabd8d..09d35a5 100644
+--- a/flcore/clients/client_base.py
++++ b/flcore/clients/client_base.py
+@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
+ from torch.optim.lr_scheduler import CosineAnnealingLR
+ from torch.cuda.amp import GradScaler
+ from sklearn import metrics
+-from ..utils import AccuracyCounter, build_loss_fn, Metric
++from ..utils import AccuracyCounter, build_loss_fn, Metric, get_device
+ from ..optimizers.sam import SAM
+ from ..datasets.info import INFO
+ 
+@@ -24,7 +24,7 @@ class Client(object):
+         self.fed_algo = args.fed_algo
+         self.prompt_algo = args.prompt_algo
+         self.dataset = args.dataset
+-        self.device = torch.device('cuda', args.device_id)
++        self.device = get_device(args.device_id)
+         self.client_id = id
+         self.save_folder_name = args.save_folder_name
+         self.trainloader = trainloader
+diff --git a/flcore/datasets/imageloader.py b/flcore/datasets/imageloader.py
+index 704d5e8..e7ba978 100644
+--- a/flcore/datasets/imageloader.py
++++ b/flcore/datasets/imageloader.py
+@@ -147,10 +147,23 @@ def augment(name, train, data_transform):
+         augments.append(tv.transforms.ToTensor())
+         # augments.append(tv.transforms.Normalize(*info['moments']))
+         if data_transform == 'default':
++            # upstream behaviour: train images are NOT normalized while test images are
+             return tv.transforms.Compose(augments)
++        if data_transform == 'default_norm':
++            # upstream crop/flip + the normalization the test transform already applies
++            return tv.transforms.Compose(augments + [transforms.Normalize(mean=mean, std=std)])
++        if data_transform == 'paper':
++            # FLIP paper, Appendix B.4: resize to 240x240, crop 224x224, random flip, normalize
++            return tv.transforms.Compose([
++                tv.transforms.Resize((240, 240), interpolation=BICUBIC),
++                transforms.RandomCrop(crop_size),
++                tv.transforms.RandomHorizontalFlip(),
++                tv.transforms.ToTensor(),
++                transforms.Normalize(mean=mean, std=std)])
+         if data_transform == 'random':
+             resize = 240
+             return RandTransform(mean, std, crop_size, resize)
++        raise ValueError(f'unknown data_transform: {data_transform}')
+ 
+ def split_fewshot_subset(train_dataset, num_shot, split):
+     """ split a fewshot subset
+@@ -240,11 +253,21 @@ def ImageLoader(
+                   'num_workers': num_workers,
+                   'drop_last': drop_last, }
+     Loader = functools.partial(torch.utils.data.DataLoader, **kwargs)
++
++    # Every DataLoader gets its own generator. Without this, creating a loader iterator draws
++    # from the global RNG, so any change in how often loaders are iterated (e.g. caching test
++    # features) silently changes the client batch order. With it, batch order depends only on
++    # the run seed, which is what lets us pair runs across configurations.
++    def gen(offset):
++        g = torch.Generator()
++        g.manual_seed(int(seed) * 100003 + offset)
++        return g
++
+     if split == 'test' or split == 'val':
+         if multi_domain:
+-            return [Loader(ImageSubset(dataset), batch_size, False)]
++            return [Loader(ImageSubset(dataset), batch_size, False, generator=gen(1))]
+         else:
+-            return Loader(ImageSubset(dataset), batch_size, False)
++            return Loader(ImageSubset(dataset), batch_size, False, generator=gen(1))
+     dataloaders = []
+     splits, stats = split_dataset(name, dataset, split_mode, num_clients,
+                             num_shards, alpha, beta, batch_size,
+@@ -252,7 +275,7 @@ def ImageLoader(
+     shuffle = split == 'train'
+ 
+     for c in range(num_clients):
+-        loader = Loader(splits[c], batch_size, shuffle=shuffle)
++        loader = Loader(splits[c], batch_size, shuffle=shuffle, generator=gen(10 + c))
+         loader.stats = stats[c]
+         dataloaders.append(loader)
+     return dataloaders
+diff --git a/flcore/models/clip/CoOp.py b/flcore/models/clip/CoOp.py
+index 90db181..23e5d15 100644
+--- a/flcore/models/clip/CoOp.py
++++ b/flcore/models/clip/CoOp.py
+@@ -20,8 +20,9 @@ class CoOpCLIP(BaseCLIP):
+         self.prompt_learner = BasePromptLearner(args, classnames, clip_model)
+         self.tokenized_prompts = self.prompt_learner.tokenized_prompts
+ 
+-    def forward(self, image, labels=None, test=False):
+-        image_features = self.image_encoder(image.type(self.dtype))
++    def forward(self, image, labels=None, test=False, image_features=None):
++        if image_features is None:   # may be supplied by a TestFeatureCache
++            image_features = self.image_encoder(image.type(self.dtype))
+         image_features = image_features[0] # only use the avg-pooled features
+         image_features = image_features / image_features.norm(dim=-1, keepdim=True)
+ 
+diff --git a/flcore/models/clip/FedOTP.py b/flcore/models/clip/FedOTP.py
+index e405b64..0004e88 100644
+--- a/flcore/models/clip/FedOTP.py
++++ b/flcore/models/clip/FedOTP.py
+@@ -80,12 +80,13 @@ class FedOTPCLIP(BaseCLIP):
+         else:
+             return Kprev
+ 
+-    def forward(self, image, labels=None, test=False):
++    def forward(self, image, labels=None, test=False, image_features=None):
+ 
+-        b = image.shape[0]
+-        image_features = self.image_encoder(image.type(self.dtype))
++        if image_features is None:   # may be supplied by a TestFeatureCache
++            image_features = self.image_encoder(image.type(self.dtype))
+         image_feature_pool = image_features[0]
+         image_features = image_features[1:]
++        b = image_feature_pool.shape[0]
+         M = image_features.shape[0]
+         self.d = image_features.shape[-1]
+ 
+diff --git a/flcore/models/clip/ZSCLIP.py b/flcore/models/clip/ZSCLIP.py
+index 88e0991..6014b28 100644
+--- a/flcore/models/clip/ZSCLIP.py
++++ b/flcore/models/clip/ZSCLIP.py
+@@ -50,8 +50,9 @@ class ZSCLIP(BaseCLIP):
+         self.text_features = text_features
+         self.clip_model = clip_model
+ 
+-    def forward(self, image, labels=None, test=False):
+-        image_features = self.clip_model.encode_image(image)
++    def forward(self, image, labels=None, test=False, image_features=None):
++        if image_features is None:   # may be supplied by a TestFeatureCache
++            image_features = self.clip_model.encode_image(image)
+         image_features = image_features[0] # only use pooled feature
+         image_features = image_features / image_features.norm(dim=-1,
+                                                               keepdim=True)
+diff --git a/flcore/models/clip/base.py b/flcore/models/clip/base.py
+index 49f69c4..b2b87af 100644
+--- a/flcore/models/clip/base.py
++++ b/flcore/models/clip/base.py
+@@ -5,6 +5,7 @@ from torch.nn import functional as F
+ from ..text.prompt import BasePromptLearner
+ from ..text.encoder import TextEncoder
+ from ...datasets.info import INFO
++from ...utils import get_device
+ 
+ class BaseCLIP(nn.Module):
+     """ Base CLIP class """
+@@ -14,8 +15,8 @@ class BaseCLIP(nn.Module):
+         self.text_encoder = TextEncoder(clip_model)
+         self.logit_scale = clip_model.logit_scale
+         self.dtype = clip_model.dtype
+-        self.device = torch.device('cuda', args.device_id)
+-        self.cuda_device = torch.device("cuda")
++        self.device = get_device(args.device_id)
++        self.cuda_device = get_device()
+         self.batch_size = args.batch_size
+ 
+     def forward(self,):
+diff --git a/flcore/models/clip/clip.py b/flcore/models/clip/clip.py
+index e69de29..ca6aabd 100644
+--- a/flcore/models/clip/clip.py
++++ b/flcore/models/clip/clip.py
+@@ -0,0 +1,163 @@
++# Reconstructed loader for FLIP. The published FLIP repository (0-ml/flip @ ec3a848)
++# ships this file empty, while server_base.py, text/prompt.py, ProGrad.py and several
++# model files import `load_clip_to_cpu`, `tokenize` and `clip.*` from it.
++#
++# Adapted from the official OpenAI CLIP loader (https://github.com/openai/CLIP,
++# clip/clip.py, MIT License, Copyright (c) 2021 OpenAI) and from the
++# `load_clip_to_cpu` helper used by CoOp / MaPLe. FLIP's own `model.py` expects
++# `build_model(state_dict, design_details)`, so the loader passes design_details through.
++import hashlib
++import os
++import urllib.request
++import warnings
++from typing import List, Union
++
++import torch
++from PIL import Image
++from torchvision.transforms import CenterCrop, Compose, Normalize, Resize, ToTensor
++from tqdm import tqdm
++
++from .model import build_model
++from .simple_tokenizer import SimpleTokenizer as _Tokenizer
++
++try:
++    from torchvision.transforms import InterpolationMode
++    BICUBIC = InterpolationMode.BICUBIC
++except ImportError:
++    BICUBIC = Image.BICUBIC
++
++
++__all__ = ["available_models", "load", "tokenize", "load_clip_to_cpu"]
++_tokenizer = _Tokenizer()
++
++_MODELS = {
++    "RN50": "https://openaipublic.azureedge.net/clip/models/afeb0e10f9e5a86da6080e35cf09123aca3b358a0c3e3b6c78a7b63bc04b6762/RN50.pt",
++    "RN101": "https://openaipublic.azureedge.net/clip/models/8fa8567bab74a42d41c5915025a8e4538c3bdbe8804a470a72f30b0d94fab599/RN101.pt",
++    "RN50x4": "https://openaipublic.azureedge.net/clip/models/7e526bd135e493cef0776de27d5f42653e6b4c8bf9e0f653bb11773263205fdd/RN50x4.pt",
++    "RN50x16": "https://openaipublic.azureedge.net/clip/models/52378b407f34354e150460fe41077663dd5b39c54cd0bfd2b27167a4a06ec9aa/RN50x16.pt",
++    "RN50x64": "https://openaipublic.azureedge.net/clip/models/be1cfb55d75a9666199fb2206c106743da0f6468c9d327f3e0d0a543a9919d9c/RN50x64.pt",
++    "ViT-B/32": "https://openaipublic.azureedge.net/clip/models/40d365715913c9da98579312b702a82c18be219cc2a73407c4526f58eba950af/ViT-B-32.pt",
++    "ViT-B/16": "https://openaipublic.azureedge.net/clip/models/5806e77cd80f8b59890b7e101eabd078d9fb84e6937f9e85e4ecb61988df416f/ViT-B-16.pt",
++    "ViT-L/14": "https://openaipublic.azureedge.net/clip/models/b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836/ViT-L-14.pt",
++    "ViT-L/14@336px": "https://openaipublic.azureedge.net/clip/models/3035c92b350959924f9f00213499208652fc7ea050643e8b385c2dac08641f02/ViT-L-14-336px.pt",
++}
++
++# Where downloaded weights are cached. On Kaggle, point FLIP_CLIP_CACHE at an attached
++# dataset that already holds the .pt files to avoid re-downloading every session.
++DEFAULT_CACHE = os.environ.get("FLIP_CLIP_CACHE", os.path.expanduser("~/.cache/clip"))
++
++
++def _sha256(path: str) -> str:
++    h = hashlib.sha256()
++    with open(path, "rb") as f:
++        for chunk in iter(lambda: f.read(1 << 20), b""):
++            h.update(chunk)
++    return h.hexdigest()
++
++
++def _download(url: str, root: str = DEFAULT_CACHE) -> str:
++    os.makedirs(root, exist_ok=True)
++    filename = os.path.basename(url)
++    expected_sha256 = url.split("/")[-2]
++    download_target = os.path.join(root, filename)
++
++    if os.path.exists(download_target) and not os.path.isfile(download_target):
++        raise RuntimeError(f"{download_target} exists and is not a regular file")
++
++    if os.path.isfile(download_target):
++        if _sha256(download_target) == expected_sha256:
++            return download_target
++        warnings.warn(f"{download_target} exists, but the SHA256 checksum does not match; re-downloading the file")
++
++    with urllib.request.urlopen(url) as source, open(download_target, "wb") as output:
++        with tqdm(total=int(source.info().get("Content-Length")), ncols=80, unit="iB",
++                  unit_scale=True, unit_divisor=1024) as loop:
++            while True:
++                buffer = source.read(8192)
++                if not buffer:
++                    break
++                output.write(buffer)
++                loop.update(len(buffer))
++
++    if _sha256(download_target) != expected_sha256:
++        raise RuntimeError("Model has been downloaded but the SHA256 checksum does not match")
++    return download_target
++
++
++def _convert_image_to_rgb(image):
++    return image.convert("RGB")
++
++
++def _transform(n_px):
++    return Compose([
++        Resize(n_px, interpolation=BICUBIC),
++        CenterCrop(n_px),
++        _convert_image_to_rgb,
++        ToTensor(),
++        Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711)),
++    ])
++
++
++def available_models() -> List[str]:
++    """Returns the names of available CLIP models."""
++    return list(_MODELS.keys())
++
++
++def _read_state_dict(name: str, download_root: str = None) -> dict:
++    if name in _MODELS:
++        model_path = _download(_MODELS[name], download_root or DEFAULT_CACHE)
++    elif os.path.isfile(name):
++        model_path = name
++    else:
++        raise RuntimeError(f"Model {name} not found; available models = {available_models()}")
++
++    with open(model_path, "rb") as opened_file:
++        try:
++            # OpenAI checkpoints are TorchScript archives
++            return torch.jit.load(opened_file, map_location="cpu").eval().state_dict()
++        except RuntimeError:
++            opened_file.seek(0)
++            return torch.load(opened_file, map_location="cpu")
++
++
++def load_clip_to_cpu(backbone_name: str, zero_shot: bool = False, design_details: dict = None,
++                     download_root: str = None):
++    """Build FLIP's CLIP model on CPU.
++
++    zero_shot=True builds a plain CLIP (no MaPLe-style deep prompts), which is what
++    FLIP's callers use for teacher / zero-shot text features.
++    """
++    state_dict = _read_state_dict(backbone_name, download_root)
++    if zero_shot:
++        design_details = None
++    return build_model(state_dict, design_details)
++
++
++def load(name: str, device: Union[str, torch.device] = "cpu", download_root: str = None):
++    """Non-JIT variant of clip.load kept for API compatibility."""
++    model = build_model(_read_state_dict(name, download_root), None).to(device)
++    if str(device) == "cpu":
++        model.float()
++    return model, _transform(model.visual.input_resolution)
++
++
++def tokenize(texts: Union[str, List[str]], context_length: int = 77, truncate: bool = False) -> torch.LongTensor:
++    """Tokenize text(s) into a [N, context_length] LongTensor (CoOp-style dtype)."""
++    if isinstance(texts, str):
++        texts = [texts]
++
++    sot_token = _tokenizer.encoder["<|startoftext|>"]
++    eot_token = _tokenizer.encoder["<|endoftext|>"]
++    all_tokens = [[sot_token] + _tokenizer.encode(text) + [eot_token] for text in texts]
++    result = torch.zeros(len(all_tokens), context_length, dtype=torch.long)
++
++    for i, tokens in enumerate(all_tokens):
++        if len(tokens) > context_length:
++            if truncate:
++                tokens = tokens[:context_length]
++                tokens[-1] = eot_token
++            else:
++                raise RuntimeError(f"Input {texts[i]} is too long for context length {context_length}")
++        result[i, :len(tokens)] = torch.tensor(tokens)
++
++    return result
+diff --git a/flcore/models/clip/simple_tokenizer.py b/flcore/models/clip/simple_tokenizer.py
+index 0a66286..88f65d7 100644
+--- a/flcore/models/clip/simple_tokenizer.py
++++ b/flcore/models/clip/simple_tokenizer.py
+@@ -9,7 +9,12 @@ import regex as re
+ 
+ @lru_cache()
+ def default_bpe():
+-    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "bpe_simple_vocab_16e6.txt.gz")
++    gz_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bpe_simple_vocab_16e6.txt.gz")
++    # Kaggle decompresses .gz files inside uploaded datasets; fall back to the plain-text copy
++    txt_path = gz_path[:-len(".gz")]
++    if not os.path.isfile(gz_path) and os.path.isfile(txt_path):
++        return txt_path
++    return gz_path
+ 
+ 
+ @lru_cache()
+@@ -63,7 +68,8 @@ class SimpleTokenizer(object):
+     def __init__(self, bpe_path: str = default_bpe()):
+         self.byte_encoder = bytes_to_unicode()
+         self.byte_decoder = {v: k for k, v in self.byte_encoder.items()}
+-        merges = gzip.open(bpe_path).read().decode("utf-8").split('\n')
++        with (gzip.open(bpe_path) if bpe_path.endswith(".gz") else open(bpe_path, "rb")) as f:
++            merges = f.read().decode("utf-8").split('\n')
+         merges = merges[1:49152-256-2+1]
+         merges = [tuple(merge.split()) for merge in merges]
+         vocab = list(bytes_to_unicode().values())
+diff --git a/flcore/models/text/prompt.py b/flcore/models/text/prompt.py
+index b3ac714..13ccd7d 100644
+--- a/flcore/models/text/prompt.py
++++ b/flcore/models/text/prompt.py
+@@ -7,7 +7,7 @@ from ..clip.clip import load_clip_to_cpu
+ from ..clip.simple_tokenizer import SimpleTokenizer as _Tokenizer
+ from ...datasets.info import INFO
+ from .template import IMAGENET_TEMPLATES
+-from ...utils import filter_states
++from ...utils import filter_states, get_device
+ 
+ _tokenizer = _Tokenizer()
+ 
+@@ -28,7 +28,7 @@ class BasePromptLearner(nn.Module):
+         self.ctx_dim = clip_model.ln_final.weight.shape[0]
+         self.vis_dim = clip_model.visual.output_dim
+         self.image_backbone = args.image_backbone
+-        self.device = torch.device('cuda', args.device_id)
++        self.device = get_device(args.device_id)
+         clip_imsize = clip_model.visual.input_resolution
+         image_size = INFO[args.dataset]['shape'][-1]
+         cfg_imsize = image_size
+@@ -235,7 +235,7 @@ class ProDAPromptLearner(BasePromptLearner):
+     """
+     def __init__(self, args, classnames, clip_model):
+         super().__init__(args, classnames, clip_model)
+-        self.device = torch.device('cuda', args.device_id)
++        self.device = get_device(args.device_id)
+         if self.n_prm >1:
+             self.pos = [0 for _ in range(self.n_prm//4)] + [1 for _ in range(self.n_prm//4)] + [2 for _ in range(self.n_prm//2)]
+         else:
+diff --git a/flcore/servers/server_base.py b/flcore/servers/server_base.py
+index bf6766c..05a7da4 100644
+--- a/flcore/servers/server_base.py
++++ b/flcore/servers/server_base.py
+@@ -15,7 +15,8 @@ from ..models.clip import clip_maps
+ from ..models.clip.clip import load_clip_to_cpu
+ from ..datasets import datasets_map
+ from ..datasets.info import INFO
+-from ..utils import unit, AccuracyCounter, eval_global, eval_base_novel
++from ..utils import (unit, AccuracyCounter, eval_global, eval_base_novel, get_device,
++                     seed_everything, TestFeatureCache)
+ from ..pretty.history import History
+ from ..pretty.logger import log
+ 
+@@ -28,7 +29,7 @@ class ServerBase(object):
+         self.fed_algo = args.fed_algo
+         self.prompt_algo = args.prompt_algo
+         self.central = args.central == 'true'
+-        self.device = torch.device('cuda', args.device_id)
++        self.device = get_device(args.device_id)
+         self.state_device = torch.device('cpu')
+         self.dataset = args.dataset
+         self.target_dataset = args.target_dataset
+@@ -50,7 +51,11 @@ class ServerBase(object):
+         self.num_join_clients = int(self.num_clients * self.train_fraction)
+         self.current_num_join_clients = self.num_join_clients
+         self.grad_clipping_norm = args.grad_clipping_norm
+-        self.seed = times
++        # explicit seed per run: run r of `--times` uses args.seed + r for few-shot sampling,
++        # client split, client selection and prompt init, so runs can be paired across configs
++        self.seed = args.seed + times
++        self.cache_test_feats = getattr(args, 'cache_test_feats', 'false') == 'true'
++        self.test_cache = None
+         self.clients = []
+         self.num_shot = args.num_shot
+         self.num_workers = args.num_workers
+@@ -71,8 +76,11 @@ class ServerBase(object):
+         self.loss_type = self.args.loss_type
+ 
+     def init_clients(self, clientObj):
++        seed_everything(self.seed)
+         self.init_dataset()
++        seed_everything(self.seed)      # prompt init must not depend on data-loading RNG draws
+         self.init_model()
++        self.build_test_cache()
+         for i in range(self.num_clients):
+             client = clientObj(self.args,
+                             id=i,
+@@ -187,6 +195,18 @@ class ServerBase(object):
+             self.test_classnames_novel = list(self.testloader_novel.dataset.dataset.classes)
+ 
+ 
++    def build_test_cache(self):
++        """ Precompute frozen image-encoder features for the shared test set (exact, cheaper). """
++        if not self.cache_test_feats or self.task != 'class' or self.test_cache is not None:
++            return
++        if self.bench not in ('global', 'xdomain', 'dual', 'personal'):
++            log.info(f'test feature cache disabled for benchmark {self.bench}')
++            return
++        start = time.time()
++        self.test_cache = TestFeatureCache(self.model, self.testloader, self.device, self.precision)
++        log.info(f'cached test features: {len(self.test_cache)} batches, '
++                 f'{self.test_cache.nbytes / 1e6:.0f} MB, in {time.time() - start:.0f}s')
++
+     def select_clients(self):
+         self.cur_join_clients = self.num_join_clients
+         selected_client_ids = list(np.random.choice(list(range(self.num_clients)),
+diff --git a/flcore/servers/server_fedavg.py b/flcore/servers/server_fedavg.py
+index 3d147d1..ee2bb2d 100644
+--- a/flcore/servers/server_fedavg.py
++++ b/flcore/servers/server_fedavg.py
+@@ -40,7 +40,7 @@ class FedAvg(ServerBase):
+                     self.best_acc_mds = md_accs
+             else:
+                 top1, _ = eval_global(self.model, self.testloader, self.device,
+-                                      self.precision, self.task)
++                                      self.precision, self.task, cache=self.test_cache)
+                 self.best_acc = top1
+                 self.best_acc_per = top1
+                 self.best_acc_hm = top1
+@@ -100,7 +100,7 @@ class FedAvg(ServerBase):
+             self.eval_multiple()
+         elif self.bench == 'dual':
+             top1, _ = eval_global(self.model, self.testloader, self.device,
+-                                  self.precision, self.task)
++                                  self.precision, self.task, cache=self.test_cache)
+             top1_per, _ = eval_personal(self.model, states, weights,
+                                         self.testloaders_per, self.device, self.precision)
+             self.model.prompt_learner.load_state_dict(avg_state, strict=False) # reload avg_state
+@@ -137,7 +137,7 @@ class FedAvg(ServerBase):
+         else:
+             # global, xdomain
+             top1, _ = eval_global(self.model, self.testloader, self.device,
+-                                  self.precision, self.task)
++                                  self.precision, self.task, cache=self.test_cache)
+             self.best_acc = top1 if top1 > self.best_acc else self.best_acc
+             self.tb.add_scalar('eval/top1', top1, self.rounds)
+             self.tb.add_scalar('eval/best', self.best_acc, self.rounds)
+diff --git a/flcore/utils.py b/flcore/utils.py
+index 4c322cf..32bfc9a 100644
+--- a/flcore/utils.py
++++ b/flcore/utils.py
+@@ -8,6 +8,51 @@ from torch.nn import functional as F
+ from matplotlib import pyplot as plt
+ 
+ 
++def seed_everything(seed):
++    """ Seed every RNG the pipeline touches (few-shot sampling, client split, prompt init). """
++    import random
++    random.seed(seed)
++    np.random.seed(seed)
++    torch.manual_seed(seed)
++    if torch.cuda.is_available():
++        torch.cuda.manual_seed_all(seed)
++
++
++class TestFeatureCache:
++    """ Precomputed image-encoder outputs for an evaluation loader.
++
++    The image encoder is frozen and the test transform is deterministic, so its outputs are
++    identical in every round. Caching them makes evaluation exact and much cheaper.
++    Batches (and therefore batch composition) are kept exactly as the loader produced them.
++    """
++
++    def __init__(self, model, dataloader, device, precision='amp'):
++        self.batches = []
++        with torch.no_grad():
++            for images, labels in dataloader:
++                images = images.to(device).type(model.dtype)
++                if precision == 'amp':
++                    with torch.cuda.amp.autocast():
++                        feats = model.image_encoder(images)
++                else:
++                    feats = model.image_encoder(images)
++                self.batches.append((feats.detach().cpu(), labels.clone()))
++        self.nbytes = sum(f.numel() * f.element_size() for f, _ in self.batches)
++
++    def __iter__(self):
++        return iter(self.batches)
++
++    def __len__(self):
++        return len(self.batches)
++
++
++def get_device(device_id=0):
++    """ CUDA device when available, CPU otherwise (CPU is only meant for smoke tests). """
++    if torch.cuda.is_available():
++        return torch.device('cuda', device_id)
++    return torch.device('cpu')
++
++
+ class DivergeError(ValueError):
+     """ Training loss diverged to NaN.  """
+ 
+@@ -214,21 +259,23 @@ def build_loss_fn(base_probs, loss_type='ce', tau=1.0, reduction='mean'):
+     return loss_maps[loss_type]
+ 
+ 
+-def eval_global(model, dataloader, device, precision='amp', task='class'):
++def eval_global(model, dataloader, device, precision='amp', task='class', cache=None):
+     model.set_classifier()
+     ac = AccuracyCounter(
+         len(dataloader.dataset), (1, 5),
+         task=task,
+         num_classes=len(dataloader.dataset.dataset.classes))
+     with torch.no_grad():
+-        for images, labels in dataloader:
++        batches = cache if cache is not None else dataloader
++        for images, labels in batches:
+             images = images.to(device)
+             labels = labels.to(device)
++            kwargs = {'image_features': images} if cache is not None else {}
+             if precision=='amp':
+                 with torch.cuda.amp.autocast():
+-                    output = model(images, labels, test=True)
++                    output = model(None if cache is not None else images, labels, test=True, **kwargs)
+             else:
+-                output = model(images, labels, test=True)
++                output = model(None if cache is not None else images, labels, test=True, **kwargs)
+             ac.add(output, labels)
+     return ac.logout()
+ 
+diff --git a/main.py b/main.py
+index cb019a7..e9124fb 100644
+--- a/main.py
++++ b/main.py
+@@ -13,6 +13,7 @@ import random
+ 
+ 
+ from flcore.servers import get_server
++from flcore.utils import seed_everything
+ from flcore.pretty.logger import log
+ 
+ 
+@@ -81,6 +82,9 @@ def main(args):
+     elif args.verbose2:
+         log.level = 'debug'
+     for i in range(args.times):
++        # run i is fully determined by args.seed + i (see ServerBase.__init__)
++        seed_everything(args.seed + i)
++        log.info(f'run {i}, seed {args.seed + i}')
+         server = get_server(args, i)
+         start = time.time()
+         server.run()
+@@ -130,7 +134,8 @@ if __name__ == "__main__":
+                         choices=['dirichlet', 'iid', 'task','predefined'])
+     parser.add_argument('-dsa', "--split_alpha", type=float, default=1)
+     parser.add_argument('-dsb', "--split_beta", type=float, default=1)
+-    parser.add_argument('-dtf', "--data_transform", type=str, default="default", choices=['default', 'randaug'])
++    parser.add_argument('-dtf', "--data_transform", type=str, default="default",
++                        choices=['default', 'default_norm', 'paper', 'randaug'])
+     parser.add_argument('-dlt', "--drop_last", type=str, default='false', choices=['true', 'false'])
+     parser.add_argument('-dpl', "--parallel", type=str, default='true', choices=['true', 'false'])
+     parser.add_argument('-dnw', "--num_workers", type=int, default=8)
+@@ -160,6 +165,9 @@ if __name__ == "__main__":
+     parser.add_argument('-lst', "--loss_type", type=str, default='ce', choices=['ce', 'bce'])
+     parser.add_argument('-gcn', "--grad_clipping_norm", type=float, default=0.,)
+     parser.add_argument('-seed', "--seed", type=int, default=0)
++    parser.add_argument('-ctf', "--cache_test_feats", type=str, default='false',
++                        choices=['true', 'false'],
++                        help='precompute frozen image-encoder features for the test set')
+     # prompt learning general settings
+     parser.add_argument('-npt', "--num_prompt", type=int, default=1)
+     parser.add_argument('-nptv', "--num_prompt_vision", type=int, default=1)

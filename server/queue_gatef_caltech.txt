@@ -1,0 +1,9 @@
+# gatef (results/side-research/calrepair/gatef_plan.md) on Caltech101: development on seeds 5-7
+# (gatefh; CLEAR-FPL clearh already run), then confirmation on fresh seeds 8-10 (gatefc and clearc).
+# Caltech never runs next to another run: start with --gpus 0 and no --per-gpu.
+caltech101 N_pair75_gatefh
+caltech101 N_sym75_gatefh
+caltech101 N_pair75_gatefc
+caltech101 N_pair75_clearc
+caltech101 N_sym75_gatefc
+caltech101 N_sym75_clearc

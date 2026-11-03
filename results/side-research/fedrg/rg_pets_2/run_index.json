@@ -1,0 +1,122 @@
+{
+ "oxford_pets_N_sym50_rg": {
+  "dataset": "oxford_pets",
+  "arm": "N_sym50_rg",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0.5",
+   "--noisy_client_frac",
+   "1.0",
+   "--fedrg",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 3357.7
+ },
+ "oxford_pets_N_sym75_rg": {
+  "dataset": "oxford_pets",
+  "arm": "N_sym75_rg",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0.75",
+   "--noisy_client_frac",
+   "1.0",
+   "--fedrg",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 3489.2
+ },
+ "oxford_pets_N_pair25_rg": {
+  "dataset": "oxford_pets",
+  "arm": "N_pair25_rg",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "pair",
+   "--noise_rate",
+   "0.25",
+   "--noisy_client_frac",
+   "1.0",
+   "--fedrg",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 3513.1
+ },
+ "oxford_pets_N_pair50_rg": {
+  "dataset": "oxford_pets",
+  "arm": "N_pair50_rg",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "pair",
+   "--noise_rate",
+   "0.5",
+   "--noisy_client_frac",
+   "1.0",
+   "--fedrg",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 3483.3
+ },
+ "oxford_pets_N_pair75_rg": {
+  "dataset": "oxford_pets",
+  "arm": "N_pair75_rg",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "pair",
+   "--noise_rate",
+   "0.75",
+   "--noisy_client_frac",
+   "1.0",
+   "--fedrg",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 3498.5
+ }
+}

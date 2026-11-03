@@ -1,0 +1,104 @@
+[
+ {
+  "dataset": "caltech101",
+  "job": "N_control",
+  "pairwise": {
+   "conc_malicious_vs_honest": 0.32,
+   "conc_noisy_vs_honest": 0.8506666666666667,
+   "sem_malicious_vs_honest": 0.316,
+   "mean_s_sem": {
+    "honest": 0.00673,
+    "noisy": 0.0657,
+    "malicious": -0.0156
+   },
+   "mean_s_conc": {
+    "honest": 0.0025,
+    "noisy": 0.02111,
+    "malicious": -0.00211
+   }
+  },
+  "auc_sem_problem_vs_honest": 0.685,
+  "auc_conc_malicious_vs_noisy": 0.067,
+  "auc_upd_malicious_vs_noisy": 0.0,
+  "gain_over_deviation": 0.067,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 0.0,
+    "c3": 0.0
+   },
+   {
+    "seed": 1,
+    "c2": 0.3333333333333333,
+    "c3": 0.0
+   },
+   {
+    "seed": 2,
+    "c2": 0.0,
+    "c3": 0.0
+   },
+   {
+    "seed": 3,
+    "c2": 0.0,
+    "c3": 0.0
+   },
+   {
+    "seed": 4,
+    "c2": 0.0,
+    "c3": 0.0
+   }
+  ],
+  "n_clients_scored": 50
+ },
+ {
+  "dataset": "caltech101",
+  "job": "P0_disguise",
+  "pairwise": {
+   "conc_malicious_vs_honest": 1.0,
+   "conc_noisy_vs_honest": 0.704,
+   "sem_malicious_vs_honest": 0.928,
+   "mean_s_sem": {
+    "honest": -0.0427,
+    "noisy": 0.03549,
+    "malicious": 0.05314
+   },
+   "mean_s_conc": {
+    "honest": -0.00691,
+    "noisy": 0.01134,
+    "malicious": 0.08562
+   }
+  },
+  "auc_sem_problem_vs_honest": 0.938,
+  "auc_conc_malicious_vs_noisy": 0.987,
+  "auc_upd_malicious_vs_noisy": 0.933,
+  "gain_over_deviation": 0.053,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 1.0,
+    "c3": 1.0
+   },
+   {
+    "seed": 1,
+    "c2": 1.0,
+    "c3": 0.6666666666666666
+   },
+   {
+    "seed": 2,
+    "c2": 0.8333333333333334,
+    "c3": 1.0
+   },
+   {
+    "seed": 3,
+    "c2": 1.0,
+    "c3": 1.0
+   },
+   {
+    "seed": 4,
+    "c2": 1.0,
+    "c3": 1.0
+   }
+  ],
+  "n_clients_scored": 50
+ }
+]

@@ -1,0 +1,50 @@
+{
+ "caltech101_N_pair50_rg": {
+  "dataset": "caltech101",
+  "arm": "N_pair50_rg",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "pair",
+   "--noise_rate",
+   "0.5",
+   "--noisy_client_frac",
+   "1.0",
+   "--fedrg",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 6072.6
+ },
+ "caltech101_N_pair75_rg": {
+  "dataset": "caltech101",
+  "arm": "N_pair75_rg",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "pair",
+   "--noise_rate",
+   "0.75",
+   "--noisy_client_frac",
+   "1.0",
+   "--fedrg",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 6134.6
+ }
+}

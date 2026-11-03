@@ -1,0 +1,290 @@
+[
+ {
+  "dataset": "dtd",
+  "job": "N_control",
+  "auc_sem_problem_vs_honest": 0.442,
+  "auc_conc_malicious_vs_noisy": 0.58,
+  "auc_upd_malicious_vs_noisy": 0.127,
+  "gain_over_deviation": 0.453,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 0.6666666666666666,
+    "c3": 0.0
+   },
+   {
+    "seed": 1,
+    "c2": 1.0,
+    "c3": 0.0
+   },
+   {
+    "seed": 2,
+    "c2": 0.6666666666666666,
+    "c3": 0.3333333333333333
+   },
+   {
+    "seed": 3,
+    "c2": 0.5,
+    "c3": 0.16666666666666666
+   },
+   {
+    "seed": 4,
+    "c2": 0.5,
+    "c3": 0.0
+   }
+  ],
+  "n_clients_scored": 50
+ },
+ {
+  "dataset": "dtd",
+  "job": "P0_disguise",
+  "auc_sem_problem_vs_honest": 0.274,
+  "auc_conc_malicious_vs_noisy": 0.78,
+  "auc_upd_malicious_vs_noisy": 0.527,
+  "gain_over_deviation": 0.253,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 1.0,
+    "c3": 0.6666666666666666
+   },
+   {
+    "seed": 1,
+    "c2": 0.6666666666666666,
+    "c3": 0.5
+   },
+   {
+    "seed": 2,
+    "c2": 0.8333333333333334,
+    "c3": 0.8333333333333334
+   },
+   {
+    "seed": 3,
+    "c2": 1.0,
+    "c3": 0.5
+   },
+   {
+    "seed": 4,
+    "c2": 0.5,
+    "c3": 0.3333333333333333
+   }
+  ],
+  "n_clients_scored": 50
+ },
+ {
+  "dataset": "dtd",
+  "job": "P1_targeted",
+  "auc_sem_problem_vs_honest": 0.493,
+  "auc_conc_malicious_vs_noisy": 0.553,
+  "auc_upd_malicious_vs_noisy": 0.28,
+  "gain_over_deviation": 0.273,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 0.5,
+    "c3": 0.0
+   },
+   {
+    "seed": 1,
+    "c2": 0.0,
+    "c3": 0.3333333333333333
+   },
+   {
+    "seed": 2,
+    "c2": 0.8333333333333334,
+    "c3": 0.3333333333333333
+   },
+   {
+    "seed": 3,
+    "c2": 1.0,
+    "c3": 0.5
+   },
+   {
+    "seed": 4,
+    "c2": 0.16666666666666666,
+    "c3": 0.0
+   }
+  ],
+  "n_clients_scored": 50
+ },
+ {
+  "dataset": "dtd",
+  "job": "P2_signflip",
+  "auc_sem_problem_vs_honest": 0.512,
+  "auc_conc_malicious_vs_noisy": 0.98,
+  "auc_upd_malicious_vs_noisy": 0.853,
+  "gain_over_deviation": 0.127,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 1.0,
+    "c3": 1.0
+   },
+   {
+    "seed": 1,
+    "c2": 1.0,
+    "c3": 0.6666666666666666
+   },
+   {
+    "seed": 2,
+    "c2": 1.0,
+    "c3": 1.0
+   },
+   {
+    "seed": 3,
+    "c2": 1.0,
+    "c3": 0.6666666666666666
+   },
+   {
+    "seed": 4,
+    "c2": 1.0,
+    "c3": 1.0
+   }
+  ],
+  "n_clients_scored": 50
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "N_control",
+  "auc_sem_problem_vs_honest": 0.829,
+  "auc_conc_malicious_vs_noisy": 0.08,
+  "auc_upd_malicious_vs_noisy": 0.027,
+  "gain_over_deviation": 0.053,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 0.0,
+    "c3": 0.0
+   },
+   {
+    "seed": 1,
+    "c2": 0.16666666666666666,
+    "c3": 0.0
+   },
+   {
+    "seed": 2,
+    "c2": 0.0,
+    "c3": 0.0
+   },
+   {
+    "seed": 3,
+    "c2": 0.0,
+    "c3": 0.0
+   },
+   {
+    "seed": 4,
+    "c2": 0.0,
+    "c3": 0.0
+   }
+  ],
+  "n_clients_scored": 50
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "P0_disguise",
+  "auc_sem_problem_vs_honest": 0.954,
+  "auc_conc_malicious_vs_noisy": 0.487,
+  "auc_upd_malicious_vs_noisy": 0.4,
+  "gain_over_deviation": 0.087,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 0.3333333333333333,
+    "c3": 0.5
+   },
+   {
+    "seed": 1,
+    "c2": 0.5,
+    "c3": 0.3333333333333333
+   },
+   {
+    "seed": 2,
+    "c2": 0.6666666666666666,
+    "c3": 0.5
+   },
+   {
+    "seed": 3,
+    "c2": 0.16666666666666666,
+    "c3": 0.6666666666666666
+   },
+   {
+    "seed": 4,
+    "c2": 0.5,
+    "c3": 0.16666666666666666
+   }
+  ],
+  "n_clients_scored": 50
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "P1_targeted",
+  "auc_sem_problem_vs_honest": 0.894,
+  "auc_conc_malicious_vs_noisy": 0.187,
+  "auc_upd_malicious_vs_noisy": 0.18,
+  "gain_over_deviation": 0.007,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 0.0,
+    "c3": 0.3333333333333333
+   },
+   {
+    "seed": 1,
+    "c2": 0.3333333333333333,
+    "c3": 0.3333333333333333
+   },
+   {
+    "seed": 2,
+    "c2": 0.3333333333333333,
+    "c3": 0.16666666666666666
+   },
+   {
+    "seed": 3,
+    "c2": 0.3333333333333333,
+    "c3": 0.0
+   },
+   {
+    "seed": 4,
+    "c2": 0.0,
+    "c3": 0.0
+   }
+  ],
+  "n_clients_scored": 50
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "P2_signflip",
+  "auc_sem_problem_vs_honest": 1.0,
+  "auc_conc_malicious_vs_noisy": 0.807,
+  "auc_upd_malicious_vs_noisy": 0.8,
+  "gain_over_deviation": 0.007,
+  "per_seed": [
+   {
+    "seed": 0,
+    "c2": 1.0,
+    "c3": 1.0
+   },
+   {
+    "seed": 1,
+    "c2": 0.6666666666666666,
+    "c3": 0.6666666666666666
+   },
+   {
+    "seed": 2,
+    "c2": 1.0,
+    "c3": 0.6666666666666666
+   },
+   {
+    "seed": 3,
+    "c2": 1.0,
+    "c3": 0.8333333333333334
+   },
+   {
+    "seed": 4,
+    "c2": 0.8333333333333334,
+    "c3": 1.0
+   }
+  ],
+  "n_clients_scored": 50
+ }
+]

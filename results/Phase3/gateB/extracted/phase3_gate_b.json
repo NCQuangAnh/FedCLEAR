@@ -1,0 +1,226 @@
+[
+ {
+  "dataset": "dtd",
+  "job": "D0_disguise_multikrum",
+  "best": 50.3,
+  "last10": 48.26,
+  "damage_vs_control": 3.71,
+  "excl_noisy": 0.137,
+  "excl_malicious": 0.399,
+  "excl_honest": 0.158,
+  "per_seed_last10": [
+   43.82,
+   52.3,
+   48.66
+  ],
+  "minutes": 25.8
+ },
+ {
+  "dataset": "dtd",
+  "job": "D1_disguise_median",
+  "best": 50.55,
+  "last10": 48.59,
+  "damage_vs_control": 3.38,
+  "excl_noisy": 0.0,
+  "excl_malicious": 0.0,
+  "excl_honest": 0.0,
+  "per_seed_last10": [
+   47.15,
+   49.22,
+   49.39
+  ],
+  "minutes": 25.9
+ },
+ {
+  "dataset": "dtd",
+  "job": "D2_signflip_multikrum",
+  "best": 44.92,
+  "last10": 42.87,
+  "damage_vs_control": 9.1,
+  "excl_noisy": 0.161,
+  "excl_malicious": 0.467,
+  "excl_honest": 0.116,
+  "per_seed_last10": [
+   39.62,
+   47.26,
+   41.72
+  ],
+  "minutes": 25.4
+ },
+ {
+  "dataset": "dtd",
+  "job": "N_control",
+  "best": 53.08,
+  "last10": 51.97,
+  "damage_vs_control": 0.0,
+  "excl_noisy": null,
+  "excl_malicious": null,
+  "excl_honest": null,
+  "per_seed_last10": [
+   51.34,
+   51.74,
+   52.83
+  ],
+  "minutes": 24.5
+ },
+ {
+  "dataset": "dtd",
+  "job": "P0_disguise",
+  "best": 48.6,
+  "last10": 47.01,
+  "damage_vs_control": 4.96,
+  "excl_noisy": null,
+  "excl_malicious": null,
+  "excl_honest": null,
+  "per_seed_last10": [
+   43.74,
+   51.94,
+   45.34
+  ],
+  "minutes": 25.2
+ },
+ {
+  "dataset": "dtd",
+  "job": "P1_targeted",
+  "best": 51.46,
+  "last10": 50.33,
+  "damage_vs_control": 1.64,
+  "excl_noisy": null,
+  "excl_malicious": null,
+  "excl_honest": null,
+  "per_seed_last10": [
+   46.06,
+   51.86,
+   53.07
+  ],
+  "minutes": 25.8
+ },
+ {
+  "dataset": "dtd",
+  "job": "P2_signflip",
+  "best": 41.1,
+  "last10": 37.42,
+  "damage_vs_control": 14.55,
+  "excl_noisy": null,
+  "excl_malicious": null,
+  "excl_honest": null,
+  "per_seed_last10": [
+   33.29,
+   42.71,
+   36.28
+  ],
+  "minutes": 25.4
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "D0_disguise_multikrum",
+  "best": 84.64,
+  "last10": 75.73,
+  "damage_vs_control": 5.01,
+  "excl_noisy": 0.331,
+  "excl_malicious": 0.467,
+  "excl_honest": 0.014,
+  "per_seed_last10": [
+   75.88,
+   83.74,
+   67.58
+  ],
+  "minutes": 27.2
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "D1_disguise_median",
+  "best": 84.77,
+  "last10": 80.53,
+  "damage_vs_control": 0.21,
+  "excl_noisy": 0.0,
+  "excl_malicious": 0.0,
+  "excl_honest": 0.0,
+  "per_seed_last10": [
+   79.46,
+   82.84,
+   79.3
+  ],
+  "minutes": 27.3
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "D2_signflip_multikrum",
+  "best": 83.58,
+  "last10": 67.99,
+  "damage_vs_control": 12.75,
+  "excl_noisy": 0.405,
+  "excl_malicious": 0.34,
+  "excl_honest": 0.021,
+  "per_seed_last10": [
+   67.66,
+   77.2,
+   59.12
+  ],
+  "minutes": 27.0
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "N_control",
+  "best": 85.83,
+  "last10": 80.74,
+  "damage_vs_control": 0.0,
+  "excl_noisy": null,
+  "excl_malicious": null,
+  "excl_honest": null,
+  "per_seed_last10": [
+   82.53,
+   80.0,
+   79.69
+  ],
+  "minutes": 26.6
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "P0_disguise",
+  "best": 84.15,
+  "last10": 77.71,
+  "damage_vs_control": 3.03,
+  "excl_noisy": null,
+  "excl_malicious": null,
+  "excl_honest": null,
+  "per_seed_last10": [
+   77.86,
+   79.54,
+   75.74
+  ],
+  "minutes": 26.1
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "P1_targeted",
+  "best": 85.43,
+  "last10": 78.15,
+  "damage_vs_control": 2.59,
+  "excl_noisy": null,
+  "excl_malicious": null,
+  "excl_honest": null,
+  "per_seed_last10": [
+   79.91,
+   78.18,
+   76.36
+  ],
+  "minutes": 26.6
+ },
+ {
+  "dataset": "oxford_pets",
+  "job": "P2_signflip",
+  "best": 81.79,
+  "last10": 62.51,
+  "damage_vs_control": 18.23,
+  "excl_noisy": null,
+  "excl_malicious": null,
+  "excl_honest": null,
+  "per_seed_last10": [
+   58.85,
+   70.91,
+   57.76
+  ],
+  "minutes": 26.7
+ }
+]

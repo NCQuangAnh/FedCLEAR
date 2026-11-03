@@ -1,0 +1,36 @@
+# 20-client study, CLEAR-FPL (arm c20). Plan: results/side-research/clients20/c20_plan.md
+# Same 11 settings and seeds as the 10-client runs, --num_clients 20. Order: Pets, DTD, Caltech.
+
+oxford_pets S_sym_c20
+oxford_pets S_pair_c20
+oxford_pets S_inst_c20
+oxford_pets S_het_c20
+oxford_pets S_clean_c20
+oxford_pets N_sym25_c20
+oxford_pets N_sym50_c20
+oxford_pets N_sym75_c20
+oxford_pets N_pair25_c20
+oxford_pets N_pair50_c20
+oxford_pets N_pair75_c20
+dtd S_sym_c20
+dtd S_pair_c20
+dtd S_inst_c20
+dtd S_het_c20
+dtd S_clean_c20
+dtd N_sym25_c20
+dtd N_sym50_c20
+dtd N_sym75_c20
+dtd N_pair25_c20
+dtd N_pair50_c20
+dtd N_pair75_c20
+caltech101 S_sym_c20
+caltech101 S_pair_c20
+caltech101 S_inst_c20
+caltech101 S_het_c20
+caltech101 S_clean_c20
+caltech101 N_sym25_c20
+caltech101 N_sym50_c20
+caltech101 N_sym75_c20
+caltech101 N_pair25_c20
+caltech101 N_pair50_c20
+caltech101 N_pair75_c20
