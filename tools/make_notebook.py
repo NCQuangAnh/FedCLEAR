@@ -216,7 +216,11 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             # PromptFL S runs at 32 shots (--log_signals, key "...L"): N rate x 1.68 (Caltech measured)
             "caltech101|pflcn32": 32.8, "caltech101|pflcn32L": 55.2,
             "oxford_pets|pflcn32L": 28.8, "dtd|pflcn32L": 32.1,
-            "eurosat|pflcn32L": 8.9, "mnist|pflcn32L": 12.3}
+            "eurosat|pflcn32L": 8.9, "mnist|pflcn32L": 12.3,
+            # 8-shot look-alike ablation gatefnm (results/side-research/merge_ablation/plan.md): rates of the
+            # 8-shot gatef Kaggle runs (slowest): Pets 1.40 h, DTD 1.59 h, Caltech 4.18 h, MNIST 0.77 h, EuroSAT 0.45 h
+            "oxford_pets|gatefnm": 19.8, "dtd|gatefnm": 22.4, "caltech101|gatefnm": 59.0,
+            "mnist|gatefnm": 10.9, "eurosat|gatefnm": 6.4}
 
 
 def md(text):
