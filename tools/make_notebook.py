@@ -208,12 +208,15 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             # FedCLEAR EuroSAT 0.45-0.60 h, MNIST 0.69-0.79 h; PromptFL N EuroSAT 0.41-0.48 h, MNIST 0.68-0.72 h
             # (the 16-shot PromptFL S runs logged --diag_scores; the 32-shot ones do not).
             # Notebooks s32_mnist_1 / s32_eurosat_1 measure them.
-            "eurosat|gatefcn32": 13.5, "eurosat|pflcn32": 11.0,
-            "mnist|gatefcn32": 19.1, "mnist|pflcn32": 17.8,
+            # measured 2026-11-13 (s32_mnist_14, s32_mnist_eurosat_15, slowest run): MNIST FedCLEAR 0.79-0.89 h,
+            # PromptFL N 0.69-0.73 h, PromptFL S 0.87 h; EuroSAT FedCLEAR 0.62 h, PromptFL S 0.63 h; EuroSAT
+            # PromptFL N not measured: S time / 1.19 (the MNIST S/N ratio)
+            "eurosat|gatefcn32": 8.8, "eurosat|pflcn32": 7.5,
+            "mnist|gatefcn32": 12.6, "mnist|pflcn32": 10.3,
             # PromptFL S runs at 32 shots (--log_signals, key "...L"): N rate x 1.68 (Caltech measured)
             "caltech101|pflcn32": 32.8, "caltech101|pflcn32L": 55.2,
             "oxford_pets|pflcn32L": 28.8, "dtd|pflcn32L": 32.1,
-            "eurosat|pflcn32L": 18.5, "mnist|pflcn32L": 29.9}
+            "eurosat|pflcn32L": 8.9, "mnist|pflcn32L": 12.3}
 
 
 def md(text):
