@@ -6,7 +6,8 @@
            aside) on flagged clients, rounds 1-5 vs 41-50: decisions are revised as the prompt
            improves
   mix      the reference with and without zero-shot CLIP (global prompt only, arm noclip), scenario 1
-  noise    Fig. 1: PromptFL and the noise-robust baselines on Pets / Caltech101 under growing noise
+  noise    Fig. 1: methods without label correction (PromptFL, NLPrompt) and with it (FedCorr,
+           FedRG) on Pets / Caltech101 under growing noise
 
 Usage: python tools/paper_extras.py <out_dir>
 """
@@ -104,20 +105,27 @@ def mix():
 
 
 def noise_fig(out):
-    methods = [("PromptFL (no defence)", "PromptFL", "#009E73"), ("FedCorr", "FedCorr", "#E69F00"),
-               ("NLPrompt", "NLPrompt", "#CC79A7"), ("FedRG", "FedRG", "#56B4E9")]
+    # Two groups, as asked by the supervisor (2026-11-04): methods that do not correct labels, and
+    # methods that correct them. A small gap separates the groups inside each setting.
+    groups = [("No label correction", [("PromptFL", "PromptFL", "#9BB7D4"), ("NLPrompt", "NLPrompt", "#2F5D8A")]),
+              ("Label correction", [("FedCorr", "FedCorr", "#F2B27A"), ("FedRG", "FedRG", "#C0501E")])]
     settings = [("clean", ("S", "clean")), ("3 of 10 noisy\n(40% sym.)", ("S", "sym")),
                 ("all noisy\n(50% sym.)", ("N", "sym50")), ("all noisy\n(75% sym.)", ("N", "sym75"))]
     zs = {"Pets": 85.69, "Caltech101": 85.76}
-    fig, axes = plt.subplots(1, 2, figsize=(4.9, 2.2), sharey=True)
+    w, gap = 0.18, 0.05
+    offs = [-1.5 * w - gap / 2, -0.5 * w - gap / 2, 0.5 * w + gap / 2, 1.5 * w + gap / 2]
+    fig, axes = plt.subplots(1, 2, figsize=(4.9, 2.3), sharey=True)
+    handles = {}
     for ax, (ds, name) in zip(axes, [("oxford_pets", "Pets"), ("caltech101", "Caltech101")]):
-        w = 0.19
-        for j, (lab, key, col) in enumerate(methods):
-            vals = [st.fmean(ab.last10(ab.tag(ds, key, k, s))) for _, (k, s) in settings]
-            x = np.arange(len(settings)) + (j - 1.5) * w
-            ax.bar(x, vals, w, color=col, label=lab, zorder=2)
-            print(f"fig1 {name} {lab}: " + " ".join(f"{v:.1f}" for v in vals))
-        ax.axhline(zs[name], color="0.25", ls=(0, (4, 2)), lw=0.9, label="Zero-shot CLIP", zorder=3)
+        j = 0
+        for g, members in groups:
+            for lab, key, col in members:
+                vals = [st.fmean(ab.last10(ab.tag(ds, key, k, s))) for _, (k, s) in settings]
+                x = np.arange(len(settings)) + offs[j]
+                handles[lab] = ax.bar(x, vals, w, color=col, zorder=2)
+                print(f"fig1 {name} {lab}: " + " ".join(f"{v:.1f}" for v in vals))
+                j += 1
+        handles["Zero-shot CLIP"] = ax.axhline(zs[name], color="0.25", ls=(0, (4, 2)), lw=0.9, zorder=3)
         ax.set_xticks(range(len(settings)))
         ax.set_xticklabels([s for s, _ in settings], fontsize=6.3)
         ax.set_title(name, fontsize=8, pad=2)
@@ -126,9 +134,13 @@ def noise_fig(out):
         for s in ("top", "right"):
             ax.spines[s].set_visible(False)
     axes[0].set_ylabel("Accuracy (%)")
-    h, l = axes[0].get_legend_handles_labels()
-    fig.legend(h, l, frameon=False, fontsize=6.8, ncol=5, loc="lower center", bbox_to_anchor=(0.5, 0.97),
-               handlelength=1.2, columnspacing=0.8)
+    # one legend box per group, then zero-shot CLIP, side by side above the panels
+    boxes = [(g, [m[0] for m in members]) for g, members in groups] + [("Reference", ["Zero-shot CLIP"])]
+    for (title, labs), x0 in zip(boxes, (0.20, 0.52, 0.82)):
+        leg = fig.legend([handles[l] for l in labs], labs, title=title, frameon=False, fontsize=6.8,
+                         title_fontsize=6.8, ncol=len(labs), loc="lower center", bbox_to_anchor=(x0, 0.97),
+                         handlelength=1.2, columnspacing=0.8)
+        leg.get_title().set_fontweight("bold")
     fig.tight_layout()
     fig.savefig(os.path.join(out, "NoiseImpact.pdf"), bbox_inches="tight", pad_inches=0.02)
 

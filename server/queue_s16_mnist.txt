@@ -1,0 +1,15 @@
+# FedCLEAR (gatef) with 16 labelled images per class, CoOp class names, seeds 0-4.
+# results/side-research/classname_fix/plan.md
+# Data once (skips what exists): PYTHONPATH=flip python server/prep_mnist_eurosat.py
+# --gpus 0 --per-gpu 2. About 4.5 h.
+mnist S_sym_gatefcn16
+mnist S_pair_gatefcn16
+mnist S_inst_gatefcn16
+mnist S_het_gatefcn16
+mnist S_clean_gatefcn16
+mnist N_sym25_gatefcn16
+mnist N_sym50_gatefcn16
+mnist N_sym75_gatefcn16
+mnist N_pair25_gatefcn16
+mnist N_pair50_gatefcn16
+mnist N_pair75_gatefcn16

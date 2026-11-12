@@ -32,6 +32,14 @@ def macro_prf(collect):
             'f1': round(float(f1.mean()), 5)}
 
 
+def confusion_matrix(collect):
+    """Test-set confusion counts from (prediction, label) batches; rows are the true classes."""
+    pred = torch.cat([p for p, _ in collect]).long()
+    y = torch.cat([t for _, t in collect]).long()
+    C = int(max(pred.max(), y.max())) + 1
+    return torch.bincount(C * y + pred, minlength=C * C).reshape(C, C).tolist()
+
+
 class FedAvg(ServerBase):
     def __init__(self, args, times):
         super().__init__(args, times)
@@ -226,6 +234,8 @@ class FedAvg(ServerBase):
                 self.record_asr(collect)
             if collect and want:
                 self.round_metrics.update(macro_prf(collect))
+                if self.rounds == self.global_rounds:
+                    self.final_confusion = confusion_matrix(collect)
             self.best_acc = top1 if top1 > self.best_acc else self.best_acc
             self.tb.add_scalar('eval/top1', top1, self.rounds)
             self.tb.add_scalar('eval/best', self.best_acc, self.rounds)

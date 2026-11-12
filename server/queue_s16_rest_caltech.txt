@@ -1,0 +1,7 @@
+# 16-shot runs still missing after the Kaggle notebooks, Caltech101 part. results/side-research/classname_fix/plan.md
+# Seeds 0-4. Caltech never runs next to another run: --gpus 0, no --per-gpu.
+# Server alone is about 0.58x the Kaggle time (8-shot Caltech gatef: 2.25 h server vs 3.94 h Kaggle).
+# Estimate: FedCLEAR S clean ~3.1 h, N pair50 ~4.1 h, PromptFL S clean (with scores) ~4.4 h. About 11.5 h.
+caltech101 N_pair50_gatefcn16
+caltech101 S_clean_gatefcn16
+caltech101 S_clean_pflcn16

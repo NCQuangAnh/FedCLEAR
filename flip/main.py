@@ -472,6 +472,11 @@ if __name__ == "__main__":
                         help="'proportional': a flagged client keeps weight = its running "
                              "r_align / the federation's median, clipped to [0, 1] -- the "
                              "detector's own evidence sets the weight. 'fixed': --refusal_weight")
+    parser.add_argument("--coop_classnames", type=str, default='false', choices=['true', 'false'],
+                        help="feed CLIP the readable class names of CoOp (e.g. EuroSAT 'Annual Crop "
+                             "Land' instead of the folder name 'AnnualCrop'). The renaming tables "
+                             "existed but never reached the prompts; 'false' keeps the old runs "
+                             "reproducible. Only EuroSAT changes among our datasets")
     parser.add_argument("--log_metrics", type=str, default='false', choices=['true', 'false'],
                         help="every eval round, macro precision / recall / F1 on the test set, and "
                              "the cost of the round: wall time, client training time, peak GPU "

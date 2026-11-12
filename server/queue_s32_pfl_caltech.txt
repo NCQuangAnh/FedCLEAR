@@ -1,0 +1,17 @@
+# PromptFL 32-shot on Caltech101, all 11 settings, seeds 0-4 (2026-11-09, user request).
+# Arms S_*_pflcn32 / N_*_pflcn32 in tools/make_notebook.py. Scenario-1 arms run without --diag_scores.
+# 56 of 100 Caltech classes have fewer than 32 training images and keep all of them (2,710 images).
+# Caltech never runs next to another run: --gpus 0, no --per-gpu.
+# Estimate: 16-shot PromptFL N run alone on the server ~1.2 h; 1.69x the images -> about 1.9-2.3 h
+# per run, 11 runs about 21-25 h. Order: heavy noise first, so the key settings finish early.
+caltech101 N_pair75_pflcn32
+caltech101 N_pair50_pflcn32
+caltech101 N_sym75_pflcn32
+caltech101 N_sym50_pflcn32
+caltech101 N_pair25_pflcn32
+caltech101 N_sym25_pflcn32
+caltech101 S_sym_pflcn32
+caltech101 S_pair_pflcn32
+caltech101 S_inst_pflcn32
+caltech101 S_het_pflcn32
+caltech101 S_clean_pflcn32

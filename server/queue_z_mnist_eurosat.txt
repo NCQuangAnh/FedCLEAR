@@ -1,0 +1,25 @@
+# FedCLEAR with tau = 0 and no look-alike merge, results/side-research/merge_ablation/plan.md. Seeds 0-4.
+# Data first, once: PYTHONPATH=flip python server/prep_mnist_eurosat.py
+# --gpus 0 --per-gpu 2. About 6.5 h.
+mnist S_sym_gatefz
+mnist S_pair_gatefz
+mnist S_inst_gatefz
+mnist S_het_gatefz
+mnist S_clean_gatefz
+mnist N_sym25_gatefz
+mnist N_sym50_gatefz
+mnist N_sym75_gatefz
+mnist N_pair25_gatefz
+mnist N_pair50_gatefz
+mnist N_pair75_gatefz
+eurosat S_sym_gatefz
+eurosat S_pair_gatefz
+eurosat S_inst_gatefz
+eurosat S_het_gatefz
+eurosat S_clean_gatefz
+eurosat N_sym25_gatefz
+eurosat N_sym50_gatefz
+eurosat N_sym75_gatefz
+eurosat N_pair25_gatefz
+eurosat N_pair50_gatefz
+eurosat N_pair75_gatefz

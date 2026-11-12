@@ -1,0 +1,15 @@
+# 16-shot runs still missing after the Kaggle notebooks, DTD part. results/side-research/classname_fix/plan.md
+# Seeds 0-4. --gpus 0 --per-gpu 2 (two DTD runs fit on the 12 GB card). Start only after the Caltech queue ends.
+# Estimate, two at a time: FedCLEAR ~2.4 h each, PromptFL with scores ~3.2 h each, PromptFL N ~0.85 h each.
+# About 11.5 h.
+dtd S_sym_pflcn16
+dtd S_pair_pflcn16
+dtd S_inst_pflcn16
+dtd S_het_pflcn16
+dtd S_clean_pflcn16
+dtd N_sym75_gatefcn16
+dtd N_pair50_gatefcn16
+dtd N_sym75_pflcn16
+dtd N_pair25_pflcn16
+dtd N_pair50_pflcn16
+dtd N_pair75_pflcn16

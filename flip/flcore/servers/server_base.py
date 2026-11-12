@@ -332,6 +332,13 @@ class ServerBase(object):
 
         self.train_classnames = list(self.trainloaders[0].dataset.dataset.classes)
         self.test_classnames = list(self.testloader.dataset.dataset.classes)
+        if getattr(self.args, 'coop_classnames', 'false') == 'true':
+            # update_class_names only renames class_to_idx, so the prompts kept the folder names
+            from ..datasets.imageloader import replace_dicts
+            rename = replace_dicts.get(self.dataset) or {}
+            self.train_classnames = [rename.get(c, c) for c in self.train_classnames]
+            self.test_classnames = [rename.get(c, c) for c in self.test_classnames]
+            print(f"- class names given to CLIP: {self.train_classnames}")
 
         if self.bench == 'base2novel':
             self.test_params['subsample'] = 'base'
@@ -1192,6 +1199,20 @@ class ServerBase(object):
     def gen_design_details(self,):
         return None
 
+    def save_run_info(self, results_dir):
+        """--log_metrics: what is needed to trace a run: machine, code version, flags, and the
+        final-round confusion matrix."""
+        import socket
+        version = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'CODE_VERSION.txt')
+        info = {'host': socket.gethostname(),
+                'gpu': torch.cuda.get_device_name(0) if torch.cuda.is_available() else None,
+                'torch': torch.__version__, 'cuda': torch.version.cuda,
+                'code_version': open(version).read().strip() if os.path.exists(version) else None,
+                'args': vars(self.args),
+                'confusion': getattr(self, 'final_confusion', None)}
+        with open(os.path.join(results_dir, f'runinfo_seed_{self.seed}.json'), 'w+', encoding='utf-8') as f:
+            json.dump(info, f, ensure_ascii=False, default=str)
+
     def summarize(self,):
         if self.bench == 'base2novel':
             exp_results = {'base': self.best_acc,
@@ -1223,6 +1244,7 @@ class ServerBase(object):
             with open(os.path.join(results_dir, f'metrics_seed_{self.seed}.json'), 'w+',
                       encoding='utf-8') as f:
                 json.dump(self.metric_records, f, ensure_ascii=False)
+            self.save_run_info(results_dir)
         fedcorr = getattr(self, 'fedcorr_records', [])      # --fedcorr (server_fedcorr.py)
         if (self.noise_report is not None or self.diag_records or self.sure_records
                 or self.nlp_records or fedcorr or self.fedrg_records):

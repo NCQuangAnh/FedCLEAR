@@ -6,29 +6,35 @@ file upstream, so keep the Kaggle dataset private.
 Usage:
     python tools/package_code.py            # -> dist/fpl-triage-code.zip
 """
+import datetime
+import hashlib
 import os
 import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCES = ["flip", "tools", "splits", "server"]   # splits/: CoOp split files, so no Google Drive download
 DST = os.path.join(ROOT, "dist", "fpl-triage-code.zip")
-SKIP_DIRS = {".git", "__pycache__", "assets", "results", "summaries", "outputs", "data"}
+SKIP_DIRS = {".git", ".git-upstream", "__pycache__", "assets", "results", "summaries", "outputs", "data"}
 
 
 def main():
     os.makedirs(os.path.dirname(DST), exist_ok=True)
     n = 0
+    digest = hashlib.sha256()
     with zipfile.ZipFile(DST, "w", zipfile.ZIP_DEFLATED) as zf:
         for src_name in SOURCES:
             src = os.path.join(ROOT, src_name)
             for dirpath, dirnames, filenames in os.walk(src):
-                dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
-                for name in filenames:
+                dirnames[:] = sorted(d for d in dirnames if d not in SKIP_DIRS)
+                for name in sorted(filenames):
                     if name.endswith((".pyc", ".pyo")):
                         continue
                     full = os.path.join(dirpath, name)
                     zf.write(full, os.path.join(src_name, os.path.relpath(full, src)))
+                    digest.update(open(full, "rb").read())
                     n += 1
+        # read back by ServerBase.save_run_info, so results can be traced to this zip
+        zf.writestr("flip/CODE_VERSION.txt", f"{digest.hexdigest()[:12]} {datetime.date.today()}\n")
     print(f"wrote {n} files to {DST} ({os.path.getsize(DST) / 1e6:.1f} MB)")
 
 

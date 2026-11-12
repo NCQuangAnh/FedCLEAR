@@ -1,0 +1,12 @@
+# FedCLEAR 32-shot on Caltech101, scenario 2 (all clients same noise), seeds 0-4 (2026-11-11, user request, ~36 h).
+# Arms N_*_gatefcn32 in tools/make_notebook.py; partner of queue_s32_pfl_caltech (PromptFL 32-shot).
+# Caltech never runs next to another run: --gpus 0, no --per-gpu.
+# Estimate: FedCLEAR Caltech 16-shot N on the server 4.0 h (N pair50); 32 shots = 1.69x training images
+# -> about 5.5-6.5 h per run, 6 runs about 33-39 h. Order: heavy noise first.
+# Scenario-1 arms (S_*_gatefcn32) are defined but not queued; next batch.
+caltech101 N_pair75_gatefcn32
+caltech101 N_pair50_gatefcn32
+caltech101 N_sym75_gatefcn32
+caltech101 N_sym50_gatefcn32
+caltech101 N_pair25_gatefcn32
+caltech101 N_sym25_gatefcn32

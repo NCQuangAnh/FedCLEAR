@@ -68,6 +68,14 @@ METHODS = {
     # estimates are wrong (the DTD N pair75 seed 5 collapse)
     "gatef": ("--sure", "true", "--sure_cal", "noise", "--sure_cal_flag", "false", "--sure_gate", "0.12",
               "--sure_cal_tmax", "1", "--sure_cal_floor", "true"),
+    # gatef without the look-alike merge (results/side-research/merge_ablation/plan.md); tau = the
+    # Pets clean p95 of the score without the merge (0.0725), the rule used for tau = 0.05
+    "gatefnm": ("--sure", "true", "--sure_cal", "noise", "--sure_cal_flag", "false", "--sure_gate", "0.12",
+                "--sure_cal_tmax", "1", "--sure_cal_floor", "true", "--sure_score", "xs", "--sure_tau", "0.072"),
+    # gatef with no look-alike merge and tau = 0: flagged when the mean excess loss is positive, its
+    # expected value being exactly 0 if the labels follow P (results/side-research/merge_ablation/plan.md)
+    "gatefz": ("--sure", "true", "--sure_cal", "noise", "--sure_cal_flag", "false", "--sure_gate", "0.12",
+               "--sure_cal_tmax", "1", "--sure_cal_floor", "true", "--sure_score", "xs", "--sure_tau", "0"),
 }
 ARM_ARGS = {f"S_{sc}_{m}": BASE + SCENARIOS[sc] + METHODS[m] for sc in SCENARIOS for m in METHODS}
 
@@ -101,7 +109,7 @@ for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
         ARM_ARGS[f"N_{_tag}{_r}_nlp"] = BASE + _sc + ("--nlprompt", "uniform")
         ARM_ARGS[f"N_{_tag}{_r}_nlph"] = BASE + _sc + ("--nlprompt", "hist")
         ARM_ARGS[f"N_{_tag}{_r}_prox"] = BASE + _sc + ("--prox_mu", "0.01")
-        for _m in ("nc", "nc05", "nc20", "v2", "v2m", "corr", "zs", "cal", "gate", "gatec", "gatef", "rg"):
+        for _m in ("nc", "nc05", "nc20", "v2", "v2m", "corr", "zs", "cal", "gate", "gatec", "gatef", "gatefnm", "gatefz", "rg"):
             ARM_ARGS[f"N_{_tag}{_r}_{_m}"] = BASE + _sc + METHODS[_m]
         # gatec_plan.md stage 2: held-out seeds 5, 6, 7 (every earlier run used seeds 0-4), with
         # CLEAR-FPL on the same seeds as the comparator
@@ -137,10 +145,75 @@ for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
     for _r in ("25", "50", "75"):
         ARM_ARGS[f"N_{_tag}{_r}_fp"] = ARM_ARGS[f"N_{_tag}{_r}_none"] + D_DIAG + FP
 
+# class-name fix (2026-11-05): before, EuroSAT prompts used the folder names ('AnnualCrop'), not
+# CoOp's readable names. *cn arms feed the CoOp names (only EuroSAT changes); *cn16 arms also use
+# 16 labelled images per class (--num_shot overrides COMMON's 8; argparse keeps the last value).
+# gatefcn = FedCLEAR, pflcn = PromptFL with the paper's flags (D_ / N_ none), zscn = zero-shot CLIP.
+CN = ("--coop_classnames", "true")
+S16 = ("--num_shot", "16")
+for _sc in SCENARIOS:
+    ARM_ARGS[f"S_{_sc}_gatefcn"] = ARM_ARGS[f"S_{_sc}_gatef"] + CN
+    ARM_ARGS[f"S_{_sc}_gatefcn16"] = ARM_ARGS[f"S_{_sc}_gatef"] + CN + S16
+    ARM_ARGS[f"S_{_sc}_pflcn"] = ARM_ARGS[f"D_{_sc}_none"] + CN
+    ARM_ARGS[f"S_{_sc}_pflcn16"] = ARM_ARGS[f"D_{_sc}_none"] + CN + S16
+ARM_ARGS["S_clean_zscn"] = ARM_ARGS["S_clean_zs"] + CN
+for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
+    for _r in ("25", "50", "75"):
+        ARM_ARGS[f"N_{_tag}{_r}_gatefcn"] = ARM_ARGS[f"N_{_tag}{_r}_gatef"] + CN
+        ARM_ARGS[f"N_{_tag}{_r}_gatefcn16"] = ARM_ARGS[f"N_{_tag}{_r}_gatef"] + CN + S16
+        ARM_ARGS[f"N_{_tag}{_r}_pflcn"] = ARM_ARGS[f"N_{_tag}{_r}_none"] + CN
+        ARM_ARGS[f"N_{_tag}{_r}_pflcn16"] = ARM_ARGS[f"N_{_tag}{_r}_none"] + CN + S16
+
+# 32 shots, PromptFL only (2026-11-09, server queue_s32_pfl_caltech). The scenario-1 arms drop
+# --diag_scores: the scores are logged only (every RNG restored, flcore/diag.py) and made the 16-shot
+# S runs about 4x slower. Classes with fewer than 32 training images keep all of them
+# (split_fewshot_subset), e.g. Caltech101: 56 of 100 classes, 2,710 images instead of 3,200.
+S32 = ("--num_shot", "32")
+for _sc, _x in D_SCEN.items():
+    ARM_ARGS[f"S_{_sc}_pflcn32"] = D_BASE + _x + CN + S32
+for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
+    for _r in ("25", "50", "75"):
+        ARM_ARGS[f"N_{_tag}{_r}_pflcn32"] = ARM_ARGS[f"N_{_tag}{_r}_none"] + CN + S32
+
+# 32 shots, FedCLEAR (2026-11-11, server queue_s32_clear_caltech): gatef + CoOp names + 32 shots,
+# the partner of the PromptFL 32-shot runs above.
+for _sc in SCENARIOS:
+    ARM_ARGS[f"S_{_sc}_gatefcn32"] = ARM_ARGS[f"S_{_sc}_gatef"] + CN + S32
+for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
+    for _r in ("25", "50", "75"):
+        ARM_ARGS[f"N_{_tag}{_r}_gatefcn32"] = ARM_ARGS[f"N_{_tag}{_r}_gatef"] + CN + S32
+
 # seconds per round on a Kaggle T4 for a --sure run; replaced by the measured rate after the
 # first run of a session
-SEC_PER_ROUND = {"oxford_pets": 22.0, "dtd": 25.0, "caltech101": 50.0,
-                 "mnist": 12.0, "eurosat": 10.0}   # MNIST / EuroSAT: guesses, PromptFL EuroSAT measured 5.2   # --sure runs; D_ runs with scores take ~1.3x
+# 2026-11-05: Pets, DTD, Caltech set to the measured FedCLEAR 16-shot rates (8-shot: 22 / 25 / 50)
+SEC_PER_ROUND = {"oxford_pets": 31.0, "dtd": 37.5, "caltech101": 103.0,
+                 "mnist": 10.5, "eurosat": 10.0}   # MNIST: FedCLEAR 16-shot measured 9.8-10.5 (s16_mnist_3, about the 8-shot time); EuroSAT: guess, PromptFL EuroSAT measured 5.2   # --sure runs; D_ runs with scores take ~1.3x
+# measured per-method rates (s per round, 16 shots) that seed the notebook's rate table:
+# PromptFL Caltech 16-shot 2.07-2.09 h per 5-seed run (user log, 2026-11-05).
+# A PromptFL S_ run logs --diag_scores (scores every image every 5 rounds): key "<method>D".
+# Rates are wall-clock seconds / (5 seeds x 51 rounds), measured on finished Kaggle runs
+# (2026-11-06): Caltech S_sym_pflcn16 9.97 h = 141 s per round (the 117 written before was wrong);
+# FedCLEAR Caltech 16-shot 94-104; EuroSAT / MNIST / Pets PromptFL from s16_caltech_6/7, s16_pfl_mnist_1.
+MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech101|gatefcn16": 104.0,
+            "eurosat|pflcn16": 6.3, "eurosat|pflcn16D": 11.0,
+            "mnist|pflcn16": 10.0, "mnist|pflcn16D": 17.2,
+            "oxford_pets|pflcn16": 13.1, "oxford_pets|pflcn16D": 40.6,   # Pets N: 0.90-0.93 h (s16_pfl_caltech_3)
+            # DTD PromptFL N 16-shot measured 0.91-0.93 h (s16_caltech_11, s16_pfl_caltech_6, 2026-11-07)
+            "dtd|pflcn16": 13.1,
+            # 32 shots, measured on Kaggle s32_pets_1-2, s32_dtd_pets_1-4 (2026-11-12, slowest run):
+            # Pets FedCLEAR 3.58-3.76 h, PromptFL 1.16-1.21 h; DTD FedCLEAR 4.36-4.75 h, PromptFL 1.29-1.35 h
+            "oxford_pets|gatefcn32": 53.1, "oxford_pets|pflcn32": 17.1,
+            "dtd|gatefcn32": 67.1, "dtd|pflcn32": 19.1,
+            # MNIST / EuroSAT 32 shots (2026-11-12, not measured yet): 16-shot rate x 1.8. 16-shot measured
+            # FedCLEAR EuroSAT 0.45-0.60 h, MNIST 0.69-0.79 h; PromptFL N EuroSAT 0.41-0.48 h, MNIST 0.68-0.72 h
+            # (the 16-shot PromptFL S runs logged --diag_scores; the 32-shot ones do not).
+            # Notebooks s32_mnist_1 / s32_eurosat_1 measure them.
+            "eurosat|gatefcn32": 13.5, "eurosat|pflcn32": 11.0,
+            "mnist|gatefcn32": 19.1, "mnist|pflcn32": 17.8,
+            # PromptFL S runs at 32 shots (--log_signals, key "...L"): N rate x 1.68 (Caltech measured)
+            "caltech101|pflcn32": 32.8, "caltech101|pflcn32L": 55.2,
+            "oxford_pets|pflcn32L": 28.8, "dtd|pflcn32L": 32.1,
+            "eurosat|pflcn32L": 18.5, "mnist|pflcn32L": 29.9}
 
 
 def md(text):
@@ -178,6 +251,7 @@ TIMES, ROUNDS = 5, 50
 BUDGET_HOURS = {budget}          # a run that would end past this is skipped, not started
 HARD_HOURS = {hard}          # a run still going at this point is killed, so the zip is always made
 SEC_PER_ROUND = {json.dumps(SEC_PER_ROUND)}
+MEASURED = {json.dumps(MEASURED)}
 
 WORK = "/kaggle/working"
 OUT = f"{{WORK}}/{{NAME}}"
@@ -338,7 +412,7 @@ COMMON = ["--benchmark", "global", "--image_backbone", "RN50", "--optim_name", "
           "--num_workers", "4", "--data_root", DATA_ROOT, "--verbose2", "--cache_test_feats", "true"]
 INDEX = f"{OUT}/run_index.json"
 ROUND_RE = re.compile(r"round (\\d+), .*?top1: ([\\d.]+)%, elapsed: ([\\d.]+)s")
-rates = {}
+rates = {tuple(k.split("|")): v for k, v in MEASURED.items()}
 
 
 def run(ds, arm):
@@ -351,11 +425,16 @@ def run(ds, arm):
     for i, a in enumerate(ARM_ARGS[arm][:-1]):
         if a == "--times":
             seeds = int(ARM_ARGS[arm][i + 1])
-    # rate per (dataset, method): a CLEAR run is ~1.45x a FedRG run on the same data. A method not
-    # measured yet uses the dataset's slowest measured rate x 1.5, else the default guess
-    method = arm.rsplit("_", 1)[-1]
-    known = [r for (d, _), r in rates.items() if d == ds]
-    rate = rates.get((ds, method), 1.5 * max(known) if known else SEC_PER_ROUND[ds])
+    # rate per (dataset, method). A method not measured yet uses the dataset's FedCLEAR rate, x 1.6
+    # for a run with --diag_scores (measured 1.07-1.6x FedCLEAR at 16 shots; PromptFL without
+    # scores is faster than FedCLEAR on every measured dataset). The old "1.5x the slowest known
+    # method" rule gave FedCLEAR Caltech 44 s per round from the PromptFL rate (real 94-104).
+    # "L": a PromptFL S_ run logs --log_signals (zero-shot signals every round), 1.68x slower than the
+    # same method without it (Caltech pflcn32 S 3.91 h vs N 2.32 h, server 2026-11-11)
+    method = arm.rsplit("_", 1)[-1] + ("D" if "--diag_scores" in ARM_ARGS[arm] else "")
+    if "--log_signals" in ARM_ARGS[arm] and "--diag_scores" not in ARM_ARGS[arm] and "--sure" not in ARM_ARGS[arm]:
+        method += "L"
+    rate = rates.get((ds, method), SEC_PER_ROUND[ds] * (1.6 if method.endswith("D") else 1.0))
     need = rate * (ROUNDS + 1) * seeds / 3600 + 0.1
     if used + need > BUDGET_HOURS:
         print(f"SKIPPED {tag}: needs ~{need:.1f} h, {BUDGET_HOURS - used:.1f} h left")

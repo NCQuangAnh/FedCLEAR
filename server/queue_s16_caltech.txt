@@ -1,0 +1,14 @@
+# FedCLEAR (gatef) with 16 labelled images per class, CoOp class names, seeds 0-4.
+# results/side-research/classname_fix/plan.md
+# --gpus 0 only (never parallel). About 45 h.
+caltech101 S_sym_gatefcn16
+caltech101 S_pair_gatefcn16
+caltech101 S_inst_gatefcn16
+caltech101 S_het_gatefcn16
+caltech101 S_clean_gatefcn16
+caltech101 N_sym25_gatefcn16
+caltech101 N_sym50_gatefcn16
+caltech101 N_sym75_gatefcn16
+caltech101 N_pair25_gatefcn16
+caltech101 N_pair50_gatefcn16
+caltech101 N_pair75_gatefcn16
