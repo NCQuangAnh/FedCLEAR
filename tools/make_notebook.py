@@ -178,6 +178,14 @@ for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
 # (Kaggle s32_dtd_pets_6); this arm runs only seed 4 so the run can be completed by merging.
 ARM_ARGS["S_inst_pflcn32s4"] = ARM_ARGS["S_inst_pflcn32"] + ("--seed", "4", "--times", "1")
 
+# Full data and client variation (supervisor, PAKDD_12pages.tex: "chay het du lieu voi 10, 20, 50, 100
+# clients"; the "all" column of the shot study is the 10-client full-data run). --num_shot 0 = no
+# few-shot subset. Speed probe first (2026-11-13): S sym, seed 0 only, to measure real full-data times.
+FULL = ("--num_shot", "0", "--times", "1")
+ARM_ARGS["S_sym_gatefcnf"] = ARM_ARGS["S_sym_gatefcn"] + FULL
+ARM_ARGS["S_sym_pflcnf"] = ARM_ARGS["S_sym_pflcn"] + FULL
+ARM_ARGS["S_sym_gatefcnf100"] = ARM_ARGS["S_sym_gatefcn"] + FULL + ("--num_clients", "100")
+
 # 32 shots, FedCLEAR (2026-11-11, server queue_s32_clear_caltech): gatef + CoOp names + 32 shots,
 # the partner of the PromptFL 32-shot runs above.
 for _sc in SCENARIOS:
@@ -185,6 +193,20 @@ for _sc in SCENARIOS:
 for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
     for _r in ("25", "50", "75"):
         ARM_ARGS[f"N_{_tag}{_r}_gatefcn32"] = ARM_ARGS[f"N_{_tag}{_r}_gatef"] + CN + S32
+
+# 64 shots (2026-11-13, supervisor's shot study 8/16/32/64/all; 1 and 4 shots dropped by the user).
+# Same pairs as 16/32: FedCLEAR = gatef + CoOp names, PromptFL = plain CoOp (S runs log signals).
+# Train images per class: Pets 74-80, DTD 60 (so DTD 64-shot = all DTD data), Caltech101 16-400
+# (94 of 100 classes have < 64), EuroSAT/MNIST thousands.
+S64 = ("--num_shot", "64")
+for _sc, _x in D_SCEN.items():
+    ARM_ARGS[f"S_{_sc}_pflcn64"] = D_BASE + _x + CN + S64
+for _sc in SCENARIOS:
+    ARM_ARGS[f"S_{_sc}_gatefcn64"] = ARM_ARGS[f"S_{_sc}_gatef"] + CN + S64
+for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
+    for _r in ("25", "50", "75"):
+        ARM_ARGS[f"N_{_tag}{_r}_pflcn64"] = ARM_ARGS[f"N_{_tag}{_r}_none"] + CN + S64
+        ARM_ARGS[f"N_{_tag}{_r}_gatefcn64"] = ARM_ARGS[f"N_{_tag}{_r}_gatef"] + CN + S64
 
 # seconds per round on a Kaggle T4 for a --sure run; replaced by the measured rate after the
 # first run of a session
@@ -218,7 +240,7 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             "mnist|gatefcn32": 12.6, "mnist|pflcn32": 10.3,
             # PromptFL S runs at 32 shots (--log_signals, key "...L"): N rate x 1.68 (Caltech measured)
             "caltech101|pflcn32": 32.8, "caltech101|pflcn32L": 55.2,
-            "oxford_pets|pflcn32L": 28.8, "oxford_pets|pflcn32s4L": 28.8, "dtd|pflcn32L": 32.1,
+            "oxford_pets|pflcn32L": 28.8, "oxford_pets|pflcn32s4L": 28.8, "oxford_pets|gatefcn64": 97.5, "oxford_pets|pflcn64": 30.0, "oxford_pets|pflcn64L": 50.0, "eurosat|gatefcn64": 12.0, "eurosat|pflcn64": 9.0, "eurosat|pflcn64L": 11.0, "mnist|gatefcn64": 15.0, "mnist|pflcn64": 12.5, "mnist|pflcn64L": 14.5, "oxford_pets|gatefcnf": 120.0, "oxford_pets|pflcnfL": 70.0, "oxford_pets|gatefcnf100": 130.0, "dtd|gatefcnf": 120.0, "dtd|pflcnfL": 75.0, "dtd|pflcn32L": 32.1,
             "eurosat|pflcn32L": 8.9, "mnist|pflcn32L": 12.3,
             # 8-shot look-alike ablation gatefnm (results/side-research/merge_ablation/plan.md): rates of the
             # 8-shot gatef Kaggle runs (slowest): Pets 1.40 h, DTD 1.59 h, Caltech 4.18 h, MNIST 0.77 h, EuroSAT 0.45 h
