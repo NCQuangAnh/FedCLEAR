@@ -174,6 +174,9 @@ for _sc, _x in D_SCEN.items():
 for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
     for _r in ("25", "50", "75"):
         ARM_ARGS[f"N_{_tag}{_r}_pflcn32"] = ARM_ARGS[f"N_{_tag}{_r}_none"] + CN + S32
+# seed 4 alone (2026-11-13): Pets S inst pflcn32 was killed by the time limit after seeds 0-3
+# (Kaggle s32_dtd_pets_6); this arm runs only seed 4 so the run can be completed by merging.
+ARM_ARGS["S_inst_pflcn32s4"] = ARM_ARGS["S_inst_pflcn32"] + ("--seed", "4", "--times", "1")
 
 # 32 shots, FedCLEAR (2026-11-11, server queue_s32_clear_caltech): gatef + CoOp names + 32 shots,
 # the partner of the PromptFL 32-shot runs above.
@@ -215,7 +218,7 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             "mnist|gatefcn32": 12.6, "mnist|pflcn32": 10.3,
             # PromptFL S runs at 32 shots (--log_signals, key "...L"): N rate x 1.68 (Caltech measured)
             "caltech101|pflcn32": 32.8, "caltech101|pflcn32L": 55.2,
-            "oxford_pets|pflcn32L": 28.8, "dtd|pflcn32L": 32.1,
+            "oxford_pets|pflcn32L": 28.8, "oxford_pets|pflcn32s4L": 28.8, "dtd|pflcn32L": 32.1,
             "eurosat|pflcn32L": 8.9, "mnist|pflcn32L": 12.3,
             # 8-shot look-alike ablation gatefnm (results/side-research/merge_ablation/plan.md): rates of the
             # 8-shot gatef Kaggle runs (slowest): Pets 1.40 h, DTD 1.59 h, Caltech 4.18 h, MNIST 0.77 h, EuroSAT 0.45 h
