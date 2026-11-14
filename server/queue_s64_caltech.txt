@@ -1,0 +1,28 @@
+# Caltech101 64-shot, FedCLEAR (gatefcn64) + PromptFL (pflcn64), all 11 settings, seeds 0-4 (2026-11-14, user request).
+# 94 of 100 Caltech classes have fewer than 64 training images and keep all of them (3,211 images vs 2,710 at 32-shot).
+# Caltech never runs next to another run: --gpus 0, no --per-gpu.
+# Estimate on the RTX 3060 (32-shot x 1.18 for the extra images): FedCLEAR about 7.5 h per run,
+# PromptFL N about 2.7 h, PromptFL S (with --log_signals) about 4.6 h. 22 runs about 120 h (5 days).
+# Order: each setting runs both methods back to back, heavy noise first, so partial results stay paired.
+caltech101 N_pair75_gatefcn64
+caltech101 N_pair75_pflcn64
+caltech101 N_sym75_gatefcn64
+caltech101 N_sym75_pflcn64
+caltech101 N_pair50_gatefcn64
+caltech101 N_pair50_pflcn64
+caltech101 N_sym50_gatefcn64
+caltech101 N_sym50_pflcn64
+caltech101 S_sym_gatefcn64
+caltech101 S_sym_pflcn64
+caltech101 S_pair_gatefcn64
+caltech101 S_pair_pflcn64
+caltech101 S_inst_gatefcn64
+caltech101 S_inst_pflcn64
+caltech101 S_het_gatefcn64
+caltech101 S_het_pflcn64
+caltech101 S_clean_gatefcn64
+caltech101 S_clean_pflcn64
+caltech101 N_pair25_gatefcn64
+caltech101 N_pair25_pflcn64
+caltech101 N_sym25_gatefcn64
+caltech101 N_sym25_pflcn64
