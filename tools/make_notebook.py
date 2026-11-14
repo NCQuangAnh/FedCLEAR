@@ -240,7 +240,8 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             "mnist|gatefcn32": 12.6, "mnist|pflcn32": 10.3,
             # PromptFL S runs at 32 shots (--log_signals, key "...L"): N rate x 1.68 (Caltech measured)
             "caltech101|pflcn32": 32.8, "caltech101|pflcn32L": 55.2,
-            "oxford_pets|pflcn32L": 28.8, "oxford_pets|pflcn32s4L": 28.8, "oxford_pets|gatefcn64": 97.5, "oxford_pets|pflcn64": 30.0, "oxford_pets|pflcn64L": 50.0, "eurosat|gatefcn64": 12.0, "eurosat|pflcn64": 9.0, "eurosat|pflcn64L": 11.0, "mnist|gatefcn64": 15.0, "mnist|pflcn64": 12.5, "mnist|pflcn64L": 14.5, "oxford_pets|gatefcnf": 120.0, "oxford_pets|pflcnfL": 70.0, "oxford_pets|gatefcnf100": 130.0, "dtd|gatefcnf": 120.0, "dtd|pflcnfL": 75.0, "dtd|pflcn32L": 32.1,
+            # 64-shot rates measured on Kaggle T4 (s64 notebooks 1-12, 2026-11-14); full-data rates still guesses
+            "oxford_pets|pflcn32L": 28.8, "oxford_pets|pflcn32s4L": 28.8, "oxford_pets|gatefcn64": 95.0, "oxford_pets|pflcn64": 25.5, "oxford_pets|pflcn64L": 42.5, "eurosat|gatefcn64": 16.0, "eurosat|pflcn64": 8.5, "eurosat|pflcn64L": 12.0, "mnist|gatefcn64": 17.5, "mnist|pflcn64": 12.5, "mnist|pflcn64L": 17.5, "oxford_pets|gatefcnf": 120.0, "oxford_pets|pflcnfL": 70.0, "oxford_pets|gatefcnf100": 130.0, "dtd|gatefcnf": 120.0, "dtd|pflcnfL": 75.0, "dtd|pflcn32L": 32.1,
             "eurosat|pflcn32L": 8.9, "mnist|pflcn32L": 12.3,
             # 8-shot look-alike ablation gatefnm (results/side-research/merge_ablation/plan.md): rates of the
             # 8-shot gatef Kaggle runs (slowest): Pets 1.40 h, DTD 1.59 h, Caltech 4.18 h, MNIST 0.77 h, EuroSAT 0.45 h
