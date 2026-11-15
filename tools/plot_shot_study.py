@@ -64,7 +64,7 @@ def main(out):
             for n in NAMES for m in ("PromptFL", "FedCLEAR") for sc in SCEN}
     shots = [k for k in SHOTS if any(v[SHOTS.index(k)] is not None for v in data.values())]
     xs = list(range(len(shots)))
-    fig, axes = plt.subplots(1, len(NAMES), figsize=(7.0, 1.55))
+    fig, axes = plt.subplots(1, len(NAMES), figsize=(7.0, 1.4))
     style = {"PromptFL": ("#2F5D8A", "o"), "FedCLEAR": ("#C0392B", "s")}
     for ax, n in zip(axes, NAMES):
         for m in ("PromptFL", "FedCLEAR"):

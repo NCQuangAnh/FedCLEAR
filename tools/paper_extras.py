@@ -115,7 +115,7 @@ def noise_fig(out):
     zs = {"Pets": 85.69, "Caltech101": 85.76}
     w, gap = 0.18, 0.05
     offs = [-1.5 * w - gap * 3 / 4, -0.5 * w + gap / 4, 0.5 * w + gap / 4, 1.5 * w + gap / 4]
-    fig, axes = plt.subplots(1, 2, figsize=(4.9, 2.3), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(4.9, 1.8), sharey=True)
     handles = {}
     for ax, (ds, name) in zip(axes, [("oxford_pets", "Pets"), ("caltech101", "Caltech101")]):
         j = 0
