@@ -6,8 +6,8 @@
            aside) on flagged clients, rounds 1-5 vs 41-50: decisions are revised as the prompt
            improves
   mix      the reference with and without zero-shot CLIP (global prompt only, arm noclip), scenario 1
-  noise    Fig. 1: methods without label correction (PromptFL, NLPrompt) and with it (FedCorr,
-           FedRG) on Pets / Caltech101 under growing noise
+  noise    Fig. 1: PromptFL (no noise handling) against the noise-handling methods (NLPrompt,
+           FedCorr, FedRG) on Pets / Caltech101 under growing noise
 
 Usage: python tools/paper_extras.py <out_dir>
 """
@@ -105,15 +105,16 @@ def mix():
 
 
 def noise_fig(out):
-    # Two groups, as asked by the supervisor (2026-11-04): methods that do not correct labels, and
-    # methods that correct them. A small gap separates the groups inside each setting.
-    groups = [("No label correction", [("PromptFL", "PromptFL", "#9BB7D4"), ("NLPrompt", "NLPrompt", "#2F5D8A")]),
-              ("Label correction", [("FedCorr", "FedCorr", "#F2B27A"), ("FedRG", "FedRG", "#C0501E")])]
+    # Two groups (supervisor, 2026-11-16 regrouping): PromptFL, which has no noise handling, and the
+    # three methods designed for noisy labels. A small gap separates the groups inside each setting.
+    groups = [("No noise handling", [("PromptFL", "PromptFL", "#2F5D8A")]),
+              ("Noise handling", [("NLPrompt", "NLPrompt", "#F6C99A"), ("FedCorr", "FedCorr", "#E08A4A"),
+                                  ("FedRG", "FedRG", "#A8431A")])]
     settings = [("clean", ("S", "clean")), ("3 of 10 noisy\n(40% sym.)", ("S", "sym")),
                 ("all noisy\n(50% sym.)", ("N", "sym50")), ("all noisy\n(75% sym.)", ("N", "sym75"))]
     zs = {"Pets": 85.69, "Caltech101": 85.76}
     w, gap = 0.18, 0.05
-    offs = [-1.5 * w - gap / 2, -0.5 * w - gap / 2, 0.5 * w + gap / 2, 1.5 * w + gap / 2]
+    offs = [-1.5 * w - gap * 3 / 4, -0.5 * w + gap / 4, 0.5 * w + gap / 4, 1.5 * w + gap / 4]
     fig, axes = plt.subplots(1, 2, figsize=(4.9, 2.3), sharey=True)
     handles = {}
     for ax, (ds, name) in zip(axes, [("oxford_pets", "Pets"), ("caltech101", "Caltech101")]):
@@ -136,13 +137,14 @@ def noise_fig(out):
     axes[0].set_ylabel("Accuracy (%)")
     # one legend box per group, then zero-shot CLIP, side by side above the panels
     boxes = [(g, [m[0] for m in members]) for g, members in groups] + [("Reference", ["Zero-shot CLIP"])]
-    for (title, labs), x0 in zip(boxes, (0.20, 0.52, 0.82)):
+    for (title, labs), x0 in zip(boxes, (0.17, 0.53, 0.88)):
         leg = fig.legend([handles[l] for l in labs], labs, title=title, frameon=False, fontsize=6.8,
                          title_fontsize=6.8, ncol=len(labs), loc="lower center", bbox_to_anchor=(x0, 0.97),
                          handlelength=1.2, columnspacing=0.8)
         leg.get_title().set_fontweight("bold")
     fig.tight_layout()
     fig.savefig(os.path.join(out, "NoiseImpact.pdf"), bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(os.path.join(out, "NoiseImpact.png"), dpi=300, bbox_inches="tight", pad_inches=0.02)
 
 
 if __name__ == "__main__":
