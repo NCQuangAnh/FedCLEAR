@@ -4,7 +4,9 @@ Merged 2026-11-14 from Kaggle notebooks s64_eurosat_1, s64_eurosat_2, s64_eurosa
 s64_mnist_5, s64_pets_6 ... s64_pets_12 (56 runs), and 2026-11-16 from s64_pets_13 ... s64_pets_18
 (10 runs, incl. s64_pets_mnist_16). All rc 0, seeds 0-4. Grid complete for EuroSAT/MNIST/Pets (33 settings).
 Accuracy = mean of the last 10 rounds, averaged over 5 seeds (`analyze_s16.last10`). 8/16/32-shot columns
-come from the earlier grids. Caltech 64 runs on the server (queue_s64_caltech*); DTD 64-shot = full data.
+come from the earlier grids. DTD 64-shot = full data (results/full).
+Caltech 64 runs on the server: queue_s64_caltech_1 (6 runs, N pair75/sym75/pair50, both methods) merged
+2026-11-16, rc 0, seeds 0-4; the other 16 run as queue_s64_caltech_2.
 
 ## EuroSAT
 
@@ -54,4 +56,20 @@ come from the earlier grids. Caltech 64 runs on the server (queue_s64_caltech*);
 | N pair50 | 41.47 | 44.93 | 46.99 | 53.42 | 86.96 | 0.56 | 86.45 | 85.84 | 86.86 | +45.48 |
 | N pair75 | 13.55 | 14.79 | 19.63 | 28.78 | 79.80 | 1.66 | 80.04 | 81.47 | 84.72 | +66.24 |
 
-FedCLEAR > PromptFL at 64-shot: 26/33
+## Caltech101 (6 of 22 runs so far)
+
+| Setting | PromptFL 64 | 32 | 16 | 8 | FedCLEAR 64 | ± std | 32 | 16 | 8 | Δ 64 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| S sym | — | 89.87 | 88.67 | 87.79 | — | — | 91.11 | 90.39 | 89.88 | — |
+| S pair | — | 87.81 | 87.73 | 86.71 | — | — | 90.75 | 90.47 | 89.83 | — |
+| S inst | — | 89.98 | 89.24 | 86.91 | — | — | 90.76 | 90.55 | 89.64 | — |
+| S het | — | 88.59 | 86.44 | 84.21 | — | — | 90.54 | 90.22 | 89.58 | — |
+| S clean | — | 90.93 | 90.85 | 89.95 | — | — | 91.15 | 90.82 | 90.21 | — |
+| N sym25 | — | 88.99 | 87.13 | 85.18 | — | — | 90.26 | 90.11 | 89.56 | — |
+| N sym50 | — | 86.93 | 83.96 | 80.48 | — | — | 89.52 | 89.27 | 87.85 | — |
+| N sym75 | 81.24 | 75.51 | 68.98 | 62.36 | 88.56 | 0.37 | 88.58 | 87.87 | 87.81 | +7.32 |
+| N pair25 | — | 83.03 | 82.88 | 81.94 | — | — | 90.19 | 89.86 | 89.25 | — |
+| N pair50 | 58.37 | 59.01 | 63.60 | 65.84 | 89.30 | 0.36 | 89.33 | 89.34 | 86.98 | +30.93 |
+| N pair75 | 18.67 | 18.49 | 21.74 | 33.12 | 83.05 | 0.37 | 81.70 | 85.42 | 83.76 | +64.38 |
+
+FedCLEAR > PromptFL at 64-shot: 26/33 (EuroSAT/MNIST/Pets); Caltech so far 3/3

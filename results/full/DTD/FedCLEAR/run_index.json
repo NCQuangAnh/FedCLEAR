@@ -1,0 +1,41 @@
+{
+ "dtd_S_sym_gatefcnfull": {
+  "dataset": "dtd",
+  "arm": "S_sym_gatefcnfull",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0.4",
+   "--noisy_client_frac",
+   "0.3",
+   "--sure",
+   "true",
+   "--sure_cal",
+   "noise",
+   "--sure_cal_flag",
+   "false",
+   "--sure_gate",
+   "0.12",
+   "--sure_cal_tmax",
+   "1",
+   "--sure_cal_floor",
+   "true",
+   "--coop_classnames",
+   "true",
+   "--num_shot",
+   "0"
+  ],
+  "returncode": 0,
+  "seconds": 31124.8,
+  "notebook": "full_dtd_3"
+ }
+}

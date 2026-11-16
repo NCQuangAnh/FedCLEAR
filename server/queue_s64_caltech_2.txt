@@ -1,0 +1,19 @@
+# Caltech101 64-shot, second part: the 16 runs of queue_s64_caltech.txt after the 6 in queue_s64_caltech_1
+# (2026-11-16). Created on the server with: tail -n 16 server/queue_s64_caltech.txt > server/queue_s64_caltech_2.txt
+# (so the server file has no comment lines). Same code zip as part 1 (5add4b53e9ec). Caltech runs alone: --gpus 0.
+caltech101 N_sym50_gatefcn64
+caltech101 N_sym50_pflcn64
+caltech101 S_sym_gatefcn64
+caltech101 S_sym_pflcn64
+caltech101 S_pair_gatefcn64
+caltech101 S_pair_pflcn64
+caltech101 S_inst_gatefcn64
+caltech101 S_inst_pflcn64
+caltech101 S_het_gatefcn64
+caltech101 S_het_pflcn64
+caltech101 S_clean_gatefcn64
+caltech101 S_clean_pflcn64
+caltech101 N_pair25_gatefcn64
+caltech101 N_pair25_pflcn64
+caltech101 N_sym25_gatefcn64
+caltech101 N_sym25_pflcn64

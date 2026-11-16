@@ -254,10 +254,11 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             # 64-shot rates measured on Kaggle T4 (s64 notebooks 1-12, 2026-11-14); full-data rates still guesses
             "oxford_pets|pflcn32L": 28.8, "oxford_pets|pflcn32s4L": 28.8, "oxford_pets|gatefcn64": 95.0, "oxford_pets|pflcn64": 25.5, "oxford_pets|pflcn64L": 42.5, "eurosat|gatefcn64": 16.0, "eurosat|pflcn64": 8.5, "eurosat|pflcn64L": 12.0, "mnist|gatefcn64": 17.5, "mnist|pflcn64": 12.5, "mnist|pflcn64L": 17.5, "oxford_pets|gatefcnf": 120.0, "oxford_pets|pflcnfL": 70.0, "oxford_pets|gatefcnf100": 130.0, "dtd|gatefcnf": 120.0, "dtd|pflcnfL": 75.0, "dtd|pflcn32L": 32.1,
             "eurosat|pflcn32L": 8.9, "mnist|pflcn32L": 12.3,
-            # full data, 5 seeds (guesses, x1.1 margin): Pets = 64-shot rate x 1.24 (2944 vs 2368 train
-            # images), DTD = 32-shot rate x 1.875 (2820 vs 1504). Replace with the first measured runs.
-            "oxford_pets|gatefcnfull": 130.0, "oxford_pets|pflcnfull": 35.0, "oxford_pets|pflcnfullL": 58.0,
-            "dtd|gatefcnfull": 139.0, "dtd|pflcnfull": 39.5, "dtd|pflcnfullL": 66.0,
+            # full data, 5 seeds. FedCLEAR measured 2026-11-16 (full_pets_1 7.88 h, full_dtd_3 8.65 h, S sym,
+            # 250 rounds). PromptFL still guesses with x1.1 margin: Pets = 64-shot rate x 1.24 (2944 vs 2368
+            # train images), DTD = 32-shot rate x 1.875 (2820 vs 1504).
+            "oxford_pets|gatefcnfull": 113.5, "oxford_pets|pflcnfull": 35.0, "oxford_pets|pflcnfullL": 58.0,
+            "dtd|gatefcnfull": 124.5, "dtd|pflcnfull": 39.5, "dtd|pflcnfullL": 66.0,
             # 8-shot look-alike ablation gatefnm (results/side-research/merge_ablation/plan.md): rates of the
             # 8-shot gatef Kaggle runs (slowest): Pets 1.40 h, DTD 1.59 h, Caltech 4.18 h, MNIST 0.77 h, EuroSAT 0.45 h
             "oxford_pets|gatefnm": 19.8, "dtd|gatefnm": 22.4, "caltech101|gatefnm": 59.0,
