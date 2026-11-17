@@ -232,6 +232,9 @@ SEC_PER_ROUND = {"oxford_pets": 31.0, "dtd": 37.5, "caltech101": 103.0,
 # FedCLEAR Caltech 16-shot 94-104; EuroSAT / MNIST / Pets PromptFL from s16_caltech_6/7, s16_pfl_mnist_1.
 MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech101|gatefcn16": 104.0,
             "eurosat|pflcn16": 6.3, "eurosat|pflcn16D": 11.0,
+            # EuroSAT 8-shot with CoOp names (2026-11-17, not measured yet): the 16-shot rates as an upper bound
+            # (FedCLEAR 16-shot 0.45-0.60 h per run = 8.5 s per round).
+            "eurosat|gatefcn": 8.5, "eurosat|pflcn": 6.3, "eurosat|pflcnD": 11.0, "eurosat|zscn": 6.3,
             "mnist|pflcn16": 10.0, "mnist|pflcn16D": 17.2,
             "oxford_pets|pflcn16": 13.1, "oxford_pets|pflcn16D": 40.6,   # Pets N: 0.90-0.93 h (s16_pfl_caltech_3)
             # DTD PromptFL N 16-shot measured 0.91-0.93 h (s16_caltech_11, s16_pfl_caltech_6, 2026-11-07)
