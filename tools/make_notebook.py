@@ -177,6 +177,16 @@ for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
 # seed 4 alone (2026-11-13): Pets S inst pflcn32 was killed by the time limit after seeds 0-3
 # (Kaggle s32_dtd_pets_6); this arm runs only seed 4 so the run can be completed by merging.
 ARM_ARGS["S_inst_pflcn32s4"] = ARM_ARGS["S_inst_pflcn32"] + ("--seed", "4", "--times", "1")
+# EuroSAT 8-shot rerun with CoOp names (2026-11-17), one notebook: gatefcn8 = gatefcn; pflcn8 = pflcn
+# without --diag_scores on the S arms (scores are logged only, as for pflcn32), which keeps all 22 runs
+# under 12 h.
+for _sc, _x in D_SCEN.items():
+    ARM_ARGS[f"S_{_sc}_gatefcn8"] = ARM_ARGS[f"S_{_sc}_gatefcn"]
+    ARM_ARGS[f"S_{_sc}_pflcn8"] = D_BASE + _x + CN
+for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
+    for _r in ("25", "50", "75"):
+        ARM_ARGS[f"N_{_tag}{_r}_gatefcn8"] = ARM_ARGS[f"N_{_tag}{_r}_gatefcn"]
+        ARM_ARGS[f"N_{_tag}{_r}_pflcn8"] = ARM_ARGS[f"N_{_tag}{_r}_pflcn"]
 
 # Full data and client variation (supervisor, PAKDD_12pages.tex: "chay het du lieu voi 10, 20, 50, 100
 # clients"; the "all" column of the shot study is the 10-client full-data run). --num_shot 0 = no
@@ -232,9 +242,11 @@ SEC_PER_ROUND = {"oxford_pets": 31.0, "dtd": 37.5, "caltech101": 103.0,
 # FedCLEAR Caltech 16-shot 94-104; EuroSAT / MNIST / Pets PromptFL from s16_caltech_6/7, s16_pfl_mnist_1.
 MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech101|gatefcn16": 104.0,
             "eurosat|pflcn16": 6.3, "eurosat|pflcn16D": 11.0,
-            # EuroSAT 8-shot with CoOp names (2026-11-17, not measured yet): the 16-shot rates as an upper bound
-            # (FedCLEAR 16-shot 0.45-0.60 h per run = 8.5 s per round).
-            "eurosat|gatefcn": 8.5, "eurosat|pflcn": 6.3, "eurosat|pflcnD": 11.0, "eurosat|zscn": 6.3,
+            # EuroSAT 8-shot with CoOp names (2026-11-17): old 8-shot logs (folder names) sum to FedCLEAR 0.42 h,
+            # PromptFL N 0.36-0.37 h, PromptFL S with --diag_scores 0.53-0.58 h per 5-seed run; x1.05 margin.
+            # pflcn8L (S, --log_signals, no --diag_scores) is a guess. zscn trains nothing.
+            "eurosat|gatefcn": 8.5, "eurosat|pflcn": 6.3, "eurosat|pflcnD": 11.0, "eurosat|zscn": 1.0,
+            "eurosat|gatefcn8": 6.2, "eurosat|pflcn8": 5.5, "eurosat|pflcn8L": 7.0,
             "mnist|pflcn16": 10.0, "mnist|pflcn16D": 17.2,
             "oxford_pets|pflcn16": 13.1, "oxford_pets|pflcn16D": 40.6,   # Pets N: 0.90-0.93 h (s16_pfl_caltech_3)
             # DTD PromptFL N 16-shot measured 0.91-0.93 h (s16_caltech_11, s16_pfl_caltech_6, 2026-11-07)
