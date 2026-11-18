@@ -198,6 +198,14 @@ for _m in ("corr", "rg", "nlp", "prox"):
         for _r in ("25", "50", "75"):
             ARM_ARGS[f"N_{_tag}{_r}_{_m}cn8"] = ARM_ARGS[f"N_{_tag}{_r}_{_m}"] + CN
 
+# Look-alike merge removed everywhere (2026-11-19, user considering dropping it from the paper): the 8-shot
+# no-merge arm gatefnm still lacks Caltech101, and EuroSAT 8-shot with CoOp names needs its own no-merge arm.
+for _sc in SCENARIOS:
+    ARM_ARGS[f"S_{_sc}_gatefnmcn8"] = ARM_ARGS[f"S_{_sc}_gatefnm"] + CN
+for _tag in ("sym", "pair"):
+    for _r in ("25", "50", "75"):
+        ARM_ARGS[f"N_{_tag}{_r}_gatefnmcn8"] = ARM_ARGS[f"N_{_tag}{_r}_gatefnm"] + CN
+
 # Full data and client variation (supervisor, PAKDD_12pages.tex: "chay het du lieu voi 10, 20, 50, 100
 # clients"; the "all" column of the shot study is the 10-client full-data run). --num_shot 0 = no
 # few-shot subset. Speed probe first (2026-11-13): S sym, seed 0 only, to measure real full-data times.
@@ -290,7 +298,8 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             # 8-shot look-alike ablation gatefnm (results/side-research/merge_ablation/plan.md): rates of the
             # 8-shot gatef Kaggle runs (slowest): Pets 1.40 h, DTD 1.59 h, Caltech 4.18 h, MNIST 0.77 h, EuroSAT 0.45 h
             "oxford_pets|gatefnm": 19.8, "dtd|gatefnm": 22.4, "caltech101|gatefnm": 59.0,
-            "mnist|gatefnm": 10.9, "eurosat|gatefnm": 6.4}
+            "mnist|gatefnm": 10.9, "eurosat|gatefnm": 6.4,
+            "eurosat|gatefnmcn8": 6.8}   # = measured gatefcn8 (eurosat8_23)
 
 
 def md(text):
