@@ -1,0 +1,29 @@
+{
+ "eurosat_S_clean_zscn": {
+  "dataset": "eurosat",
+  "arm": "S_clean_zscn",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0",
+   "--noisy_client_frac",
+   "0",
+   "--prompt_algo",
+   "CLIP",
+   "--coop_classnames",
+   "true"
+  ],
+  "returncode": 0,
+  "seconds": 78.3,
+  "notebook": "eurosat8_23"
+ }
+}

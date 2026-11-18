@@ -26,14 +26,14 @@ Hours = Kaggle wall time per run (5 seeds).
 | N sym25 | 57.11 | 61.61 | 0.99 | +4.50 | 54.99 | 58.94 | +3.95 | 7.76 | 1.94 |
 | N sym50 | 52.74 | 57.30 | 0.46 | +4.56 | 47.99 | 54.78 | +6.79 | 8.43 | 1.93 |
 | N sym75 | 37.73 | 50.23 | 1.08 | +12.50 | 35.26 | 47.64 | +12.38 | 7.78 | 2.02 |
-| N pair25 | 50.63 | — | — | — | 49.35 | 59.08 | +9.73 | — | 1.96 |
+| N pair25 | 50.63 | 61.22 | 0.83 | +10.59 | 49.35 | 59.08 | +9.73 | 8.18 | 1.96 |
 | N pair50 | 31.88 | 54.93 | 0.77 | +23.04 | 31.09 | 53.39 | +22.29 | 7.78 | 2.09 |
 | N pair75 | 10.27 | 45.64 | 0.46 | +35.37 | 9.77 | 44.86 | +35.08 | 7.94 | 1.97 |
 
-FedCLEAR > PromptFL on full data: 11/11
+FedCLEAR > PromptFL on full data: 12/12 (grid complete)
 
 Merged: full_pets_1, full_dtd_3 (2026-11-16); full_pfl_7, full_pets_8, full_dtd_9, full_pets_10, full_dtd_11,
 full_pets_12, full_dtd_13, full_pets_14, full_dtd_15, full_pets_16, full_pets_18, full_dtd_19 (2026-11-17).
 All rc 0, 5 seeds each. The DTD PromptFL bonus runs (pair50, pair75, sym75) all finished.
-Only DTD N pair25 FedCLEAR is still missing. full_pets_8 also carried the 32-shot Pets S inst PromptFL seed 4
+full_dtd_20 (DTD N pair25 FedCLEAR, 2026-11-18) completes the grid. full_pets_8 also carried the 32-shot Pets S inst PromptFL seed 4
 rerun, merged into results/32-shot.

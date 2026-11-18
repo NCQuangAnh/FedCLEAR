@@ -246,7 +246,7 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             # PromptFL N 0.36-0.37 h, PromptFL S with --diag_scores 0.53-0.58 h per 5-seed run; x1.05 margin.
             # pflcn8L (S, --log_signals, no --diag_scores) is a guess. zscn trains nothing.
             "eurosat|gatefcn": 8.5, "eurosat|pflcn": 6.3, "eurosat|pflcnD": 11.0, "eurosat|zscn": 1.0,
-            "eurosat|gatefcn8": 6.2, "eurosat|pflcn8": 5.5, "eurosat|pflcn8L": 7.0,
+            "eurosat|gatefcn8": 6.8, "eurosat|pflcn8": 5.5, "eurosat|pflcn8L": 7.5,   # measured eurosat8_23 (slowest run)
             "mnist|pflcn16": 10.0, "mnist|pflcn16D": 17.2,
             "oxford_pets|pflcn16": 13.1, "oxford_pets|pflcn16D": 40.6,   # Pets N: 0.90-0.93 h (s16_pfl_caltech_3)
             # DTD PromptFL N 16-shot measured 0.91-0.93 h (s16_caltech_11, s16_pfl_caltech_6, 2026-11-07)
