@@ -7,7 +7,7 @@ import json, shutil, sys
 from pathlib import Path
 src_root = Path(sys.argv[1]); dst_root = Path(sys.argv[2]); nbs = sys.argv[3:]
 DS = {"caltech101": "Caltech101", "eurosat": "EuroSAT", "mnist": "MNIST", "oxford_pets": "Pets", "dtd": "DTD"}
-ME = {"gatefcn16": "FedCLEAR", "pflcn16": "PromptFL", "pflcn32": "PromptFL", "gatefcn32": "FedCLEAR", "pflcn64": "PromptFL", "gatefcn64": "FedCLEAR", "pflcnfull": "PromptFL", "gatefcnfull": "FedCLEAR", "gatefcn8": "FedCLEAR", "pflcn8": "PromptFL", "zscn": "ZeroShot"}
+ME = {"gatefcn16": "FedCLEAR", "pflcn16": "PromptFL", "pflcn32": "PromptFL", "gatefcn32": "FedCLEAR", "pflcn64": "PromptFL", "gatefcn64": "FedCLEAR", "pflcnfull": "PromptFL", "gatefcnfull": "FedCLEAR", "gatefcn8": "FedCLEAR", "pflcn8": "PromptFL", "zscn": "ZeroShot", "corrcn8": "FedCorr", "rgcn8": "FedRG", "nlpcn8": "NLPrompt", "proxcn8": "FedProx"}
 for nb in nbs:
     src = src_root / nb
     idx = json.loads((src / "run_index.json").read_text())
