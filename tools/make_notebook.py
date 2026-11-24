@@ -205,6 +205,11 @@ for _sc in SCENARIOS:
 for _tag in ("sym", "pair"):
     for _r in ("25", "50", "75"):
         ARM_ARGS[f"N_{_tag}{_r}_gatefnmcn8"] = ARM_ARGS[f"N_{_tag}{_r}_gatefnm"] + CN
+# Eq. 4 with P-bar weights (2026-11-24, user's request): gatefcn8 with --sure_score xs_mb, every other
+# hyperparameter unchanged (tau 0.05 too); comparator = paper FedCLEAR EuroSAT 8-shot (gatefcn8, seeds 0-4)
+for _tag in ("sym", "pair"):
+    for _r in ("25", "50", "75"):
+        ARM_ARGS[f"N_{_tag}{_r}_gatefpbcn8"] = ARM_ARGS[f"N_{_tag}{_r}_gatefcn8"] + ("--sure_score", "xs_mb")
 
 # Full data and client variation (supervisor, PAKDD_12pages.tex: "chay het du lieu voi 10, 20, 50, 100
 # clients"; the "all" column of the shot study is the 10-client full-data run). --num_shot 0 = no
@@ -299,7 +304,7 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             # 8-shot gatef Kaggle runs (slowest): Pets 1.40 h, DTD 1.59 h, Caltech 4.18 h, MNIST 0.77 h, EuroSAT 0.45 h
             "oxford_pets|gatefnm": 19.8, "dtd|gatefnm": 22.4, "caltech101|gatefnm": 59.0,
             "mnist|gatefnm": 10.9, "eurosat|gatefnm": 6.4,
-            "eurosat|gatefnmcn8": 6.8}   # = measured gatefcn8 (eurosat8_23)
+            "eurosat|gatefnmcn8": 6.8, "eurosat|gatefpbcn8": 6.8}   # = measured gatefcn8 (eurosat8_23)
 
 
 def md(text):

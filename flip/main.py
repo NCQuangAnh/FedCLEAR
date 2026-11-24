@@ -342,7 +342,7 @@ if __name__ == "__main__":
                              "above --sure_tau, and repair a flagged client's suspect images")
     parser.add_argument("--sure_dist", type=str, default='e', choices=['e', 'g'],
                         help="e: global prompt averaged with zero-shot CLIP; g: global prompt only")
-    parser.add_argument("--sure_score", type=str, default='xs_m', choices=['xs_m', 'xs', 'dis'],
+    parser.add_argument("--sure_score", type=str, default='xs_m', choices=['xs_m', 'xs', 'dis', 'xs_mb'],
                         help="client score: merged excess surprise, plain excess surprise, or the "
                              "old disagreement")
     parser.add_argument("--sure_tau", type=float, default=0.05,

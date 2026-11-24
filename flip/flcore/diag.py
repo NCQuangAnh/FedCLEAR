@@ -22,6 +22,7 @@ nearest to y in CLIP's zero-shot text space):
            unsure about (look-alike classes, a hard or rare class) costs little; a label that
            contradicts a confident prediction costs a lot
   xs_m     the same with y merged with nn(y), on both sides
+  xs_mb    xs_m with the merged P-bar (sum about 2) also weighting the expected term
   xp       sum_k P_k^2 - P_y: the bounded version of xs (expected minus observed probability
            of the label under P)
   f30/f50  share of images with xp > 0.3 / 0.5, a count version that estimates contamination
@@ -149,6 +150,10 @@ def _scores(P, y, nn):
         obs = (-merged[idx, y].clamp_min(eps).log()).clamp(max=NLL_CLIP)
         exp_ = (P * (-merged.clamp_min(eps).log()).clamp(max=NLL_CLIP)).sum(dim=1)
         out['xs_m'] = float((obs - exp_).mean())
+        # xs_mb: Eq. 4 with the merged P-bar also as the weights of the expected term (not normalised;
+        # the weights sum to 1 + sum_k P_nn(k), about 2) - user's comparison run 2026-11-24
+        exp_b = (merged * (-merged.clamp_min(eps).log()).clamp(max=NLL_CLIP)).sum(dim=1)
+        out['xs_mb'] = float((obs - exp_b).mean())
     return out
 
 
