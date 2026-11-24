@@ -1,0 +1,15 @@
+# CLIP ViT-B/16 backbone check (2026-11-24): EuroSAT FedCLEAR + PromptFL, then the Pets PromptFL N runs.
+# Pets FedCLEAR and Pets PromptFL S run on Kaggle (vit_pets_1, vit_pets_2).
+eurosat S_sym_gatefv16
+eurosat S_sym_pflv16
+eurosat S_pair_gatefv16
+eurosat S_pair_pflv16
+eurosat N_sym50_gatefv16
+eurosat N_sym50_pflv16
+eurosat N_pair50_gatefv16
+eurosat N_pair50_pflv16
+eurosat N_pair75_gatefv16
+eurosat N_pair75_pflv16
+oxford_pets N_sym50_pflv16
+oxford_pets N_pair50_pflv16
+oxford_pets N_pair75_pflv16

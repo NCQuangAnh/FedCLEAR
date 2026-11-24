@@ -205,6 +205,16 @@ for _sc in SCENARIOS:
 for _tag in ("sym", "pair"):
     for _r in ("25", "50", "75"):
         ARM_ARGS[f"N_{_tag}{_r}_gatefnmcn8"] = ARM_ARGS[f"N_{_tag}{_r}_gatefnm"] + CN
+# Backbone check (2026-11-24, reviewer point "one backbone"): CLIP ViT-B/16 image encoder instead of RN50,
+# everything else = the paper's 8-shot arms (gatefcn8 FedCLEAR, pflcn8 PromptFL); argparse keeps the last
+# --image_backbone, so this overrides COMMON's RN50. Pets + EuroSAT, S sym/pair, N sym50/pair50/pair75.
+VIT = ("--image_backbone", "ViT-B/16")
+for _sc in ("sym", "pair"):
+    ARM_ARGS[f"S_{_sc}_gatefv16"] = ARM_ARGS[f"S_{_sc}_gatefcn8"] + VIT
+    ARM_ARGS[f"S_{_sc}_pflv16"] = ARM_ARGS[f"S_{_sc}_pflcn8"] + VIT
+for _k in ("sym50", "pair50", "pair75"):
+    ARM_ARGS[f"N_{_k}_gatefv16"] = ARM_ARGS[f"N_{_k}_gatefcn8"] + VIT
+    ARM_ARGS[f"N_{_k}_pflv16"] = ARM_ARGS[f"N_{_k}_pflcn8"] + VIT
 # Eq. 4 with P-bar weights (2026-11-24, user's request): gatefcn8 with --sure_score xs_mb, every other
 # hyperparameter unchanged (tau 0.05 too); comparator = paper FedCLEAR EuroSAT 8-shot (gatefcn8, seeds 0-4)
 for _tag in ("sym", "pair"):
@@ -304,7 +314,10 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             # 8-shot gatef Kaggle runs (slowest): Pets 1.40 h, DTD 1.59 h, Caltech 4.18 h, MNIST 0.77 h, EuroSAT 0.45 h
             "oxford_pets|gatefnm": 19.8, "dtd|gatefnm": 22.4, "caltech101|gatefnm": 59.0,
             "mnist|gatefnm": 10.9, "eurosat|gatefnm": 6.4,
-            "eurosat|gatefnmcn8": 6.8, "eurosat|gatefpbcn8": 6.8}   # = measured gatefcn8 (eurosat8_23)
+            "eurosat|gatefnmcn8": 6.8, "eurosat|gatefpbcn8": 6.8,
+            # ViT-B/16 guesses = 8-shot RN50 rate x 2 (Pets gatef 1.40 h = 19.8 s/round; Pets PromptFL ~8)
+            "oxford_pets|gatefv16": 40.0, "oxford_pets|pflv16": 16.0, "oxford_pets|pflv16L": 27.0,
+            "eurosat|gatefv16": 14.0, "eurosat|pflv16": 11.0, "eurosat|pflv16L": 15.0}   # = measured gatefcn8 (eurosat8_23)
 
 
 def md(text):
