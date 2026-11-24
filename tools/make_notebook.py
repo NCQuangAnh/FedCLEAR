@@ -265,6 +265,16 @@ for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
 # seconds per round on a Kaggle T4 for a --sure run; replaced by the measured rate after the
 # first run of a session
 # 2026-11-05: Pets, DTD, Caltech set to the measured FedCLEAR 16-shot rates (8-shot: 22 / 25 / 50)
+# 50 clients on full data (2026-11-24, reviewer point "ten clients"; supervisor's client study 10/20/50/100):
+# the full-data arms (gatefcnfull / pflcnfull, Dirichlet alpha 0.1, every client takes part each round) with
+# --num_clients 50; noisy fractions stay (S sym: 15 of 50 clients). FedCLEAR is split into seeds 0-2 (a) and
+# 3-4 (b) so each part fits a Kaggle notebook; merge the two into one 5-seed run.
+C50 = ("--num_clients", "50")
+for _k, _base in (("S_sym", "S_sym"), ("N_sym50", "N_sym50"), ("N_pair50", "N_pair50")):
+    ARM_ARGS[f"{_k}_gatefc50a"] = ARM_ARGS[f"{_base}_gatefcnfull"] + C50 + ("--seed", "0", "--times", "3")
+    ARM_ARGS[f"{_k}_gatefc50b"] = ARM_ARGS[f"{_base}_gatefcnfull"] + C50 + ("--seed", "3", "--times", "2")
+    ARM_ARGS[f"{_k}_pflc50"] = ARM_ARGS[f"{_base}_pflcnfull"] + C50
+
 SEC_PER_ROUND = {"oxford_pets": 31.0, "dtd": 37.5, "caltech101": 103.0,
                  "mnist": 10.5, "eurosat": 10.0}   # MNIST: FedCLEAR 16-shot measured 9.8-10.5 (s16_mnist_3, about the 8-shot time); EuroSAT: guess, PromptFL EuroSAT measured 5.2   # --sure runs; D_ runs with scores take ~1.3x
 # measured per-method rates (s per round, 16 shots) that seed the notebook's rate table:
@@ -317,7 +327,10 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             "eurosat|gatefnmcn8": 6.8, "eurosat|gatefpbcn8": 6.8,
             # ViT-B/16 guesses = 8-shot RN50 rate x 2 (Pets gatef 1.40 h = 19.8 s/round; Pets PromptFL ~8)
             "oxford_pets|gatefv16": 40.0, "oxford_pets|pflv16": 16.0, "oxford_pets|pflv16L": 27.0,
-            "eurosat|gatefv16": 14.0, "eurosat|pflv16": 11.0, "eurosat|pflv16L": 15.0}   # = measured gatefcn8 (eurosat8_23)
+            "eurosat|gatefv16": 14.0, "eurosat|pflv16": 11.0, "eurosat|pflv16L": 15.0,
+            # 50 clients full data: 10-client full rates (Pets 113.5 / DTD 124.5 FedCLEAR, PromptFL N 23, S 58) + ~25% guess
+            "oxford_pets|gatefc50a": 140.0, "oxford_pets|gatefc50b": 140.0, "dtd|gatefc50a": 155.0, "dtd|gatefc50b": 155.0,
+            "oxford_pets|pflc50": 30.0, "oxford_pets|pflc50L": 72.0, "dtd|pflc50": 30.0, "dtd|pflc50L": 72.0}   # = measured gatefcn8 (eurosat8_23)
 
 
 def md(text):
