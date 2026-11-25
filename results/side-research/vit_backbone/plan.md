@@ -32,3 +32,8 @@ S sym, S pair, ~8.9 h), `vit_mnist_5` (MNIST FedCLEAR N x3 + PromptFL all 5, ~6.
 Fixed before the runs: report every setting; read each dataset as above (mean difference, wins out
 of 5, gate opens vs RN50). The Pets / EuroSAT verdict stands on its own; DTD and MNIST are reported
 per dataset, and a negative mean on either is stated as such.
+
+## Extension 2026-11-25: Caltech101 on the server (user request)
+
+Same 10 arms, server queue `queue_vit_caltech` (run alone on the GPU). Caltech folder names are already
+the CoOp names, so the RN50 comparators are the paper's 8-shot runs. Same reading rule as above.

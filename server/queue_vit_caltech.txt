@@ -1,0 +1,12 @@
+# CLIP ViT-B/16 backbone check, Caltech101 (2026-11-25): FedCLEAR + PromptFL, 5 settings, seeds 0-4.
+# Same arms as queue_vit; Caltech folder names are already the CoOp names. Run alone on the GPU.
+caltech101 S_sym_gatefv16
+caltech101 S_sym_pflv16
+caltech101 S_pair_gatefv16
+caltech101 S_pair_pflv16
+caltech101 N_sym50_gatefv16
+caltech101 N_sym50_pflv16
+caltech101 N_pair50_gatefv16
+caltech101 N_pair50_pflv16
+caltech101 N_pair75_gatefv16
+caltech101 N_pair75_pflv16
