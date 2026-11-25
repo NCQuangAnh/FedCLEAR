@@ -119,6 +119,11 @@ class FedAvg(ServerBase):
                 self.clients[c].zs_text_feats = self.zs_text_feats
                 self.clients[c].init(self.model, self.rounds)
                 profiles.append(cal_profile(self.clients[c]))
+                # free this client's model copy now: the training loop below makes a fresh one, and
+                # keeping all copies alive at once runs a 16 GB GPU out of memory with 50 clients
+                for attr in ('model', 'optimizer', 'lr_scheduler'):
+                    if hasattr(self.clients[c], attr):
+                        delattr(self.clients[c], attr)
             T_fit = cal_pick(profiles)
             tmax = float(getattr(self.args, 'sure_cal_tmax', 0.0) or 0.0)
             # --sure_cal_tmax: P is already softened by the zero-shot mix; a fitted T above the cap

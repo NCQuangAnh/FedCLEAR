@@ -328,6 +328,11 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             # ViT-B/16 guesses = 8-shot RN50 rate x 2 (Pets gatef 1.40 h = 19.8 s/round; Pets PromptFL ~8)
             "oxford_pets|gatefv16": 40.0, "oxford_pets|pflv16": 16.0, "oxford_pets|pflv16L": 27.0,
             "eurosat|gatefv16": 14.0, "eurosat|pflv16": 11.0, "eurosat|pflv16L": 15.0,
+            # measured 2026-11-25 (vit_pets_1-2, slowest run): Pets FedCLEAR 1.83 h = 25.8, PromptFL S 1.18 h = 16.7,
+            # i.e. ViT / RN50 = 1.31 for FedCLEAR. DTD / MNIST guesses = 8-shot RN50 gatef rate x 1.31 + 5%;
+            # PromptFL = Pets ViT PromptFL rates scaled like FedCLEAR (DTD x 1.2, MNIST x 0.6), rounded up
+            "dtd|gatefv16": 31.0, "dtd|pflv16": 12.0, "dtd|pflv16L": 20.0,
+            "mnist|gatefv16": 15.0, "mnist|pflv16": 8.0, "mnist|pflv16L": 12.0,
             # 50 clients full data: 10-client full rates (Pets 113.5 / DTD 124.5 FedCLEAR, PromptFL N 23, S 58) + ~25% guess
             "oxford_pets|gatefc50a": 140.0, "oxford_pets|gatefc50b": 140.0, "dtd|gatefc50a": 155.0, "dtd|gatefc50b": 155.0,
             "oxford_pets|pflc50": 30.0, "oxford_pets|pflc50L": 72.0, "dtd|pflc50": 30.0, "dtd|pflc50L": 72.0}   # = measured gatefcn8 (eurosat8_23)

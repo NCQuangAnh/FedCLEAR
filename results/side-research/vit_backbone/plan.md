@@ -21,3 +21,14 @@ Fixed before the runs:
   number of runs in which the gate opens (compare with RN50).
 - Claim "the result carries over to ViT-B/16" only if FedCLEAR's mean difference is positive on both
   datasets; otherwise state where it fails.
+
+## Extension 2026-11-25: DTD and MNIST (user decision after the Pets / EuroSAT result)
+
+Same arms, settings, seeds and hyperparameters; FedRG still left out. CoOp class names change nothing
+on DTD or MNIST (empty rename table), so the RN50 comparators are the paper's 8-shot runs.
+Kaggle: `vit_dtd_3` (DTD FedCLEAR S sym, S pair, N sym50, N pair50 + PromptFL N sym50, ~9.6 h),
+`vit_dtd_mnist_4` (DTD FedCLEAR N pair75 + PromptFL N pair50, N pair75, S sym, S pair; MNIST FedCLEAR
+S sym, S pair, ~8.9 h), `vit_mnist_5` (MNIST FedCLEAR N x3 + PromptFL all 5, ~6.6 h).
+Fixed before the runs: report every setting; read each dataset as above (mean difference, wins out
+of 5, gate opens vs RN50). The Pets / EuroSAT verdict stands on its own; DTD and MNIST are reported
+per dataset, and a negative mean on either is stated as such.
