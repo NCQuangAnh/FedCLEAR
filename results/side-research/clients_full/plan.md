@@ -35,3 +35,4 @@ First notebook: c50_pfl_9 (PromptFL DTD N pair50, Pets N pair50, Pets N pair75; 
 Then c50_10 (FedCLEAR Pets N pair75 seeds 0-2 + PromptFL DTD N pair75; ~9.4 h, --hours=10.5).
 Then c50_11 (FedCLEAR DTD N pair75 seeds 0-2 + PromptFL Pets N sym25; ~9.5 h, --hours=10.5).
 Then c50_12 (FedCLEAR Pets N sym25 seeds 0-2 + PromptFL DTD N sym25; ~9.4 h, --hours=10.5).
+Then c50_13 (FedCLEAR DTD N sym25 seeds 0-4; ~9.9 h).
