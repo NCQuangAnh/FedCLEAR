@@ -33,3 +33,4 @@ flip/.git-upstream/
 results/ViT/
 results/side-research/vit_backbone/
 kaggle/vit_*.ipynb
+server/queue_vit_s2.txt
