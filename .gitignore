@@ -28,3 +28,8 @@ desktop.ini
 # Upstream FLiP clone (0-ml/flip @ ec3a848); diff with:
 #   git --git-dir=flip/.git-upstream --work-tree=flip diff
 flip/.git-upstream/
+
+# ViT-B/16 check: kept local only, not for the paper (user 2026-11-26)
+results/ViT/
+results/side-research/vit_backbone/
+kaggle/vit_*.ipynb

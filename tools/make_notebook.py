@@ -341,13 +341,15 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             # PromptFL = Pets ViT PromptFL rates scaled like FedCLEAR (DTD x 1.2, MNIST x 0.6), rounded up
             "dtd|gatefv16": 31.0, "dtd|pflv16": 12.0, "dtd|pflv16L": 20.0,
             "mnist|gatefv16": 15.0, "mnist|pflv16": 8.0, "mnist|pflv16L": 12.0,
-            # 50 clients full data: 10-client full rates (Pets 113.5 / DTD 124.5 FedCLEAR, PromptFL N 23, S 58) + ~25% guess
-            "oxford_pets|gatefc50a": 140.0, "oxford_pets|gatefc50b": 140.0, "dtd|gatefc50a": 155.0, "dtd|gatefc50b": 155.0,
-            "oxford_pets|pflc50": 30.0, "oxford_pets|pflc50L": 72.0, "dtd|pflc50": 30.0, "dtd|pflc50L": 72.0,
+            # 50 clients full data, measured 2026-11-26 (c50_* notebooks, slowest run per arm)
+            "oxford_pets|gatefc50a": 140.0, "oxford_pets|gatefc50b": 140.0, "dtd|gatefc50a": 142.0, "dtd|gatefc50b": 142.0,
+            "oxford_pets|pflc50": 50.5, "oxford_pets|pflc50L": 82.0, "dtd|pflc50": 52.0, "dtd|pflc50L": 83.5,
             # 100 clients full data (guess): client training cost = 0.35 s fixed + 0.022 s per image (fit on the
             # Pets 8-shot and full logs), i.e. +30 s per round over 10 clients, plus per-client calibration
-            "oxford_pets|gatefc100a": 185.0, "oxford_pets|gatefc100b": 185.0, "dtd|gatefc100a": 190.0, "dtd|gatefc100b": 190.0,
-            "oxford_pets|pflc100": 60.0, "oxford_pets|pflc100L": 95.0, "dtd|pflc100": 60.0, "dtd|pflc100L": 95.0}   # = measured gatefcn8 (eurosat8_23)
+            # measured 2026-11-26: gatefc100a Pets 162, DTD 175; gatefc100b Pets 174; pflc100 Pets N 73.
+            # pflc100L still a guess = 73 x 1.63 (S / N ratio at 50 clients)
+            "oxford_pets|gatefc100a": 162.0, "oxford_pets|gatefc100b": 174.0, "dtd|gatefc100a": 175.0, "dtd|gatefc100b": 175.0,
+            "oxford_pets|pflc100": 73.0, "oxford_pets|pflc100L": 119.0, "dtd|pflc100": 73.0, "dtd|pflc100L": 119.0}   # = measured gatefcn8 (eurosat8_23)
 
 
 def md(text):

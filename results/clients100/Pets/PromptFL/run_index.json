@@ -1,0 +1,31 @@
+{
+ "oxford_pets_N_sym50_pflc100": {
+  "dataset": "oxford_pets",
+  "arm": "N_sym50_pflc100",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0.5",
+   "--noisy_client_frac",
+   "1.0",
+   "--coop_classnames",
+   "true",
+   "--num_shot",
+   "0",
+   "--num_clients",
+   "100"
+  ],
+  "returncode": 0,
+  "seconds": 18256.3,
+  "notebook": "c100_pets_7"
+ }
+}
