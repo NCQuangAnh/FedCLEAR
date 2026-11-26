@@ -32,3 +32,4 @@ Arms `gatefc50a/b` and `pflc50` now exist for N sym25 / sym50 / sym75 / pair25 /
 Full Scenario 2 at 50 clients needs 18 more runs: PromptFL N pair50 x2 (skipped for time) plus the 4 new
 settings x 2 methods x 2 datasets; about 110 Kaggle hours (FedCLEAR ~9.7 h per 5-seed run, PromptFL ~3.6 h).
 First notebook: c50_pfl_9 (PromptFL DTD N pair50, Pets N pair50, Pets N pair75; ~10.6 h). Same reading rule.
+Then c50_10 (FedCLEAR Pets N pair75 seeds 0-2 + PromptFL DTD N pair75; ~9.4 h, --hours=10.5).
