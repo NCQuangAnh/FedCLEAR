@@ -39,3 +39,11 @@ Then c50_13 (FedCLEAR DTD N sym25 seeds 0-4; ~9.9 h).
 Then c50_14 (FedCLEAR Pets N pair75 seeds 3-4 + PromptFL Pets N sym75; ~7.4 h) and c50_15 (FedCLEAR DTD N pair75 seeds 3-4 + PromptFL Pets N pair25; ~7.5 h), both --hours=8.
 Then c50_pfl_16 (PromptFL DTD N sym75, N pair25; ~7.2 h) and c50_17 (FedCLEAR Pets N sym25 + N sym75 seeds 3-4; ~7.8 h, --hours=8.5).
 Then c50_18 (FedCLEAR DTD N sym75 seeds 0-4; ~9.9 h).
+
+## Decision 2026-11-26 (user): 50 and 100 clients = Scenario 2 only
+
+S sym is dropped at 50 and 100 clients (10 clients has no PromptFL S sym full-data run, so it cannot be compared).
+The S sym runs already done stay as extras. Removed before running: c100_dtd_9 (DTD S sym FedCLEAR seeds 3-4 +
+DTD N sym50 PromptFL), c100_pfl_12, c100_pfl_13 (PromptFL S sym). Kept: c100_pets_8, c100_dtd_10, c100_b_11.
+Still needed at 100 clients, built only when the user asks: DTD N sym50 PromptFL (~5.1 h), then N sym25 / sym75 /
+pair25 / pair75 for both datasets and both methods (~34 h per setting).
