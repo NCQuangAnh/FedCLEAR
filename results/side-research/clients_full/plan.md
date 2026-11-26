@@ -36,3 +36,4 @@ Then c50_10 (FedCLEAR Pets N pair75 seeds 0-2 + PromptFL DTD N pair75; ~9.4 h, -
 Then c50_11 (FedCLEAR DTD N pair75 seeds 0-2 + PromptFL Pets N sym25; ~9.5 h, --hours=10.5).
 Then c50_12 (FedCLEAR Pets N sym25 seeds 0-2 + PromptFL DTD N sym25; ~9.4 h, --hours=10.5).
 Then c50_13 (FedCLEAR DTD N sym25 seeds 0-4; ~9.9 h).
+Then c50_14 (FedCLEAR Pets N pair75 seeds 3-4 + PromptFL Pets N sym75; ~7.4 h) and c50_15 (FedCLEAR DTD N pair75 seeds 3-4 + PromptFL Pets N pair25; ~7.5 h), both --hours=8.
