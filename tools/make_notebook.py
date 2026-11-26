@@ -270,7 +270,8 @@ for _nt, _tag in (("sym", "sym"), ("pair", "pair")):
 # --num_clients 50; noisy fractions stay (S sym: 15 of 50 clients). FedCLEAR is split into seeds 0-2 (a) and
 # 3-4 (b) so each part fits a Kaggle notebook; merge the two into one 5-seed run.
 C50 = ("--num_clients", "50")
-for _k, _base in (("S_sym", "S_sym"), ("N_sym50", "N_sym50"), ("N_pair50", "N_pair50")):
+# 2026-11-26 (user): all of Scenario 2 at 50 clients (adds N sym25/sym75/pair25/pair75)
+for _k, _base in ((x, x) for x in ("S_sym", "N_sym25", "N_sym50", "N_sym75", "N_pair25", "N_pair50", "N_pair75")):
     ARM_ARGS[f"{_k}_gatefc50a"] = ARM_ARGS[f"{_base}_gatefcnfull"] + C50 + ("--seed", "0", "--times", "3")
     ARM_ARGS[f"{_k}_gatefc50b"] = ARM_ARGS[f"{_base}_gatefcnfull"] + C50 + ("--seed", "3", "--times", "2")
     ARM_ARGS[f"{_k}_pflc50"] = ARM_ARGS[f"{_base}_pflcnfull"] + C50

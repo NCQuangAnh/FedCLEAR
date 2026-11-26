@@ -25,3 +25,10 @@ Per dataset and client count, Δ = FedCLEAR - PromptFL, averaged over the 3 sett
 - A single-setting gap smaller than 2 seed std is not called a win or a loss.
 - Also report how FedCLEAR accuracy changes from 10 to 50 to 100 clients. This is descriptive only, with no
   claim attached.
+
+## Extension 2026-11-26: all of Scenario 2 at 50 clients (user request)
+
+Arms `gatefc50a/b` and `pflc50` now exist for N sym25 / sym50 / sym75 / pair25 / pair50 / pair75 (Pets, DTD).
+Full Scenario 2 at 50 clients needs 18 more runs: PromptFL N pair50 x2 (skipped for time) plus the 4 new
+settings x 2 methods x 2 datasets; about 110 Kaggle hours (FedCLEAR ~9.7 h per 5-seed run, PromptFL ~3.6 h).
+First notebook: c50_pfl_9 (PromptFL DTD N pair50, Pets N pair50, Pets N pair75; ~10.6 h). Same reading rule.
