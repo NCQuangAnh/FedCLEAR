@@ -50,3 +50,4 @@ pair25 / pair75 for both datasets and both methods (~34 h per setting).
 Then (2026-11-27) c50_19 (FedCLEAR DTD N pair25 seeds 0-4; ~10.9 h) and c50_20 (FedCLEAR Pets N pair25 seeds 0-4; ~9.9 h), 12 h notebooks. Left after these: FedCLEAR Pets N sym75 seeds 0-2 (~5.7 h).
 Then (2026-11-27) c50_17 ran only Pets N sym25 seeds 3-4 (N sym75 seeds 3-4 skipped for time), so c50_21 = FedCLEAR Pets N sym75 seeds 0-4 (~10.1 h), the last 50-client run.
 2026-11-27 (user asked for 2 notebooks): 100-client arms now cover all of Scenario 2. c100_pfl_14 (PromptFL DTD N sym50 + Pets N sym25; ~10.5 h) and c100_15 (FedCLEAR Pets N sym25 seeds 3-4 + PromptFL DTD N sym25; ~10.3 h). Still unrun: c100_pets_8, c100_dtd_10, c100_b_11.
+Then c100_16 (FedCLEAR DTD N sym25 seeds 3-4 + PromptFL Pets N sym75; ~10.3 h) and c100_pfl_17 (PromptFL DTD N sym75 + Pets N pair25; ~10.5 h). FedCLEAR seeds 0-2 halves (~7 h each) do not pair with another run under 11.5 h.
