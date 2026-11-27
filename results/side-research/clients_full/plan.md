@@ -48,3 +48,4 @@ DTD N sym50 PromptFL), c100_pfl_12, c100_pfl_13 (PromptFL S sym). Kept: c100_pet
 Still needed at 100 clients, built only when the user asks: DTD N sym50 PromptFL (~5.1 h), then N sym25 / sym75 /
 pair25 / pair75 for both datasets and both methods (~34 h per setting).
 Then (2026-11-27) c50_19 (FedCLEAR DTD N pair25 seeds 0-4; ~10.9 h) and c50_20 (FedCLEAR Pets N pair25 seeds 0-4; ~9.9 h), 12 h notebooks. Left after these: FedCLEAR Pets N sym75 seeds 0-2 (~5.7 h).
+Then (2026-11-27) c50_17 ran only Pets N sym25 seeds 3-4 (N sym75 seeds 3-4 skipped for time), so c50_21 = FedCLEAR Pets N sym75 seeds 0-4 (~10.1 h), the last 50-client run.

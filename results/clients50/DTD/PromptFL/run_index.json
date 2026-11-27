@@ -149,5 +149,63 @@
   "returncode": 0,
   "seconds": 12062.2,
   "notebook": "c50_pfl_9"
+ },
+ "dtd_N_sym75_pflc50": {
+  "dataset": "dtd",
+  "arm": "N_sym75_pflc50",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "sym",
+   "--noise_rate",
+   "0.75",
+   "--noisy_client_frac",
+   "1.0",
+   "--coop_classnames",
+   "true",
+   "--num_shot",
+   "0",
+   "--num_clients",
+   "50"
+  ],
+  "returncode": 0,
+  "seconds": 12973.0,
+  "notebook": "c50_pfl_16"
+ },
+ "dtd_N_pair25_pflc50": {
+  "dataset": "dtd",
+  "arm": "N_pair25_pflc50",
+  "args": [
+   "--attacker_model",
+   "data",
+   "--data_transform",
+   "paper",
+   "--attack_type",
+   "none",
+   "--malicious_client_frac",
+   "0",
+   "--noise_type",
+   "pair",
+   "--noise_rate",
+   "0.25",
+   "--noisy_client_frac",
+   "1.0",
+   "--coop_classnames",
+   "true",
+   "--num_shot",
+   "0",
+   "--num_clients",
+   "50"
+  ],
+  "returncode": 0,
+  "seconds": 13294.5,
+  "notebook": "c50_pfl_16"
  }
 }

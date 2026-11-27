@@ -10,7 +10,7 @@ which the referee gate opens. All runs rc 0.
 | Setting | 10: PromptFL | 10: FedCLEAR | Δ10 | 50: PromptFL | 50: FedCLEAR | Δ50 | 100: PromptFL | 100: FedCLEAR | Δ100 |
 |---|---|---|---|---|---|---|---|---|---|
 | S sym (extra) | — | 88.00 ±0.36 | — | 87.66 | 89.55 ±0.25 | +1.88 | — | 89.40 ±0.40 (5) | — |
-| N sym25 | 80.06 | 88.42 ±0.32 | +8.37 | 85.82 | 89.49 ±0.29 (3) | +3.67 | — | — | — |
+| N sym25 | 80.06 | 88.42 ±0.32 | +8.37 | 85.82 | 89.56 ±0.42 | +3.74 | — | — | — |
 | N sym50 | 73.66 | 87.18 ±1.00 | +13.52 | 81.22 | 88.74 ±0.27 | +7.52 | 79.24 | 87.99 ±0.92 (3) | +8.75 |
 | N sym75 | 48.98 | 84.40 ±1.14 | +35.42 | 57.29 | — | — | — | — | — |
 | N pair25 | 67.38 | 88.23 ±0.60 | +20.85 | 78.18 | — | — | — | — | — |
@@ -24,23 +24,21 @@ which the referee gate opens. All runs rc 0.
 | S sym (extra) | — | 61.50 ±0.92 | — | 59.48 | 60.76 ±1.15 | +1.29 | — | 57.67 ±2.44 (3) | — |
 | N sym25 | 57.11 | 61.61 ±1.11 | +4.50 | 57.09 | 58.18 ±1.07 | +1.08 | — | — | — |
 | N sym50 | 52.74 | 57.30 ±0.52 | +4.56 | 50.93 | 54.17 ±1.26 | +3.23 | — | 51.39 ±1.26 (3) | — |
-| N sym75 | 37.73 | 50.23 ±1.21 | +12.50 | — | 47.38 ±1.47 | — | — | — | — |
-| N pair25 | 50.63 | 61.22 ±0.93 | +10.60 | — | — | — | — | — | — |
+| N sym75 | 37.73 | 50.23 ±1.21 | +12.50 | 37.56 | 47.38 ±1.47 | +9.82 | — | — | — |
+| N pair25 | 50.63 | 61.22 ±0.93 | +10.60 | 53.79 | — | — | — | — | — |
 | N pair50 | 31.88 | 54.93 ±0.86 | +23.04 | 36.34 | 52.81 ±1.25 | +16.46 | — | 50.10 ±1.74 (3) | — |
 | N pair75 | 10.27 | 45.64 ±0.52 | +35.37 | 12.53 | 44.12 ±0.58 | +31.59 | — | — | — |
 
-Gate: open in every FedCLEAR run so far at 50 clients (61/61 seeds) and at 100 clients (17/17).
+Gate: open in every FedCLEAR run so far at 50 clients (63/63 seeds) and at 100 clients (17/17).
 
 ## What is missing
 
-- 50 clients (Scenario 2): FedCLEAR Pets N sym25 seeds 3-4 + N sym75 seeds 3-4 (c50_17, out), Pets N sym75
-  seeds 0-2 (not built), Pets N pair25 (c50_20), DTD N pair25 (c50_19); PromptFL DTD N sym75 + N pair25
-  (c50_pfl_16, out).
+- 50 clients (Scenario 2): only FedCLEAR N pair25 (c50_19 DTD, c50_20 Pets) and Pets N sym75 (c50_21).
 - 100 clients: kept notebooks c100_pets_8, c100_dtd_10, c100_b_11 (not run); the rest is built only when asked.
 
 ## Notes (descriptive, no claim yet)
 
-- Every Δ measured so far at 50 clients is positive (8/8 Scenario 2 cells, plus S sym). Smallest: DTD N sym25
+- Every Δ measured so far at 50 clients is positive (9/9 Scenario 2 cells, plus S sym). Smallest: DTD N sym25
   +1.08, which is about 1 seed std of FedCLEAR (1.07), so it is not called a win under the plan's rule.
 - Pets FedCLEAR barely moves with more clients (84-90 at 10, 50 and 100). DTD FedCLEAR drops a little at 50
   clients in every setting (N sym25 61.61 to 58.18, N sym75 50.23 to 47.38, N pair50 54.93 to 52.81).
