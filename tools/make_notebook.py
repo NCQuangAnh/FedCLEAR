@@ -279,7 +279,8 @@ for _k, _base in ((x, x) for x in ("S_sym", "N_sym25", "N_sym50", "N_sym75", "N_
 # min 5-11, median 29 images per client (simulated, Pets and DTD). 5 seeds do not fit one Kaggle notebook,
 # so FedCLEAR a (seeds 0-2) and b (seeds 3-4) go into separate notebooks; merge them into one 5-seed run.
 C100 = ("--num_clients", "100")
-for _k in ("S_sym", "N_sym50", "N_pair50"):
+# 2026-11-27 (user): rest of Scenario 2 at 100 clients (N sym25/sym75/pair25/pair75)
+for _k in ("S_sym", "N_sym25", "N_sym50", "N_sym75", "N_pair25", "N_pair50", "N_pair75"):
     ARM_ARGS[f"{_k}_gatefc100a"] = ARM_ARGS[f"{_k}_gatefcnfull"] + C100 + ("--seed", "0", "--times", "3")
     ARM_ARGS[f"{_k}_gatefc100b"] = ARM_ARGS[f"{_k}_gatefcnfull"] + C100 + ("--seed", "3", "--times", "2")
     ARM_ARGS[f"{_k}_pflc100"] = ARM_ARGS[f"{_k}_pflcnfull"] + C100
