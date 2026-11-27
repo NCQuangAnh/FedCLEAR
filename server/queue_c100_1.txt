@@ -1,13 +1,7 @@
-# 100 clients, full data, Scenario 2 (2026-11-27): FedCLEAR seeds 0-2 left after the Kaggle notebooks,
-# then the runs of c100_22 / c100_23 (FedCLEAR seeds 3-4, PromptFL seed 4). About 2 days with --per-gpu 2.
+# 100 clients, full data, Scenario 2 (2026-11-27): FedCLEAR seeds 0-2 left after the Kaggle notebooks
+# (c100_22 / c100_23 run on Kaggle). About 1-1.5 days with --per-gpu 2.
 oxford_pets N_pair75_gatefc100a
 dtd N_sym25_gatefc100a
 dtd N_sym75_gatefc100a
 dtd N_pair25_gatefc100a
 dtd N_pair75_gatefc100a
-dtd N_sym75_gatefc100b
-dtd N_pair25_gatefc100b
-dtd N_pair75_gatefc100b
-oxford_pets N_pair75_gatefc100b
-dtd N_pair25_pflc100b
-dtd N_pair75_pflc100b
