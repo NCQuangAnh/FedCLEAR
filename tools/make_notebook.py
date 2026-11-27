@@ -284,6 +284,9 @@ for _k in ("S_sym", "N_sym25", "N_sym50", "N_sym75", "N_pair25", "N_pair50", "N_
     ARM_ARGS[f"{_k}_gatefc100a"] = ARM_ARGS[f"{_k}_gatefcnfull"] + C100 + ("--seed", "0", "--times", "3")
     ARM_ARGS[f"{_k}_gatefc100b"] = ARM_ARGS[f"{_k}_gatefcnfull"] + C100 + ("--seed", "3", "--times", "2")
     ARM_ARGS[f"{_k}_pflc100"] = ARM_ARGS[f"{_k}_pflcnfull"] + C100
+    # 2026-11-27: PromptFL split into seeds 0-3 (a) and seed 4 (b) so a notebook can hold FedCLEAR a + PromptFL a (~11.2 h)
+    ARM_ARGS[f"{_k}_pflc100a"] = ARM_ARGS[f"{_k}_pflcnfull"] + C100 + ("--seed", "0", "--times", "4")
+    ARM_ARGS[f"{_k}_pflc100b"] = ARM_ARGS[f"{_k}_pflcnfull"] + C100 + ("--seed", "4", "--times", "1")
 
 SEC_PER_ROUND = {"oxford_pets": 31.0, "dtd": 37.5, "caltech101": 103.0,
                  "mnist": 10.5, "eurosat": 10.0}   # MNIST: FedCLEAR 16-shot measured 9.8-10.5 (s16_mnist_3, about the 8-shot time); EuroSAT: guess, PromptFL EuroSAT measured 5.2   # --sure runs; D_ runs with scores take ~1.3x
@@ -351,7 +354,7 @@ MEASURED = {"caltech101|pflcn16": 29.4, "caltech101|pflcn16D": 141.0, "caltech10
             # measured 2026-11-26: gatefc100a Pets 162, DTD 175; gatefc100b Pets 174; pflc100 Pets N 73.
             # pflc100L still a guess = 73 x 1.63 (S / N ratio at 50 clients)
             "oxford_pets|gatefc100a": 162.0, "oxford_pets|gatefc100b": 174.0, "dtd|gatefc100a": 175.0, "dtd|gatefc100b": 175.0,
-            "oxford_pets|pflc100": 73.0, "oxford_pets|pflc100L": 119.0, "dtd|pflc100": 73.0, "dtd|pflc100L": 119.0}   # = measured gatefcn8 (eurosat8_23)
+            "oxford_pets|pflc100": 73.0, "oxford_pets|pflc100a": 73.0, "oxford_pets|pflc100b": 73.0, "dtd|pflc100a": 73.0, "dtd|pflc100b": 73.0, "oxford_pets|pflc100L": 119.0, "dtd|pflc100": 73.0, "dtd|pflc100L": 119.0}   # = measured gatefcn8 (eurosat8_23)
 
 
 def md(text):
