@@ -1,4 +1,4 @@
-# Client-count study on full data: results so far (2026-11-26)
+# Client-count study on full data: results so far (2026-11-27)
 
 Plan and reading rule: plan.md (written before any result). Runs: `results/clients50/<Dataset>/<Method>`,
 `results/clients100/<Dataset>/<Method>`; 10 clients = `results/full`. Accuracy = mean of the last 10 rounds,
@@ -9,34 +9,41 @@ which the referee gate opens. All runs rc 0.
 
 | Setting | 10: PromptFL | 10: FedCLEAR | Δ10 | 50: PromptFL | 50: FedCLEAR | Δ50 | 100: PromptFL | 100: FedCLEAR | Δ100 |
 |---|---|---|---|---|---|---|---|---|---|
-| S sym | — | 88.00 ±0.36 | — | 87.66 | 89.55 ±0.25 | +1.88 | — | 89.40 ±0.40 (5) | — |
+| S sym (extra) | — | 88.00 ±0.36 | — | 87.66 | 89.55 ±0.25 | +1.88 | — | 89.40 ±0.40 (5) | — |
+| N sym25 | 80.06 | 88.42 ±0.32 | +8.37 | 85.82 | 89.49 ±0.29 (3) | +3.67 | — | — | — |
 | N sym50 | 73.66 | 87.18 ±1.00 | +13.52 | 81.22 | 88.74 ±0.27 | +7.52 | 79.24 | 87.99 ±0.92 (3) | +8.75 |
-| N pair50 | 40.75 | 86.72 ±0.85 | +45.97 | — | 88.23 ±0.60 | — | — | 88.52 ±0.49 (3) | — |
+| N sym75 | 48.98 | 84.40 ±1.14 | +35.42 | 57.29 | — | — | — | — | — |
+| N pair25 | 67.38 | 88.23 ±0.60 | +20.85 | 78.18 | — | — | — | — | — |
+| N pair50 | 40.75 | 86.72 ±0.85 | +45.97 | 50.09 | 88.23 ±0.60 | +38.14 | — | 88.52 ±0.49 (3) | — |
+| N pair75 | 14.69 | 80.26 ±2.55 | +65.57 | 18.78 | 84.52 ±1.46 | +65.74 | — | — | — |
 
 ## DTD
 
 | Setting | 10: PromptFL | 10: FedCLEAR | Δ10 | 50: PromptFL | 50: FedCLEAR | Δ50 | 100: PromptFL | 100: FedCLEAR | Δ100 |
 |---|---|---|---|---|---|---|---|---|---|
-| S sym | — | 61.50 ±0.92 | — | 59.48 | 60.76 ±1.15 | +1.29 | — | 57.67 ±2.44 (3) | — |
+| S sym (extra) | — | 61.50 ±0.92 | — | 59.48 | 60.76 ±1.15 | +1.29 | — | 57.67 ±2.44 (3) | — |
+| N sym25 | 57.11 | 61.61 ±1.11 | +4.50 | 57.09 | 58.18 ±1.07 | +1.08 | — | — | — |
 | N sym50 | 52.74 | 57.30 ±0.52 | +4.56 | 50.93 | 54.17 ±1.26 | +3.23 | — | 51.39 ±1.26 (3) | — |
-| N pair50 | 31.88 | 54.93 ±0.86 | +23.04 | — | 52.81 ±1.25 | — | — | 50.10 ±1.74 (3) | — |
+| N sym75 | 37.73 | 50.23 ±1.21 | +12.50 | — | 47.38 ±1.47 | — | — | — | — |
+| N pair25 | 50.63 | 61.22 ±0.93 | +10.60 | — | — | — | — | — | — |
+| N pair50 | 31.88 | 54.93 ±0.86 | +23.04 | 36.34 | 52.81 ±1.25 | +16.46 | — | 50.10 ±1.74 (3) | — |
+| N pair75 | 10.27 | 45.64 ±0.52 | +35.37 | 12.53 | 44.12 ±0.58 | +31.59 | — | — | — |
 
-Gate: open in every FedCLEAR run at 50 clients (30/30) and at 100 clients (17/17 so far).
+Gate: open in every FedCLEAR run so far at 50 clients (61/61 seeds) and at 100 clients (17/17).
 
 ## What is missing
 
-- 50 clients: PromptFL N pair50 on Pets and DTD (skipped for time in c50_pfl_pets_7 / c50_pfl_dtd_8).
-  10 clients has no PromptFL S sym full-data run.
-- 100 clients: FedCLEAR seeds 3-4 for Pets N sym50 / N pair50 and all DTD settings; PromptFL for all but
-  Pets N sym50. Notebooks still out: c100_pets_8, c100_dtd_9, c100_dtd_10, c100_b_11, c100_pfl_12, c100_pfl_13.
+- 50 clients (Scenario 2): FedCLEAR Pets N sym25 seeds 3-4 + N sym75 seeds 3-4 (c50_17, out), Pets N sym75
+  seeds 0-2 (not built), Pets N pair25 (c50_20), DTD N pair25 (c50_19); PromptFL DTD N sym75 + N pair25
+  (c50_pfl_16, out).
+- 100 clients: kept notebooks c100_pets_8, c100_dtd_10, c100_b_11 (not run); the rest is built only when asked.
 
 ## Notes (descriptive, no claim yet)
 
-- Every Δ measured so far is positive (5/5 cells at 50 clients plus Pets N sym50 at 100).
-  The rule needs the 3-setting mean per dataset, so it cannot be applied until the missing PromptFL runs are in.
-- Pets FedCLEAR barely moves with more clients (87-90 at 10, 50 and 100). DTD FedCLEAR drops as clients
-  grow: S sym 61.50 / 60.76 / 57.67, N pair50 54.93 / 52.81 / 50.10 (100-client values are 3 seeds).
-- PromptFL Pets N sym50 is higher with 50 clients (81.22) than with 10 (73.66), so Δ shrinks there
-  (+13.52 to +7.52).
-- Kaggle hours: 50 clients FedCLEAR 5.5-5.9 (3 seeds) and 3.7-3.9 (2 seeds), PromptFL S 5.7-5.8, N 3.5-3.6;
-  100 clients FedCLEAR 6.7-7.3 (3 seeds), 4.8 (2 seeds), PromptFL N 5.1.
+- Every Δ measured so far at 50 clients is positive (8/8 Scenario 2 cells, plus S sym). Smallest: DTD N sym25
+  +1.08, which is about 1 seed std of FedCLEAR (1.07), so it is not called a win under the plan's rule.
+- Pets FedCLEAR barely moves with more clients (84-90 at 10, 50 and 100). DTD FedCLEAR drops a little at 50
+  clients in every setting (N sym25 61.61 to 58.18, N sym75 50.23 to 47.38, N pair50 54.93 to 52.81).
+- PromptFL gains more from 50 clients than FedCLEAR does at low noise (Pets N sym25 80.06 to 85.82, N pair25
+  67.38 to 78.18), so Δ shrinks there; at 75% noise Δ stays about the same (Pets N pair75 +65.57 / +65.74).
+- Kaggle hours at 50 clients: FedCLEAR 5.6-6.3 (3 seeds), 3.6-4.4 (2 seeds); PromptFL N 3.35-3.60.
