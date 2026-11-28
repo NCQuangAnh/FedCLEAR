@@ -56,3 +56,4 @@ Then c100_20 (FedCLEAR Pets N sym25 seeds 0-2 + PromptFL DTD N pair75 seeds 0-3;
 Then c100_22 (FedCLEAR DTD N sym75 + N pair25 seeds 3-4 + PromptFL DTD N pair25 seed 4; ~11.3 h) and c100_23 (FedCLEAR DTD N pair75 + Pets N pair75 seeds 3-4 + PromptFL DTD N pair75 seed 4; ~11.2 h). Left: FedCLEAR seeds 0-2 for Pets N pair75 and DTD N sym25/sym75/pair25/pair75 (~7-7.5 h each, one per notebook).
 Server queue server/queue_c100_1.txt (2026-11-27, code zip 65d7d039c8a3): FedCLEAR seeds 0-2 for Pets N pair75, DTD N sym25/sym75/pair25/pair75, c100_22 and c100_23 stay on Kaggle (user is running them).
 2026-11-28: merged c50_19-21 and c100_pets_8, c100_dtd_10, c100_b_11, c100_pfl_14, c100_15-23 (35 runs, rc 0). 50 clients complete; 100 clients wait only for server queue_c100_1.
+2026-11-28: merged server queue_c100_1 (5 runs, rc 0). 100-client Scenario 2 grid complete; FedCLEAR ahead 14/14 (DTD N sym25 +0.70, N pair25 +0.96 within std).
